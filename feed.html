@@ -165,6 +165,9 @@
             <button class="sidebar-nav-btn" id="sidebarPubBtn" onclick="location.href='publications.html'">
               <span class="nav-icon">📰</span> Field Publications
             </button>
+            <button class="sidebar-nav-btn" id="sidebarMessengerBtn" onclick="openMessenger()">
+              <span class="nav-icon">💬</span> Direct Messages <span class="sidebar-badge badge-green" id="sidebarDmBadge">6 Online</span>
+            </button>
           </div>
 
           <div class="sidebar-nav-group">
@@ -314,6 +317,26 @@
                 <!-- Dynamically rendered via gamification.js -->
               </div>
             </div>
+          </div>
+
+          <!-- Online Explorers Live Hub Widget -->
+          <div class="sidebar-widget" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%); border-color: rgba(59, 130, 246, 0.25);">
+            <div class="widget-title" style="color: #3b82f6;">
+              <span style="display:flex; align-items:center; gap:6px;">
+                <span class="online-pulse-dot" style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 0 3px rgba(16,185,129,0.3); animation:pulseGreen 1.6s infinite;"></span>
+                Online Explorers
+              </span>
+              <span class="bounty-status-tag active" style="font-size: 0.7rem; background: #3b82f6; color: #fff;" id="sidebarOnlineCountBadge">6 Active</span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">
+              Wanderers exploring right now. Tap anyone to DM, exchange photos, coordinates & GIFs.
+            </p>
+            <div class="online-explorers-mini-list" id="sidebarOnlineExplorers">
+              <!-- Dynamically populated by crew-chat.js renderSidebarOnlineWidget() -->
+            </div>
+            <button class="btn-gem" style="width: 100%; padding: 8px; font-size: 0.82rem; margin-top: 10px; background: linear-gradient(135deg, #3b82f6, #6366f1);" onclick="openMessenger()">
+              Open Messenger & DMs 💬
+            </button>
           </div>
 
           <!-- Travel Passport Scratch-Off Widget -->
@@ -981,7 +1004,7 @@
   <script src="js/notifications.js"></script>
   <script src="js/trip-mode.js"></script>
   <script src="js/leaderboard.js"></script>
-  <script src="js/crew-chat.js"></script>
+  <script src="js/crew-chat.js?v=20261104_dm_engine_v28"></script>
   <script src="js/ui-effects.js?v=20261104_scroll_reveal_v14"></script>
   <script src="js/app-init.js?v=20261104_scroll_reveal_v14"></script>
   <script src="js/human-craft.js?v=20261104_post_modal_v22"></script>
