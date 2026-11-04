@@ -1551,7 +1551,8 @@ body {
   box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(6, 182, 212, 0.15), 0 0 40px rgba(6, 182, 212, 0.1) !important;
   overflow-y: auto !important;
   position: relative !important;
-  scrollbar-width: thin !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 [data-theme="dark"] #postPlaceModal .modal-box {
@@ -2012,5 +2013,78 @@ body {
   }
   .btn-modal-cancel, .btn-modal-publish {
     width: 100% !important;
+  }
+}
+
+
+/* ==========================================================================
+   Completely Remove / Hide All Modal Scrollbars
+   ========================================================================== */
+.modal-box,
+#postPlaceModal .modal-box,
+.modal-backdrop .modal-box {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.modal-box::-webkit-scrollbar,
+#postPlaceModal .modal-box::-webkit-scrollbar,
+.modal-backdrop .modal-box::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 2-Column Compact Studio Grid Layout for Share Place Modal */
+.post-modal-studio-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.post-modal-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+#postPlaceModal .modal-box {
+  max-width: 980px !important;
+  max-height: 94vh !important;
+}
+
+#postPlaceModal .post-form-header {
+  padding: 20px 28px 12px !important;
+}
+
+#postPlaceModal .post-form-header h2 {
+  font-size: 1.7rem !important;
+}
+
+#postPlaceModal .post-form-body {
+  padding: 16px 28px 20px !important;
+  gap: 12px !important;
+}
+
+.form-section-card {
+  padding: 13px 15px !important;
+  gap: 9px !important;
+  border-radius: 14px !important;
+}
+
+.post-photo-preview-wrap {
+  height: 115px !important;
+  margin-bottom: 2px !important;
+}
+
+#postPlaceModal textarea.form-control {
+  min-height: 65px !important;
+}
+
+@media (max-width: 860px) {
+  .post-modal-studio-grid {
+    grid-template-columns: 1fr !important;
   }
 }

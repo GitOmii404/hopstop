@@ -1023,18 +1023,16 @@
   opacity: 1;
 }
 
-/* Modal Inner Scrollbar */
+/* Modal Inner Scrollbar (Completely Hidden) */
+.modal-box {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
 .modal-box::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modal-box::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.modal-box::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: var(--radius-full);
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 .modal-close-btn {
