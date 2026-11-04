@@ -8,8 +8,8 @@
   
   <!-- Leaflet.js Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261104_scroll_reveal_v14">
-  <link rel="stylesheet" href="css/human-craft.css?v=20261104_scroll_reveal_v14">
+  <link rel="stylesheet" href="styles.css?v=20261104_perfect_feed_v15">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261104_perfect_feed_v15">
 </head>
 <body>
 
@@ -127,58 +127,57 @@
         
         <!-- Left Quick Navigation Sidebar -->
         <aside class="app-sidebar-left">
-          <button class="sidebar-nav-btn active" id="sidebarFeedBtn" onclick="location.href='feed.html'">
-            <span class="nav-icon">🏠</span> Feed Stream
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarPassportBtn" onclick="openTravelPassport()">
-            <span class="nav-icon">🛂</span> Travel Passport <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #10b981; color:#fff;">8 Visited</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarTripModeBtn" onclick="openTripMode()" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(234, 179, 8, 0.1)); border-color: rgba(249, 115, 22, 0.3);">
-            <span class="nav-icon">🚀</span> Trip Mode <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #f97316;">Live GPS</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarBoardsBtn" onclick="location.href='boards.html'">
-            <span class="nav-icon">📌</span> Dream Boards <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #ec4899;">Co-Save</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarBattlesBtn" onclick="location.href='battles.html'">
-            <span class="nav-icon">🏆</span> Photo Battles <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #eab308; color: #000;">Live Vote</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarLeaderboardBtn" onclick="openLeaderboardModal()">
-            <span class="nav-icon">👑</span> Top Finders <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">Ranks</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarEscapeBtn" onclick="openEscapeMode()" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(139, 92, 246, 0.12)); border-color: rgba(6, 182, 212, 0.3);">
-            <span class="nav-icon">🎧</span> Escape Mode <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #06b6d4;">HD Audio</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarPubBtn" onclick="location.href='publications.html'">
-            <span class="nav-icon">📰</span> Publications <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">Series</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarItineraryBtn" onclick="location.href='planner.html'">
-            <span class="nav-icon">🗺️</span> Route Planner <span class="bounty-status-tag active" id="sidebarItineraryCount" style="margin-left: auto; font-size: 0.65rem;">3 Legs</span>
-          </button>
-          <button class="sidebar-nav-btn" id="sidebarBountyBtn" onclick="location.href='bounties.html'">
-            <span class="nav-icon">🎯</span> Bounty Board <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">3 Active</span>
-          </button>
-          <button class="sidebar-nav-btn" onclick="location.href='index.html#gallery'">
-            <span class="nav-icon">📸</span> Field Gallery
-          </button>
-          <button class="sidebar-nav-btn" onclick="location.href='index.html#mapSection'">
-            <span class="nav-icon">🗺️</span> World Map
-          </button>
-          <button class="sidebar-nav-btn" onclick="location.href='index.html'">
-            <span class="nav-icon">🧭</span> Discover Wall
-          </button>
-          <button class="sidebar-nav-btn" onclick="openPostModal()">
-            <span class="nav-icon">✨</span> Post Discovery
-          </button>
-          <button class="sidebar-nav-btn" onclick="openCloudModal()">
-            <span class="nav-icon">⚡</span> Cloud Backend
-          </button>
-          <button class="sidebar-nav-btn" onclick="handleUserLogout()">
-            <span class="nav-icon">🚪</span> Sign Out
+          <button class="btn-gem sidebar-post-cta" onclick="openPostModal()">
+            ✨ + Share a Hidden Stop
           </button>
 
-          <button class="btn-gem sidebar-post-cta" onclick="openPostModal()">
-            💎 + Share a Stop
-          </button>
+          <div class="sidebar-nav-group">
+            <span class="sidebar-group-title">EXPLORE</span>
+            <button class="sidebar-nav-btn active" id="sidebarFeedBtn" onclick="location.href='feed.html'">
+              <span class="nav-icon">📱</span> Social Feed
+            </button>
+            <button class="sidebar-nav-btn" onclick="location.href='index.html'">
+              <span class="nav-icon">🧭</span> Discover Wall
+            </button>
+            <button class="sidebar-nav-btn" onclick="location.href='index.html#gallery'">
+              <span class="nav-icon">📸</span> 35mm Field Gallery
+            </button>
+            <button class="sidebar-nav-btn" onclick="location.href='index.html#mapSection'">
+              <span class="nav-icon">🌍</span> Interactive World Map
+            </button>
+          </div>
+
+          <div class="sidebar-nav-group">
+            <span class="sidebar-group-title">COMMUNITY & QUESTS</span>
+            <button class="sidebar-nav-btn" id="sidebarBoardsBtn" onclick="location.href='boards.html'">
+              <span class="nav-icon">📌</span> Dream Boards <span class="sidebar-badge badge-pink">Co-Save</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarBattlesBtn" onclick="location.href='battles.html'">
+              <span class="nav-icon">🏆</span> Photo Battles <span class="sidebar-badge badge-gold">Live Vote</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarBountyBtn" onclick="location.href='bounties.html'">
+              <span class="nav-icon">🎯</span> Bounty Board <span class="sidebar-badge badge-amber">3 Active</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarItineraryBtn" onclick="location.href='planner.html'">
+              <span class="nav-icon">🗺️</span> Route Planner <span class="sidebar-badge badge-blue">3 Legs</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarPubBtn" onclick="location.href='publications.html'">
+              <span class="nav-icon">📰</span> Field Publications
+            </button>
+          </div>
+
+          <div class="sidebar-nav-group">
+            <span class="sidebar-group-title">EXPEDITION MODES</span>
+            <button class="sidebar-nav-btn" id="sidebarPassportBtn" onclick="openTravelPassport()">
+              <span class="nav-icon">🛂</span> Travel Passport <span class="sidebar-badge badge-green">8 Stamped</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarTripModeBtn" onclick="openTripMode()">
+              <span class="nav-icon">🚀</span> Live Trip Mode <span class="sidebar-badge badge-amber">HUD</span>
+            </button>
+            <button class="sidebar-nav-btn" id="sidebarEscapeBtn" onclick="openEscapeMode()">
+              <span class="nav-icon">🎧</span> Ambient Escape <span class="sidebar-badge badge-cyan">Audio</span>
+            </button>
+          </div>
         </aside>
 
         <!-- Center Feed Stream -->
@@ -1010,7 +1009,7 @@
   <script src="js/auth.js"></script>
   <script src="js/gamification.js"></script>
   <script src="js/bounties.js?v=20261103_perfect_v6"></script>
-  <script src="js/feed.js"></script>
+  <script src="js/feed.js?v=20261104_perfect_feed_v15"></script>
   <script src="js/planner.js?v=20261103_perfect_v6"></script>
   <script src="js/daily-streak.js"></script>
   <script src="js/micro-adventures.js"></script>

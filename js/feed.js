@@ -99,27 +99,28 @@ function renderAppFeed() {
       <article class="social-card post-card-animated" data-id="${post.id}">
         <div class="social-card-header">
           <div class="social-author-wrap">
-            <img src="${post.author.avatar}" alt="${post.author.name}" class="social-author-img" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'">
+            <div class="social-avatar-ring">
+              <img src="${post.author.avatar}" alt="${post.author.name}" class="social-author-img" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'">
+            </div>
             <div class="social-author-text">
               <div class="social-author-name">
-                ${post.author.name} <span style="color: #06b6d4; font-size: 0.85rem;">✓</span>
+                <span>${post.author.name}</span>
+                <span class="social-verified-badge" title="Verified Field Explorer">✓</span>
               </div>
-              <span class="social-place-location" onclick="focusPostOnMap(${post.id})" style="cursor: pointer;" title="View on map">
-                📍 ${post.placeName}, ${post.country} • ${weather.icon} ${weather.temp}
+              <span class="social-place-location" onclick="focusPostOnMap(${post.id})" style="cursor: pointer;" title="View on interactive world map">
+                📍 ${post.placeName}, ${post.country} • <span class="weather-chip">${weather.icon} ${weather.temp}</span>
               </span>
             </div>
           </div>
 
-          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-            <button class="btn-been-here ${isChecked ? 'checked' : ''}" onclick="checkInToGem(${post.id})" title="Confirm you've visited this place">
-              📍 ${isChecked ? "✅ Visited" : `Been Here (${checkIns})`}
-            </button>
+          <div class="social-header-actions">
             <span class="card-distance-pill" title="Distance from ${userLocationName}">${distPill}</span>
-            <button class="btn-popup-read" style="padding: 4px 10px; font-size: 0.75rem;" onclick="addToItinerary(${post.id})" title="Add to Itinerary Route">
-              ${isInItinerary ? '✅ In Route' : '🗺️ + Route'}
+            <button class="btn-been-here ${isChecked ? 'checked' : ''}" onclick="checkInToGem(${post.id})" title="Confirm you've visited this place">
+              ${isChecked ? "✅ Visited" : `📍 Been Here (${checkIns})`}
             </button>
-            <button class="btn-popup-read" style="padding: 4px 10px; font-size: 0.75rem;" onclick="focusPostOnMap(${post.id})">Map</button>
-            <button class="btn-direction" onclick="openDirections(event, '${encodeURIComponent(post.locationQuery)}')">🧭 Directions</button>
+            <button class="btn-header-direction" onclick="openDirections(event, '${encodeURIComponent(post.locationQuery)}')" title="1-Tap Directions">
+              🧭
+            </button>
           </div>
         </div>
 
@@ -133,20 +134,21 @@ function renderAppFeed() {
           ` : `
             <img src="${post.image}" alt="${post.title}" loading="lazy">
           `}
-          <div class="gem-score-pill">💎 Underrated: ${post.gemScore}/10</div>
+          <div class="gem-score-pill">💎 ${post.gemScore}/10 Underrated</div>
+          <div class="category-pill-tag">${post.category ? post.category.toUpperCase() : 'SECRET SPOT'}</div>
           <div class="flying-heart" id="flyingHeart_${post.id}">❤️</div>
         </div>
 
         <div class="social-action-bar">
           <div class="social-action-group">
             <button class="action-icon-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(event, ${post.id})" title="Like">
-              ${post.isLiked ? '❤️' : '🤍'}
+              ${post.isLiked ? '❤️' : '🤍'} <span class="action-btn-counter">${post.likes.toLocaleString()}</span>
             </button>
-            <button class="action-icon-btn" onclick="openArticleModal(${post.id})" title="Comment & Weather">
-              💬
+            <button class="action-icon-btn" onclick="openArticleModal(${post.id})" title="Comment & Transit Intel">
+              💬 <span class="action-btn-counter">${commentCount}</span>
             </button>
-            <button class="action-icon-btn ${isInItinerary ? 'liked' : ''}" onclick="addToItinerary(${post.id})" title="Add to Route Planner">
-              🗺️
+            <button class="action-icon-btn ${isInItinerary ? 'in-route' : ''}" onclick="addToItinerary(${post.id})" title="${isInItinerary ? 'In Itinerary Route' : 'Add to Route'}">
+              🗺️ <span class="action-btn-text">${isInItinerary ? 'In Route' : '+ Route'}</span>
             </button>
             <button class="action-icon-btn" onclick="openAddPinModal(${post.id})" title="Co-Save to Dream Board">
               📌
@@ -154,35 +156,37 @@ function renderAppFeed() {
             <button class="action-icon-btn" onclick="sharePostLink(${post.id})" title="Share Link">
               🚀
             </button>
-            <button class="action-icon-btn" onclick="focusPostOnMap(${post.id})" title="Find on Map">
+            <button class="action-icon-btn" onclick="focusPostOnMap(${post.id})" title="Locate on World Map">
               📍
             </button>
           </div>
 
-          <button class="action-icon-btn" onclick="toggleBookmark(event, ${post.id})" title="Save to Bucket List">
-            ${isSaved ? '📌' : '🔖'}
+          <button class="action-icon-btn btn-bookmark-toggle ${isSaved ? 'saved' : ''}" onclick="toggleBookmark(event, ${post.id})" title="Save to Secret Stops">
+            ${isSaved ? '🔖 Saved' : '🔖 Save'}
           </button>
         </div>
 
-        <div class="social-likes-count">
-          ${post.likes.toLocaleString()} likes • <strong>${checkIns} traveler check-ins</strong>
-        </div>
-
         <div class="social-caption-wrap">
-          <strong>${authorHandle}</strong> ${post.title} — ${post.excerpt}
+          <span class="social-author-handle">${authorHandle}</span>
+          <span class="social-post-headline">${post.title}</span>
+          <p class="social-post-desc">${post.excerpt}</p>
         </div>
 
         <div class="social-secret-tip-box">
-          <strong>🤫 Secret Tip:</strong> ${post.secretTip}
+          <div class="secret-tip-header">
+            <span>🤫 SECRET FIELD INTEL</span>
+          </div>
+          <p class="secret-tip-text">${post.secretTip}</p>
         </div>
 
         <div class="social-view-comments-btn" onclick="openArticleModal(${post.id})">
-          ${commentCount > 0 ? `View all ${commentCount} traveler comments & live destination climate...` : 'Add the first comment on this stop...'}
+          ${commentCount > 0 ? `💬 View all ${commentCount} explorer dispatches & route notes...` : '💬 Leave the first expedition tip on this stop...'}
         </div>
 
         <form class="social-inline-comment-form" onsubmit="handleInlineCommentSubmit(event, ${post.id})">
-          <input type="text" class="social-comment-input" placeholder="Add a comment or ask for transit tips..." required>
-          <button type="submit" class="btn-post-comment">Post</button>
+          <img src="${currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80'}" class="comment-author-avatar" alt="You">
+          <input type="text" class="social-comment-input" placeholder="Add field notes, transit advice, or secret coordinates..." required>
+          <button type="submit" class="btn-post-comment">Dispatch</button>
         </form>
       </article>
     `;
