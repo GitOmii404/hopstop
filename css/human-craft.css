@@ -955,16 +955,11 @@ body {
   overflow: hidden;
 }
 
-/* Elegant Ambient Top Glow Accent (Replaced awkward clipped airmail stripe) */
-.newsletter-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 5%, rgba(249, 115, 22, 0.7) 40%, rgba(6, 182, 212, 0.6) 70%, transparent 95%);
-  pointer-events: none;
+/* Disabled any top line/strip on newsletter card */
+.newsletter-card::after,
+.newsletter-card::before {
+  display: none !important;
+  content: none !important;
 }
 
 /* --------------------------------------------------------------------------

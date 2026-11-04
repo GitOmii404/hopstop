@@ -1363,14 +1363,7 @@ textarea.form-control {
 }
 
 .newsletter-card::after {
-  content: '';
-  position: absolute;
-  bottom: -80px;
-  right: -80px;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%);
+  display: none !important;
 }
 
 .newsletter-text h3 {
