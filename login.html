@@ -7,30 +7,30 @@
   <meta name="description" content="Sign in to HopStop to share secret waypoints, earn daily streak XP, rank on leaderboards, and direct message online travelers worldwide.">
   
   <link rel="stylesheet" href="styles.css?v=20261104_navbar_perfection_v31">
-  <link rel="stylesheet" href="css/login.css?v=20261104_login_v1">
+  <link rel="stylesheet" href="css/login.css?v=20261104_no_scroll_v2">
 </head>
 <body class="login-page-wrap">
 
-  <!-- ==================== Login Header Bar ==================== -->
+  <!-- ==================== Compact 48px Header Bar ==================== -->
   <header class="login-nav">
     <div class="login-nav-left">
-      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-        <div class="brand-icon">💎</div>
-        <span style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Hop<span style="color: var(--accent);">Stop</span></span>
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 7px;">
+        <div class="brand-icon" style="font-size: 1.15rem;">💎</div>
+        <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Hop<span style="color: var(--accent);">Stop</span></span>
       </div>
       <a href="index.html" class="login-back-btn">
         <span>←</span> Back to Home
       </a>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme" style="background: none; border: 1px solid var(--border-color); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 1.05rem;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme" style="background: none; border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center;">
         🌙
       </button>
     </div>
   </header>
 
-  <!-- ==================== Main Split Login Layout ==================== -->
+  <!-- ==================== Main Split Login Layout (100% Viewport, Zero Scroll) ==================== -->
   <main class="login-main">
     
     <!-- Left Hero Pane -->
@@ -50,8 +50,8 @@
         <div class="login-author-box">
           <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Elena Vance" class="login-author-avatar">
           <div>
-            <div style="font-weight: 800; font-size: 0.95rem;">Elena Vance</div>
-            <div style="font-size: 0.78rem; color: #94a3b8;">Alpine Seeker • Vetted Waypoint Contributor</div>
+            <div style="font-weight: 800; font-size: 0.88rem;">Elena Vance</div>
+            <div style="font-size: 0.74rem; color: #94a3b8;">Alpine Seeker • Vetted Contributor</div>
           </div>
         </div>
       </div>
@@ -72,14 +72,14 @@
       </div>
     </div>
 
-    <!-- Right Form Pane -->
+    <!-- Right Form Pane (Compact & Fit on Single Screen) -->
     <div class="login-form-pane">
       <div class="login-card-container">
         
         <div class="login-card-header">
-          <div style="font-size: 2.2rem; margin-bottom: 4px;">💎</div>
+          <div style="font-size: 1.6rem; margin-bottom: 2px;">💎</div>
           <h2 class="login-card-title">Welcome to HopStop</h2>
-          <p class="login-card-desc">Sign in for full member access, or jump in instantly as a guest to browse and DM.</p>
+          <p class="login-card-desc">Sign in for full member access, or jump in instantly as a guest.</p>
         </div>
 
         <!-- Segmented Tab Switcher -->
@@ -91,7 +91,7 @@
         <!-- Sign In Form -->
         <form id="pageSigninForm" onsubmit="handlePageSignin(event)">
           <div class="login-form-group">
-            <label class="login-label">Email or Explorer Handle</label>
+            <label class="login-label">Email or Username</label>
             <div class="login-input-wrap">
               <input type="text" id="signinEmail" class="login-input" placeholder="maya@wander.com" value="maya@wander.com" required>
             </div>
@@ -137,7 +137,7 @@
           <div class="login-options-row">
             <label class="login-checkbox-label">
               <input type="checkbox" checked required>
-              <span>I pledge to follow Leave-No-Trace ethics 🌿</span>
+              <span>I pledge Leave-No-Trace ethics 🌿</span>
             </label>
           </div>
 
@@ -150,58 +150,42 @@
           <span>Or Choose Instant Access</span>
         </div>
 
-        <!-- 2 Instant Access Tier Cards -->
-        <div class="access-cards-group">
+        <!-- 2-Column Side-by-Side Instant Access Cards -->
+        <div class="access-cards-grid">
           
-          <!-- Card 1: 1-Click Demo Login (Full Access) -->
+          <!-- Card 1: 1-Click Demo Login (Full Member) -->
           <div class="access-tier-card tier-demo-login" onclick="loginAsDemo()">
             <div class="tier-header-row">
-              <span class="tier-card-title">⚡ 1-Click Demo Login (Maya Lin)</span>
+              <span class="tier-card-title">⚡ Demo Login</span>
               <span class="tier-pill-badge full">👑 Full Access</span>
             </div>
             <div class="tier-card-desc">
-              All features unlocked: post secret gems, claim +50 XP streaks, level up badges, co-save dream boards, and live DM travelers.
+              All unlocked: post secret gems, +50 XP streaks, badges, boards & live DMs.
             </div>
           </div>
 
           <!-- Card 2: Continue as Guest (Browse & DM Only) -->
           <div class="access-tier-card tier-guest-login" onclick="loginAsGuest()">
             <div class="tier-header-row">
-              <span class="tier-card-title">👤 Continue as Guest</span>
-              <span class="tier-pill-badge guest">🟢 Browse & DM Only</span>
+              <span class="tier-card-title">👤 Guest Mode</span>
+              <span class="tier-pill-badge guest">🟢 Live DMs & View</span>
             </div>
             <div class="tier-card-desc">
-              No registration needed: browse all hidden gems & photo stories, and direct message (DM) online wanderers with GIFs and photos.
+              Instant entry: browse hidden waypoints & photos, chat & DM online wanderers.
             </div>
           </div>
 
         </div>
 
-        <!-- Feature Comparison Matrix -->
-        <div class="tier-matrix-box">
-          <div class="matrix-header">
-            <span>Platform Capabilities</span>
-            <span>Signed In vs Guest</span>
+        <!-- Ultra-Compact Feature Comparison Strip -->
+        <div class="tier-matrix-compact">
+          <div class="matrix-row-item">
+            <span class="matrix-tag-member">👑 Signed In:</span>
+            <span class="matrix-features-text">Post Gems &bull; XP & Streaks &bull; Co-Save Boards &bull; Full DMs</span>
           </div>
-          <div class="matrix-row">
-            <span>Browse Hidden Gems & Photo Wall</span>
-            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <strong class="matrix-badge-check">✓ Guest</strong></span>
-          </div>
-          <div class="matrix-row">
-            <span>Live DMs, GIFs & Chat with Online Wanderers</span>
-            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <strong class="matrix-badge-check">✓ Guest</strong></span>
-          </div>
-          <div class="matrix-row">
-            <span>Post New Waypoints, Secret Tips & Photos</span>
-            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
-          </div>
-          <div class="matrix-row">
-            <span>Daily Discovery Streaks & Explorer XP</span>
-            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
-          </div>
-          <div class="matrix-row">
-            <span>Co-Save Dream Boards & Route Planner</span>
-            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
+          <div class="matrix-row-item">
+            <span class="matrix-tag-guest">👤 Guest:</span>
+            <span class="matrix-features-text">Browse Hidden Gems &bull; Live Online Wanderers DMs & GIFs</span>
           </div>
         </div>
 
