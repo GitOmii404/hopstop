@@ -82,35 +82,144 @@
         <div id="authHeaderActions" style="display: none; align-items: center; gap: 12px;">
           <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
           
-          <div class="user-menu-wrap">
-            <div class="user-avatar-btn" id="userMenuTrigger">
+                    <div class="user-menu-wrap">
+            <div class="user-avatar-btn" id="userMenuTrigger" onclick="toggleUserMenu(event)">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
-              <span class="user-avatar-name current-user-name">Maya</span>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+              <span class="user-avatar-name current-user-name">Maya Lin</span>
+              <span class="user-avatar-arrow">▼</span>
             </div>
 
             <!-- User Dropdown Menu -->
             <div class="user-dropdown" id="userMenuDropdown">
-              <div class="dropdown-item" onclick="location.href='feed.html'">📱 Social Feed</div>
-              <div class="dropdown-item" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</div>
-              <div class="dropdown-item" onclick="openTripMode()">🚀 On-The-Road Trip Mode</div>
-              <div class="dropdown-item" onclick="openLeaderboardModal()">🏆 Monthly Top-Finders Leaderboard</div>
-              <div class="dropdown-item" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</div>
-              <div class="dropdown-item" onclick="location.href='boards.html'">📌 Collaborative Dream Boards</div>
-              <div class="dropdown-item" onclick="location.href='battles.html'">🏆 Weekly Photo Battles & Prompts</div>
-              <div class="dropdown-item" onclick="openEscapeMode()">🎧 Ambient Escape Mode</div>
-              <div class="dropdown-item" onclick="location.href='publications.html'">📰 Micro-Publications & Series</div>
-              <div class="dropdown-item" onclick="location.href='planner.html'">🗺️ Multi-Stop Route Planner</div>
-              <div class="dropdown-item" onclick="location.href='bounties.html'">🎯 Travel Bounty Board</div>
-              <div class="dropdown-item" onclick="location.href='index.html#gallery'">📸 Field Photo Gallery</div>
-              <div class="dropdown-item" onclick="location.href='index.html#mapSection'">🗺️ Interactive World Map</div>
-              <div class="dropdown-item" onclick="openDailyGemModal()">🌅 Today's Curated Gem</div>
-              <div class="dropdown-item" onclick="openPostModal()">💎 Post a Hidden Gem</div>
-              <div class="dropdown-item" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</div>
-              <div class="dropdown-item" onclick="location.href='index.html'">🌍 Discover Page</div>
+              <!-- Profile Header Card -->
+              <div class="user-dropdown-header">
+                <div class="user-dropdown-avatar-wrap">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Maya Lin" class="user-dropdown-avatar current-user-avatar">
+                  <span class="user-dropdown-online-dot" title="Active Explorer"></span>
+                </div>
+                <div class="user-dropdown-profile-info">
+                  <div class="user-dropdown-name current-user-name">Maya Lin</div>
+                  <div class="user-dropdown-handle current-user-handle">@mayawanders</div>
+                  <div class="user-dropdown-tier-badge">⚡ Level 2: Trailblazer</div>
+                </div>
+              </div>
+
+              <!-- XP Progress Bar -->
+              <div class="user-dropdown-xp-card">
+                <div class="user-dropdown-xp-header">
+                  <span style="font-weight: 700; font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Explorer XP</span>
+                  <span class="user-dropdown-xp-val" style="font-size: 0.75rem; font-weight: 700; color: #0284c7;"><strong>475</strong> / 600 XP</span>
+                </div>
+                <div class="user-dropdown-xp-bar">
+                  <div class="user-dropdown-xp-fill" style="width: 79%;"></div>
+                </div>
+              </div>
+
+              <!-- Fast Action Pills Row -->
+              <div class="user-dropdown-quick-actions">
+                <button type="button" class="dropdown-quick-pill" onclick="closeUserMenu(); openMessenger();" title="Open Direct Messages">
+                  <span>💬</span> <strong>DMs</strong> <span class="quick-pill-badge">6</span>
+                </button>
+                <button type="button" class="dropdown-quick-pill" onclick="closeUserMenu(); openTravelPassport();" title="Open Passport">
+                  <span>🛂</span> <strong>Pass</strong>
+                </button>
+                <button type="button" class="dropdown-quick-pill" onclick="closeUserMenu(); openPostModal();" title="Post Hidden Gem">
+                  <span>💎</span> <strong>Share</strong>
+                </button>
+              </div>
+
+              <div class="dropdown-section-title">COMMUNITY & EXPLORE</div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='feed.html'">
+                <span class="dropdown-item-icon">📱</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Social Discovery Feed</span>
+                  <span class="dropdown-item-sub">Live waypoints & stories</span>
+                </div>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='boards.html'">
+                <span class="dropdown-item-icon">📌</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Dream Boards</span>
+                  <span class="dropdown-item-sub">Co-save hidden spots</span>
+                </div>
+                <span class="dropdown-item-badge badge-pink">Co-Save</span>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='battles.html'">
+                <span class="dropdown-item-icon">🏆</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Photo Battles</span>
+                  <span class="dropdown-item-sub">Weekly photo showdowns</span>
+                </div>
+                <span class="dropdown-item-badge badge-gold">Active</span>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='bounties.html'">
+                <span class="dropdown-item-icon">🎯</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Travel Bounty Board</span>
+                  <span class="dropdown-item-sub">Find secret spots for XP</span>
+                </div>
+                <span class="dropdown-item-badge badge-amber">3 Active</span>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='planner.html'">
+                <span class="dropdown-item-icon">🗺️</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Multi-Stop Route Planner</span>
+                  <span class="dropdown-item-sub">Curate your next road-trip</span>
+                </div>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); location.href='publications.html'">
+                <span class="dropdown-item-icon">📰</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Field Publications</span>
+                  <span class="dropdown-item-sub">Original travel narratives</span>
+                </div>
+              </div>
+
+              <div class="dropdown-section-title">SMART TOOLS & MODES</div>
+              <div class="dropdown-item" onclick="closeUserMenu(); openTripMode();">
+                <span class="dropdown-item-icon">🚀</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">On-The-Road Trip Mode</span>
+                  <span class="dropdown-item-sub">Live turn-by-turn waypoint HUD</span>
+                </div>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); openLeaderboardModal();">
+                <span class="dropdown-item-icon">👑</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Top-Finders Leaderboard</span>
+                  <span class="dropdown-item-sub">Rankings & podium explorers</span>
+                </div>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); openEscapeMode();">
+                <span class="dropdown-item-icon">🎧</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Ambient Escape Mode</span>
+                  <span class="dropdown-item-sub">Play wanderlust audio</span>
+                </div>
+              </div>
+              <div class="dropdown-item" onclick="closeUserMenu(); openWeeklyDigestModal();">
+                <span class="dropdown-item-icon">📬</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Weekly Friday Dispatch</span>
+                  <span class="dropdown-item-sub">5 coordinates in your inbox</span>
+                </div>
+              </div>
+
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item" style="color: #ef4444;" onclick="handleUserLogout()">🚪 Log Out</div>
+              <div class="dropdown-item" onclick="closeUserMenu(); toggleTheme();">
+                <span class="dropdown-item-icon">🌓</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Toggle Light / Dark Theme</span>
+                </div>
+              </div>
+              <div class="dropdown-item dropdown-item-danger" onclick="logout();">
+                <span class="dropdown-item-icon">🚪</span>
+                <div class="dropdown-item-text">
+                  <span class="dropdown-item-title">Sign Out</span>
+                </div>
+              </div>
             </div>
+          </div>
           </div>
         </div>
 

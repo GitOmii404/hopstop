@@ -200,6 +200,49 @@ window.loginAsDemo = function () {
 window.handleSignOut = function () {
   currentUser = null;
   localStorage.removeItem('hopstop_auth_user');
+  if (typeof window.closeUserMenu === 'function') window.closeUserMenu();
   syncAuthState();
   if (typeof showToast === 'function') showToast('Signed out of HopStop.');
 };
+
+window.logout = window.handleUserLogout = window.handleSignOut;
+
+window.toggleUserMenu = function (e) {
+  if (e) {
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+  }
+  const dropdown = document.getElementById('userMenuDropdown');
+  if (!dropdown) return;
+
+  const willOpen = !dropdown.classList.contains('open');
+
+  // Close notifications dropdown if open
+  const notifDropdown = document.getElementById('notificationsDropdown');
+  if (notifDropdown) notifDropdown.classList.remove('open');
+
+  if (willOpen) {
+    // Sync latest XP & tier in user menu
+    if (typeof userXp !== 'undefined') {
+      const xpValEl = document.querySelector('.user-dropdown-xp-val');
+      const xpFillEl = document.querySelector('.user-dropdown-xp-fill');
+      if (xpValEl) xpValEl.innerHTML = '<strong>' + userXp + '</strong> / 600 XP';
+      if (xpFillEl) xpFillEl.style.width = Math.min(100, Math.round((userXp / 600) * 100)) + '%';
+    }
+    dropdown.classList.add('open');
+  } else {
+    dropdown.classList.remove('open');
+  }
+};
+
+window.closeUserMenu = function () {
+  const dropdown = document.getElementById('userMenuDropdown');
+  if (dropdown) dropdown.classList.remove('open');
+};
+
+// Global click listener to close user dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.user-menu-wrap')) {
+    window.closeUserMenu();
+  }
+});

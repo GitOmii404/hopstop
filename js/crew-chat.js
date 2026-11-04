@@ -652,6 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   initDmStore();
   mountMessengerUI();
+  initEventListeners();
 }
 
 // Re-export original functions
@@ -768,7 +769,7 @@ function initEventListeners() {
   });
 
   document.addEventListener('click', (e) => {
-    userMenuDropdown?.classList.remove('open');
+    if (!e.target.closest('.user-menu-wrap')) userMenuDropdown?.classList.remove('open');
     if (notificationsDropdown && !e.target.closest('#notificationsDropdown') && !e.target.closest('.notif-btn-wrap')) {
       notificationsDropdown.classList.remove('open');
     }
