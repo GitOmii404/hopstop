@@ -267,6 +267,8 @@
 }
 
 .user-avatar-btn {
+  position: relative;
+  z-index: 2501;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -311,6 +313,10 @@
   white-space: nowrap;
 }
 
+.user-avatar-btn * {
+  pointer-events: none;
+}
+
 .user-avatar-arrow {
   font-size: 0.72rem;
   color: var(--text-muted);
@@ -348,10 +354,11 @@
 }
 
 .user-dropdown.open {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  transform: scale(1) translateY(0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  display: block !important;
 }
 
 /* Slim scrollbar */

@@ -209,10 +209,11 @@ window.logout = window.handleUserLogout = window.handleSignOut;
 
 window.toggleUserMenu = function (e) {
   if (e) {
-    if (e.stopPropagation) e.stopPropagation();
-    if (e.preventDefault) e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (typeof e.preventDefault === 'function') e.preventDefault();
   }
   const dropdown = document.getElementById('userMenuDropdown');
+  const wrap = document.querySelector('.user-menu-wrap');
   if (!dropdown) return;
 
   const willOpen = !dropdown.classList.contains('open');
@@ -230,14 +231,18 @@ window.toggleUserMenu = function (e) {
       if (xpFillEl) xpFillEl.style.width = Math.min(100, Math.round((userXp / 600) * 100)) + '%';
     }
     dropdown.classList.add('open');
+    if (wrap) wrap.classList.add('open');
   } else {
     dropdown.classList.remove('open');
+    if (wrap) wrap.classList.remove('open');
   }
 };
 
 window.closeUserMenu = function () {
   const dropdown = document.getElementById('userMenuDropdown');
+  const wrap = document.querySelector('.user-menu-wrap');
   if (dropdown) dropdown.classList.remove('open');
+  if (wrap) wrap.classList.remove('open');
 };
 
 // Global click listener to close user dropdown when clicking outside

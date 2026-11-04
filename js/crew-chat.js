@@ -762,11 +762,7 @@ function initEventListeners() {
     });
   });
 
-  // User Dropdown & Notification Dropdown in Header
-  userMenuTrigger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    userMenuDropdown?.classList.toggle('open');
-  });
+  // User Dropdown is handled via window.toggleUserMenu(event)
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.user-menu-wrap')) userMenuDropdown?.classList.remove('open');
