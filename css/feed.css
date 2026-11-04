@@ -1467,13 +1467,4 @@
 }
 
 
-/* ==========================================================================
-   Remove Floating Wanderlust Audio Pill from Feed View
-   ========================================================================== */
-#wanderlustAudioPill,
-.wanderlust-audio-pill {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+
