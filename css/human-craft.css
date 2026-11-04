@@ -1,0 +1,1505 @@
+/* ==========================================================================
+   HopStop — Human-Crafted Visual Experience & Section Atmosphere Engine
+   Eliminates bland corporate AI-slop with rich textures, warm gradients,
+   depth, tactile stamps, and playful interactive elements.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. GLOBAL VIBE & CLEAN HIGH-CONTRAST CANVAS
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--bg-primary) !important;
+  background-image: 
+    radial-gradient(circle 900px at 15% -5%, rgba(249, 115, 22, 0.04), transparent 60%),
+    radial-gradient(circle 800px at 85% 10%, rgba(14, 165, 233, 0.04), transparent 60%),
+    radial-gradient(circle 600px at 50% 60%, rgba(139, 92, 246, 0.02), transparent 70%),
+    linear-gradient(180deg, var(--bg-primary) 0%, #f1f5f9 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--bg-primary) !important;
+  background-image: 
+    radial-gradient(circle 900px at 15% -5%, rgba(249, 115, 22, 0.07), transparent 60%),
+    radial-gradient(circle 800px at 85% 10%, rgba(14, 165, 233, 0.06), transparent 60%),
+    radial-gradient(circle 600px at 50% 60%, rgba(139, 92, 246, 0.04), transparent 70%),
+    linear-gradient(180deg, var(--bg-primary) 0%, #060911 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. HERO SECTION — Golden Hour Explorer Atmosphere (Clean, High-Contrast)
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding-top: 26px !important;
+  padding-bottom: 46px !important;
+  background: 
+    radial-gradient(circle at 10% 25%, rgba(251, 146, 60, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-primary) 100%) !important;
+  border-bottom: 1px solid var(--border-color);
+  overflow: visible !important;
+}
+
+/* Hero Title with Warm Gradient Sparkle */
+.hero-title span {
+  background: linear-gradient(135deg, #ea580c 0%, #db2777 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+}
+
+/* Playful Floating Traveler Stickers */
+.hero-stickers-wrap {
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+
+.human-sticker {
+  pointer-events: auto;
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  user-select: none;
+  z-index: 8;
+  animation: floatSticker 5s ease-in-out infinite alternate;
+}
+
+.human-sticker:hover {
+  transform: scale(1.12) rotate(0deg) !important;
+  box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.18);
+}
+
+.sticker-1 {
+  top: -18px;
+  left: 20px;
+  background: rgba(254, 243, 199, 0.95);
+  color: #b45309;
+  border: 1.5px dashed #f59e0b;
+  transform: rotate(-4deg);
+  animation-delay: 0s;
+}
+
+.sticker-2 {
+  bottom: -22px;
+  left: 120px;
+  background: rgba(220, 252, 231, 0.95);
+  color: #15803d;
+  border: 1.5px solid #22c55e;
+  transform: rotate(3deg);
+  animation-delay: 1.2s;
+}
+
+.sticker-3 {
+  top: 40px;
+  right: -15px;
+  background: rgba(254, 226, 226, 0.95);
+  color: #b91c1c;
+  border: 1.5px dashed #ef4444;
+  transform: rotate(5deg);
+  animation-delay: 2.1s;
+}
+
+.sticker-4 {
+  bottom: 25px;
+  right: 15px;
+  background: rgba(224, 242, 254, 0.95);
+  color: #0369a1;
+  border: 1.5px solid #0284c7;
+  transform: rotate(-3deg);
+  animation-delay: 0.7s;
+}
+
+@keyframes floatSticker {
+  0% { transform: translateY(0px) rotate(var(--rot, -3deg)); }
+  100% { transform: translateY(-8px) rotate(var(--rot, 2deg)); }
+}
+
+/* Glowing Search Box with Real Tactile Warmth */
+.hero-search-box {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 2px solid rgba(249, 115, 22, 0.25) !important;
+  box-shadow: 0 12px 30px -5px rgba(249, 115, 22, 0.15), 0 4px 10px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 18px !important;
+}
+
+.hero-search-box:focus-within {
+  border-color: #ea580c !important;
+  box-shadow: 0 16px 38px -5px rgba(234, 88, 12, 0.25), 0 0 0 4px rgba(251, 146, 60, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   3. INTERACTIVE MAP SECTION — Clean Expedition Cartography Deck
+   -------------------------------------------------------------------------- */
+.map-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 20% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #f0fdf4 0%, #f0f9ff 50%, #f8fafc 100%) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  padding: 56px 0 !important;
+}
+
+[data-theme="dark"] .map-section {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 20% 85%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, #09121d 0%, #0d1a29 50%, #080f18 100%) !important;
+  border-color: #1e293b;
+}
+
+/* Cartographer Live Telemetry HUD */
+.cartography-hud-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 16px;
+  padding: 10px 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px -4px rgba(6, 182, 212, 0.12);
+}
+
+[data-theme="dark"] .cartography-hud-bar {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.hud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+[data-theme="dark"] .hud-item {
+  color: #38bdf8;
+}
+
+.hud-radar-dot {
+  width: 9px;
+  height: 9px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseRadar 2s infinite;
+}
+
+@keyframes pulseRadar {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+/* Glowing Map Container Frame */
+.map-container-frame {
+  border-radius: 24px !important;
+  overflow: hidden;
+  box-shadow: 
+    0 24px 60px -15px rgba(2, 132, 199, 0.22),
+    0 0 0 1px rgba(6, 182, 212, 0.35) !important;
+  transition: box-shadow 0.4s ease;
+}
+
+.map-container-frame:hover {
+  box-shadow: 
+    0 30px 75px -15px rgba(2, 132, 199, 0.32),
+    0 0 0 2px rgba(6, 182, 212, 0.5) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. UNDERRATED PLACES (DISCOVER GRID) — Clean Backdrop (No Blurry Edge Blobs)
+   -------------------------------------------------------------------------- */
+#explore {
+  background: 
+    radial-gradient(circle at 12% 20%, rgba(254, 215, 170, 0.22) 0%, transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(186, 230, 253, 0.26) 0%, transparent 45%),
+    linear-gradient(180deg, #f8fafc 0%, #f5f3ef 50%, #f8fafc 100%) !important;
+  padding: 60px 0 !important;
+  position: relative;
+}
+
+[data-theme="dark"] #explore {
+  background: 
+    radial-gradient(circle at 12% 20%, rgba(120, 53, 15, 0.22) 0%, transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(30, 58, 138, 0.26) 0%, transparent 45%),
+    linear-gradient(180deg, #0b1120 0%, #0e1726 50%, #0b1120 100%) !important;
+}
+
+/* Post Cards with Human Handcrafted Polish */
+.post-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.06),
+    0 4px 8px -2px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.post-card:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  box-shadow: 
+    0 24px 45px -8px rgba(234, 88, 12, 0.16),
+    0 12px 20px -5px rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(249, 115, 22, 0.4) !important;
+}
+
+/* Tactile "Handpicked Passport Stamp" on Cards */
+.card-stamp-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #fed7aa;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 215, 170, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Secret Tip Note Pill — Taped Explorer Memo Look */
+.post-secret-tip-pill {
+  background: #fffbeb !important;
+  border-left: 4px solid #f59e0b !important;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #78350f !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  font-size: 0.84rem !important;
+  line-height: 1.45 !important;
+  margin: 12px 0 !important;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.08);
+  position: relative;
+}
+
+[data-theme="dark"] .post-secret-tip-pill {
+  background: rgba(120, 53, 15, 0.25) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fef3c7 !important;
+}
+
+/* Gem Score Badge with Glowing Prism */
+.post-gem-badge {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.95)) !important;
+  backdrop-filter: blur(10px) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  font-weight: 800 !important;
+  border-radius: 9999px !important;
+  padding: 5px 12px !important;
+}
+
+/* Category Filter Pills — Tactile Bouncy Buttons */
+.filter-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 9999px !important;
+  padding: 9px 20px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px) scale(1.04) !important;
+  border-color: #ea580c !important;
+  color: #ea580c !important;
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.15) !important;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #ea580c, #f97316) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.35) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. COMMUNITY PHOTO WALL — Dark Translucent Authentic Wood Bark Exhibition Wall
+   -------------------------------------------------------------------------- */
+#gallery {
+  background-color: #21160e !important;
+  background-image: 
+    /* 1. Ambient Gallery Warm Downlighting */
+    radial-gradient(circle at 50% 8%, rgba(255, 235, 205, 0.22) 0%, transparent 65%),
+    radial-gradient(circle at 18% 48%, rgba(217, 119, 6, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 82% 52%, rgba(180, 83, 9, 0.10) 0%, transparent 50%),
+    /* 2. Authentic Handcrafted Dark Translucent Wood Bark, Organic Furrows & Timber Grain */
+    url('wood-bark.svg?v=20261103_dark_transparent_bark') !important;
+  background-size: auto, auto, auto, 520px 520px !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat !important;
+  border-top: 1px solid rgba(195, 130, 75, 0.28) !important;
+  border-bottom: 1px solid rgba(195, 130, 75, 0.28) !important;
+  box-shadow: inset 0 16px 44px rgba(0, 0, 0, 0.50), inset 0 -16px 44px rgba(0, 0, 0, 0.50) !important;
+  padding: 34px 0 28px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] #gallery {
+  /* Traditional Japanese Yakisugi (Shou Sugi Ban) Authentic Charred Wood Bark */
+  background-color: #100b08 !important;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+    url('wood-bark-dark.svg?v=20261103_dark_transparent_bark') !important;
+  background-size: auto, 520px 520px !important;
+  background-repeat: no-repeat, repeat !important;
+  border-color: rgba(180, 83, 9, 0.3) !important;
+}
+
+#gallery .section-tag {
+  background: rgba(254, 243, 199, 0.16) !important;
+  color: #fde68a !important;
+  border: 1px solid rgba(245, 158, 11, 0.45) !important;
+  border-radius: 9999px !important;
+  padding: 4px 14px !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.08em !important;
+  backdrop-filter: blur(8px) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+[data-theme="dark"] #gallery .section-tag {
+  background: rgba(120, 53, 15, 0.4) !important;
+  color: #fde68a !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+#gallery .section-title {
+  color: #ffffff !important;
+  font-family: var(--font-heading) !important;
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] #gallery .section-title {
+  color: #f8fafc !important;
+}
+
+#gallery .section-subtitle {
+  color: #e5d8c8 !important;
+  font-size: 1.0rem !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] #gallery .section-subtitle {
+  color: #cbd5e1 !important;
+}
+
+/* Gallery Viewport Dimensions & Spacing — 100% Crystal Clear (No Blur/Fade Overlays) */
+.gallery-carousel-viewport {
+  height: auto !important;
+  min-height: 620px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  padding: 8px 0 12px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* Remove all blurry edge vignettes from carousel left and right */
+.gallery-carousel-viewport::before,
+.gallery-carousel-viewport::after {
+  display: none !important;
+  content: none !important;
+}
+
+.gallery-carousel-track {
+  position: relative !important;
+  display: flex !important;
+  gap: 22px !important;
+  align-items: center !important;
+  padding: 10px 50px 10px 75px !important;
+  overflow: visible !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  will-change: transform !important;
+  user-select: none !important;
+}
+
+.gallery-carousel-track.track-top {
+  animation: galleryMarqueeLeft 48s linear infinite !important;
+}
+
+.gallery-carousel-track.track-bottom {
+  animation: galleryMarqueeRight 52s linear infinite !important;
+}
+
+.gallery-carousel-track.paused {
+  animation-play-state: paused !important;
+}
+
+@keyframes galleryMarqueeLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes galleryMarqueeRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   THE POLAROID & 35MM SLIDE CARD (Human-Crafted Tactile Artifact)
+   -------------------------------------------------------------------------- */
+.polaroid-slide-card {
+  flex: 0 0 230px !important;
+  height: auto !important;
+  min-height: 285px !important;
+  background: #ffffff !important;
+  border-radius: 14px !important;
+  padding: 22px 11px 12px 11px !important;
+  box-shadow: 
+    0 10px 24px -4px rgba(60, 40, 20, 0.1),
+    0 3px 8px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(226, 214, 198, 0.7) !important;
+  transform-origin: 50% 15px !important; /* Punched brass eyelet pivot point */
+  will-change: transform;
+  position: relative !important;
+  z-index: 10 !important;
+  overflow: visible !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  box-sizing: border-box !important;
+  transition: box-shadow 0.3s ease, filter 0.3s ease !important;
+}
+
+[data-theme="dark"] .polaroid-slide-card {
+  background: #1e1814 !important;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(180, 83, 9, 0.3) !important;
+}
+
+.polaroid-slide-card:hover {
+  box-shadow: 
+    0 30px 60px -10px rgba(180, 83, 9, 0.35),
+    0 0 0 2px #f59e0b !important;
+  z-index: 40 !important;
+}
+
+/* Washi Tape Mount Accent (Top-Center) */
+.card-washi-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 16px;
+  background: rgba(254, 240, 138, 0.92);
+  border: 1px dashed rgba(234, 179, 8, 0.65);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* Brass Grommet Eyelet Hole (Option B: Just below washi tape) */
+.postcard-puncture {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 45%, #854d0e 90%);
+  border: 2px solid #b45309;
+  box-shadow: 
+    0 1.5px 3px rgba(0, 0, 0, 0.28),
+    inset 0 1.5px 3px rgba(0, 0, 0, 0.85);
+  z-index: 14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.postcard-puncture::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #0f172a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="dark"] .postcard-puncture::after {
+  background: #090d16;
+}
+
+/* Decorative Tied Red Silk Knot (Akai Ito Musubi) */
+.akai-eyelet-knot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -18%);
+  width: 28px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyelet-knot-svg {
+  width: 28px;
+  height: 30px;
+  overflow: visible;
+}
+
+/* Layering for Akai Ito Over-and-Under Thread Weaving */
+.postcard-thread-svg-front {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 25 !important;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.postcard-thread-svg-behind {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4 !important;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Photo Frame */
+.polaroid-photo-frame {
+  position: relative;
+  width: 100%;
+  height: 165px !important;
+  margin-top: 4px !important;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e2e8f0;
+  flex-shrink: 0 !important;
+}
+
+/* Interactive Travel Twine Toolbar Buttons */
+.btn-twine-strum {
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6) !important;
+  border: 1.5px solid #f43f5e !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.12) !important;
+  cursor: pointer !important;
+  padding: 8px 16px !important;
+  border-radius: 9999px !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.btn-twine-strum:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(225, 29, 72, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-twine-strum {
+  background: rgba(225, 29, 72, 0.15) !important;
+  border-color: rgba(244, 63, 94, 0.5) !important;
+  color: #fda4af !important;
+}
+
+.polaroid-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.polaroid-slide-card:hover .polaroid-photo-frame img {
+  filter: brightness(1.04);
+}
+
+/* Badge Chip on Top-Left */
+.polaroid-badge-chip {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(8px);
+  color: #fef08a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 240, 138, 0.35);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+
+/* Hover Curtain & Action Pill */
+.polaroid-hover-curtain {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.82) 0%, transparent 65%);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease;
+  z-index: 6;
+}
+
+.polaroid-slide-card:hover .polaroid-hover-curtain {
+  opacity: 1;
+}
+
+.hover-inspect-btn {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(6px);
+  transition: transform 0.25s ease;
+}
+
+.polaroid-slide-card:hover .hover-inspect-btn {
+  transform: translateY(0);
+}
+
+/* Caption Footer */
+.polaroid-caption-bar {
+  padding-top: 10px !important;
+  padding-bottom: 2px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  flex-grow: 1 !important;
+}
+
+.polaroid-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.polaroid-place-title {
+  font-family: var(--font-heading) !important;
+  font-size: 1.0rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+[data-theme="dark"] .polaroid-place-title {
+  color: #f8fafc !important;
+}
+
+.polaroid-serial {
+  font-family: monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.polaroid-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.polaroid-location {
+  color: #d97706;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.polaroid-camera-tag {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.72rem;
+  background: rgba(241, 245, 249, 0.9);
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .polaroid-camera-tag {
+  background: rgba(30, 24, 20, 0.9);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: #cbd5e1;
+}
+
+/* Gallery Filter Pills in Dark Woodcraft Theme */
+#gallery .gallery-filter-btn {
+  background: rgba(35, 22, 14, 0.75) !important;
+  border: 1.5px solid rgba(195, 135, 80, 0.35) !important;
+  color: #f3ece4 !important;
+  border-radius: 9999px !important;
+  font-weight: 700 !important;
+  padding: 8px 18px !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] #gallery .gallery-filter-btn {
+  background: rgba(22, 15, 10, 0.85) !important;
+  border-color: rgba(180, 83, 9, 0.35) !important;
+  color: #cbd5e1 !important;
+}
+
+#gallery .gallery-filter-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(55, 34, 22, 0.9) !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25) !important;
+}
+
+#gallery .gallery-filter-btn.active {
+  background: linear-gradient(135deg, #ea580c, #f59e0b) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.45) !important;
+  transform: translateY(-2px) !important;
+}
+
+#gallery .btn-shuffle {
+  background: rgba(35, 22, 14, 0.75) !important;
+  border: 1.5px solid rgba(195, 135, 80, 0.35) !important;
+  color: #f3ece4 !important;
+  border-radius: 9999px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  padding: 8px 16px !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] #gallery .btn-shuffle {
+  background: rgba(22, 15, 10, 0.85) !important;
+  border-color: rgba(180, 83, 9, 0.35) !important;
+  color: #f8fafc !important;
+}
+
+#gallery .btn-shuffle:hover {
+  background: #ea580c !important;
+  color: #ffffff !important;
+  border-color: #ea580c !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35) !important;
+}
+
+/* Scrub Reel Control Bar */
+.gallery-reel-scrub-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.btn-reel-scrub {
+  background: #ffffff;
+  border: 1.5px solid rgba(226, 214, 198, 0.9);
+  color: #b45309;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .btn-reel-scrub {
+  background: #1c1613;
+  border-color: rgba(180, 83, 9, 0.3);
+  color: #fde68a;
+}
+
+.btn-reel-scrub:hover {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.2);
+}
+
+.btn-reel-scrub:active {
+  transform: scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   6. SECRET ITINERARY — Vintage Field Passport & Explorer Journal
+   -------------------------------------------------------------------------- */
+#toolkit {
+  background: 
+    radial-gradient(circle at 75% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 40%),
+    linear-gradient(180deg, #f8f6f0 0%, #fdfbf7 50%, #f4f6fa 100%) !important;
+  padding: 60px 0 !important;
+  position: relative;
+}
+
+[data-theme="dark"] #toolkit {
+  background: linear-gradient(180deg, #0b1120 0%, #111827 100%) !important;
+}
+
+.toolkit-card {
+  background: #ffffff !important;
+  border: 2px dashed #e2d9cc !important;
+  border-radius: 24px !important;
+  box-shadow: 
+    0 16px 40px -8px rgba(180, 83, 9, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Vintage Field Passport Seal in Corner */
+.toolkit-card::before {
+  content: '★ FIELD DOSSIER ★';
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: #b45309;
+  background: rgba(254, 243, 199, 0.8);
+  border: 1.5px solid #f59e0b;
+  border-radius: 8px;
+  padding: 3px 12px;
+  transform: rotate(2deg);
+}
+
+/* --------------------------------------------------------------------------
+   7. NEWSLETTER SECTION — Airmail Vintage Postcard
+   -------------------------------------------------------------------------- */
+.newsletter-card {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.25) 0%, transparent 45%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border: 2px solid rgba(249, 115, 22, 0.3) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 24px 60px -12px rgba(234, 88, 12, 0.22) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Airmail Strip Edge Accent */
+.newsletter-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: repeating-linear-gradient(
+    45deg,
+    #ef4444,
+    #ef4444 12px,
+    #ffffff 12px,
+    #ffffff 24px,
+    #0284c7 24px,
+    #0284c7 36px,
+    #ffffff 36px,
+    #ffffff 48px
+  );
+}
+
+/* --------------------------------------------------------------------------
+   8. TACTILE BUTTONS & HUMAN INTERACTION MICRO-EFFECTS
+   -------------------------------------------------------------------------- */
+.btn-gem {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 50%, #db2777 100%) !important;
+  border-radius: 9999px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 24px -4px rgba(234, 88, 12, 0.45) !important;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.btn-gem:hover {
+  transform: translateY(-2px) scale(1.04) !important;
+  box-shadow: 0 12px 30px -4px rgba(234, 88, 12, 0.6) !important;
+}
+
+.btn-gem:active {
+  transform: translateY(1px) scale(0.97) !important;
+}
+
+/* Floating Wanderlust Sound Capsule Widget */
+.wanderlust-audio-pill {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  color: #fed7aa;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.25s ease;
+}
+
+.wanderlust-audio-pill:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: #0f172a;
+  border-color: #ea580c;
+  color: #fff;
+  box-shadow: 0 16px 36px rgba(234, 88, 12, 0.35);
+}
+
+.wanderlust-audio-pill.playing {
+  background: rgba(15, 23, 42, 0.96);
+  border-color: #f97316;
+  color: #fff;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.45), 0 12px 32px rgba(0, 0, 0, 0.35);
+  animation: audioPulse 2.8s infinite ease-in-out;
+}
+
+@keyframes audioPulse {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(249, 115, 22, 0.35), 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(249, 115, 22, 0.75), 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-bar {
+  width: 2.5px;
+  height: 100%;
+  background: #ea580c;
+  border-radius: 2px;
+  animation: equalize 1s infinite alternate;
+}
+
+.sound-bar:nth-child(2) { animation-delay: 0.2s; height: 60%; }
+.sound-bar:nth-child(3) { animation-delay: 0.4s; height: 80%; }
+
+@keyframes equalize {
+  0% { height: 20%; }
+  100% { height: 100%; }
+}
+
+.sound-bars.paused .sound-bar {
+  animation: none;
+  height: 4px;
+}
+
+/* ==========================================================================
+   CINEMATIC EXPANDING DESTINATION STAGE (The Human-Made Expanding Carousel)
+   ========================================================================== */
+.hopstop-stage-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 28px;
+  padding: 0 8px;
+}
+
+.hopstop-stage-container {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  background: #090d16;
+  border-radius: 26px;
+  box-shadow: 
+    0 24px 55px -12px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .hopstop-stage-container {
+  box-shadow: 
+    0 24px 55px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(249, 115, 22, 0.3);
+}
+
+.hopstop-stage-slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Base Slider Item */
+.hopstop-stage-slide .item {
+  width: 180px;
+  height: 250px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  background-position: center;
+  background-size: cover;
+  display: inline-block;
+  transition: all 0.65s cubic-bezier(0.25, 1, 0.3, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Card 1 and 2: The Hero Fullscreen Background Experience */
+.hopstop-stage-slide .item:nth-child(1),
+.hopstop-stage-slide .item:nth-child(2) {
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  border-radius: 32px;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Vignette overlay for readable text on full stage */
+.hopstop-stage-slide .item:nth-child(1)::before,
+.hopstop-stage-slide .item:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg, 
+    rgba(15, 23, 42, 0.92) 0%, 
+    rgba(15, 23, 42, 0.75) 45%, 
+    rgba(15, 23, 42, 0.25) 80%, 
+    transparent 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Preview Card Subtle Dark Tint and Border */
+.hopstop-stage-slide .item:nth-child(n + 3)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(15, 23, 42, 0.85) 100%);
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.hopstop-stage-slide .item:nth-child(n + 3):hover {
+  transform: translateY(calc(-50% - 10px)) scale(1.05);
+  box-shadow: 0 28px 55px rgba(234, 88, 12, 0.4), 0 0 0 2px #ea580c;
+  z-index: 25;
+}
+
+/* Stacking Positions for Preview Cards */
+.hopstop-stage-slide .item:nth-child(3) {
+  left: 54%;
+}
+
+.hopstop-stage-slide .item:nth-child(4) {
+  left: calc(54% + 195px);
+}
+
+.hopstop-stage-slide .item:nth-child(5) {
+  left: calc(54% + 390px);
+}
+
+.hopstop-stage-slide .item:nth-child(n + 6) {
+  left: calc(54% + 585px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Preview Card Overlay Label */
+.item-preview-label {
+  display: none;
+}
+
+.hopstop-stage-slide .item:nth-child(n + 3) .item-preview-label {
+  display: block;
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 3;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.item-preview-label h5 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-preview-label span {
+  font-size: 0.72rem;
+  color: #fed7aa;
+  font-weight: 600;
+}
+
+/* Expanded Content Layer */
+.hopstop-stage-slide .item .content {
+  position: absolute;
+  top: 50%;
+  left: 54px;
+  width: 440px;
+  max-width: calc(100% - 90px);
+  text-align: left;
+  color: #f8fafc;
+  transform: translateY(-50%);
+  display: none;
+  z-index: 5;
+}
+
+/* Active Main Slide Displays Animated Content */
+.hopstop-stage-slide .item:nth-child(2) .content {
+  display: block;
+}
+
+.stage-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(249, 115, 22, 0.25);
+  backdrop-filter: blur(8px);
+  color: #fed7aa;
+  border: 1px solid rgba(251, 146, 60, 0.45);
+  padding: 5px 14px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: stageTextAnim 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s 1 forwards;
+}
+
+.content .name {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  animation: stageTextAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s 1 forwards;
+}
+
+.content .location-subtitle {
+  color: #fed7aa;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 6px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: stageTextAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s 1 forwards;
+}
+
+.content .des {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: stageTextAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s 1 forwards;
+}
+
+.stage-secret-memo {
+  background: rgba(245, 158, 11, 0.18);
+  border-left: 3px solid #f59e0b;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.86rem;
+  color: #fef3c7;
+  line-height: 1.5;
+  margin-bottom: 22px;
+  opacity: 0;
+  animation: stageTextAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s 1 forwards;
+}
+
+.content .stage-actions-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: stageTextAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s 1 forwards;
+}
+
+.stage-btn-explore {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.45);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-btn-explore:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(234, 88, 12, 0.6);
+}
+
+.stage-btn-directions {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stage-btn-directions:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.stage-btn-save {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fef08a;
+  border: 1px solid rgba(254, 240, 138, 0.4);
+  padding: 12px 18px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stage-btn-save:hover {
+  background: rgba(254, 240, 138, 0.25);
+  transform: translateY(-2px);
+}
+
+@keyframes stageTextAnim {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Slider Navigation Buttons (Next / Prev) */
+.hopstop-stage-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 54%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 20;
+}
+
+.stage-nav-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.stage-nav-arrow:hover {
+  background: #ea580c;
+  border-color: #ea580c;
+  color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 10px 28px rgba(234, 88, 12, 0.5);
+}
+
+.stage-nav-arrow:active {
+  transform: scale(0.96);
+}
+
+/* Auto-Advance Timeline Progress Bar */
+.stage-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  z-index: 30;
+  overflow: hidden;
+}
+
+.stage-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ea580c 0%, #f97316 60%, #fef08a 100%);
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
+  transition: width 0.1s linear;
+}
+
+/* Responsive Rules for Expanding Stage */
+@media (max-width: 1100px) {
+  .hopstop-stage-container {
+    height: 540px;
+  }
+  .content .name {
+    font-size: 2.3rem;
+  }
+  .hopstop-stage-slide .item .content {
+    left: 40px;
+    width: 440px;
+  }
+  .hopstop-stage-slide .item {
+    width: 180px;
+    height: 250px;
+  }
+  .hopstop-stage-slide .item:nth-child(3) {
+    left: 55%;
+  }
+  .hopstop-stage-slide .item:nth-child(4) {
+    left: calc(55% + 195px);
+  }
+  .hopstop-stage-slide .item:nth-child(5) {
+    left: calc(55% + 390px);
+  }
+  .hopstop-stage-controls {
+    left: 55%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hopstop-stage-container {
+    height: 580px;
+  }
+  .hopstop-stage-slide .item .content {
+    left: 24px;
+    right: 24px;
+    width: auto;
+    top: 42%;
+  }
+  .content .name {
+    font-size: 1.9rem;
+  }
+  .hopstop-stage-slide .item:nth-child(n + 3) {
+    display: none; /* Mobile focuses on the full featured slide */
+  }
+  .hopstop-stage-controls {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+  }
+}
+

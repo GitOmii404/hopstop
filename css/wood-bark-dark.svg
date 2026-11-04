@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <!-- Yakisugi Charred Timber & Raw Grain Gradients -->
+    <linearGradient id="charBarkPlate1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0a0806" stop-opacity="0.80"/>
+      <stop offset="35%" stop-color="#1f1812" stop-opacity="0.65"/>
+      <stop offset="65%" stop-color="#2a2018" stop-opacity="0.75"/>
+      <stop offset="90%" stop-color="#16120e" stop-opacity="0.70"/>
+      <stop offset="100%" stop-color="#060403" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <linearGradient id="charBarkPlate2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#040302" stop-opacity="0.85"/>
+      <stop offset="25%" stop-color="#1c1611" stop-opacity="0.65"/>
+      <stop offset="60%" stop-color="#2d221a" stop-opacity="0.75"/>
+      <stop offset="85%" stop-color="#18130f" stop-opacity="0.70"/>
+      <stop offset="100%" stop-color="#080605" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <!-- Seamless noise texture for microscopic wood pores & fibrous bark grain -->
+    <filter id="charWoodFibers" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.004" numOctaves="3" seed="24" result="noise"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.85  0 0 0 0 0.60  0 0 0 0 0.25  0 0 0 0 0.08 0"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Background Slat & Bark Plates (Seamless at 0 and 600) -->
+  <rect x="0" y="0" width="120" height="600" fill="url(#charBarkPlate1)"/>
+  <rect x="120" y="0" width="150" height="600" fill="url(#charBarkPlate2)"/>
+  <rect x="270" y="0" width="130" height="600" fill="url(#charBarkPlate1)"/>
+  <rect x="400" y="0" width="200" height="600" fill="url(#charBarkPlate2)"/>
+
+  <!-- 2. Microscopic Natural Wood Fibers & Grain -->
+  <rect x="0" y="0" width="600" height="600" filter="url(#charWoodFibers)" opacity="0.6"/>
+
+  <!-- 3. Fine Organic Vertical Grain Striations -->
+  <g fill="none" stroke="#f59e0b" stroke-width="0.7" opacity="0.10">
+    <path d="M 18,0 C 22,120 14,240 20,360 C 24,460 18,540 18,600"/>
+    <path d="M 36,0 C 32,100 40,220 34,340 C 30,440 38,530 36,600"/>
+    <path d="M 58,0 C 64,150 52,280 60,420 C 66,510 58,570 58,600"/>
+    <path d="M 82,0 C 78,90 86,210 80,330 C 76,450 84,540 82,600"/>
+    <path d="M 102,0 C 106,140 98,270 104,400 C 108,500 102,560 102,600"/>
+
+    <path d="M 142,0 C 138,100 144,200 140,300 C 136,410 144,520 142,600"/>
+    <path d="M 162,0 C 166,90 156,180 158,260 C 150,300 158,340 164,420 C 168,510 162,560 162,600"/>
+    <path d="M 180,0 C 184,110 174,210 170,270 C 166,290 166,310 172,330 C 178,410 182,510 180,600"/>
+    <path d="M 215,0 C 210,110 220,210 224,270 C 228,290 228,310 222,330 C 214,410 212,510 215,600"/>
+    <path d="M 238,0 C 242,130 234,260 240,390 C 244,490 238,560 238,600"/>
+    <path d="M 256,0 C 252,90 260,200 254,320 C 250,430 258,530 256,600"/>
+
+    <path d="M 292,0 C 298,120 288,240 294,370 C 298,470 292,550 292,600"/>
+    <path d="M 314,0 C 310,100 320,210 312,330 C 308,440 316,530 314,600"/>
+    <path d="M 338,0 C 344,140 332,270 340,410 C 346,500 338,570 338,600"/>
+    <path d="M 362,0 C 358,90 366,200 360,320 C 356,430 364,520 362,600"/>
+    <path d="M 384,0 C 388,110 380,230 386,360 C 390,460 384,540 384,600"/>
+
+    <path d="M 425,0 C 420,100 428,210 422,330 C 418,440 426,530 425,600"/>
+    <path d="M 450,0 C 456,130 446,260 452,390 C 458,490 450,560 450,600"/>
+    <path d="M 478,0 C 474,90 482,190 476,300 C 472,400 480,510 478,600"/>
+    <path d="M 510,0 C 516,120 506,240 512,370 C 518,470 510,550 510,600"/>
+    <path d="M 542,0 C 538,100 546,220 540,340 C 536,450 544,530 542,600"/>
+    <path d="M 572,0 C 576,130 568,260 574,400 C 578,500 572,560 572,600"/>
+  </g>
+
+  <!-- 4. Deep Organic Bark Furrows & Fissures -->
+  <g>
+    <path d="M 120,0 C 124,70 116,150 122,230 C 127,310 117,390 123,480 C 126,530 120,570 120,600" 
+          fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 122,0 C 126,70 118,150 124,230 C 129,310 119,390 125,480 C 128,530 122,570 122,600" 
+          fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.12"/>
+    <path d="M 121,110 C 128,135 136,150 138,170" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.4"/>
+    <path d="M 122,340 C 114,365 106,380 102,405" fill="none" stroke="#000000" stroke-width="1.2" opacity="0.4"/>
+  </g>
+
+  <g>
+    <path d="M 270,0 C 265,80 274,170 268,260 C 262,340 273,430 267,520 C 264,560 270,590 270,600" 
+          fill="none" stroke="#000000" stroke-width="3.2" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 272,0 C 267,80 276,170 270,260 C 264,340 275,430 269,520 C 266,560 272,590 272,600" 
+          fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.12"/>
+    <path d="M 269,200 C 278,225 284,245 288,270" fill="none" stroke="#000000" stroke-width="1.3" opacity="0.4"/>
+    <path d="M 268,460 C 259,485 252,505 248,525" fill="none" stroke="#000000" stroke-width="1.2" opacity="0.4"/>
+  </g>
+
+  <g>
+    <path d="M 400,0 C 405,90 395,190 402,280 C 408,370 397,460 404,540 C 406,570 400,590 400,600" 
+          fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 402,0 C 407,90 397,190 404,280 C 410,370 399,460 406,540 C 408,570 402,590 402,600" 
+          fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.12"/>
+    <path d="M 401,150 C 392,175 385,195 380,215" fill="none" stroke="#000000" stroke-width="1.2" opacity="0.4"/>
+    <path d="M 403,380 C 411,405 418,425 422,450" fill="none" stroke="#000000" stroke-width="1.3" opacity="0.4"/>
+  </g>
+
+  <g>
+    <path d="M 0,0 C 4,90 -3,190 3,290 C 7,380 -2,470 4,550 C 5,580 0,595 0,600" 
+          fill="none" stroke="#000000" stroke-width="2.8" opacity="0.5"/>
+    <path d="M 600,0 C 604,90 597,190 603,290 C 607,380 598,470 604,550 C 605,580 600,595 600,600" 
+          fill="none" stroke="#000000" stroke-width="2.8" opacity="0.5"/>
+  </g>
+
+  <!-- 5. Wood Knots -->
+  <g transform="translate(195, 300)" opacity="0.75">
+    <ellipse cx="0" cy="0" rx="26" ry="46" fill="none" stroke="#000000" stroke-width="1" opacity="0.4"/>
+    <ellipse cx="0" cy="0" rx="19" ry="34" fill="none" stroke="#000000" stroke-width="1.2" opacity="0.5"/>
+    <ellipse cx="0" cy="0" rx="12" ry="22" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="6" ry="12" fill="#000000" opacity="0.75"/>
+    <ellipse cx="2" cy="1" rx="4" ry="8" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.2"/>
+  </g>
+
+  <g transform="translate(520, 140)" opacity="0.70">
+    <ellipse cx="0" cy="0" rx="16" ry="28" fill="none" stroke="#000000" stroke-width="0.9" opacity="0.4"/>
+    <ellipse cx="0" cy="0" rx="9" ry="17" fill="none" stroke="#000000" stroke-width="1.2" opacity="0.5"/>
+    <ellipse cx="0" cy="0" rx="4" ry="8" fill="#000000" opacity="0.75"/>
+  </g>
+</svg>
+

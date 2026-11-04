@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bounties — HopStop Crowdsourced Travel Request Board</title>
+  <meta name="description" content="Solve crowdsourced travel requests for rare, secret spots to earn XP, level up your rank, and unlock exclusive explorer badges on HopStop.">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="styles.css?v=20261103_high_contrast_clean">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261103_high_contrast_clean">
+</head>
+<body>
+
+  <!-- ==================== Global Header ==================== -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+        <div class="brand-icon">💎</div>
+        <span>Hop<span>Stop</span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="feed.html" class="nav-link">📱 Feed</a></li>
+          <li><a href="index.html#gallery" class="nav-link">📸 Gallery</a></li>
+          <li><a href="boards.html" class="nav-link">📌 Boards</a></li>
+          <li><a href="battles.html" class="nav-link">🏆 Battles</a></li>
+          <li><a href="planner.html" class="nav-link">🗺️ Planner</a></li>
+          <li><a href="bounties.html" class="nav-link active">🎯 Bounties</a></li>
+          <li><a href="index.html#mapSection" class="nav-link">🌍 World Map</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button id="cloudStatusBtn" class="cloud-status-badge disconnected" onclick="openCloudModal()" title="Configure Supabase Free Cloud Backend">
+          <span class="cloud-status-dot" id="cloudStatusDot"></span>
+          <span id="cloudStatusLabel">Local Storage</span>
+        </button>
+
+        <div class="notification-bell-wrap" style="position: relative;">
+          <button id="notifBellBtn" class="icon-btn" onclick="toggleNotificationDropdown(event)" title="Notifications">
+            🔔
+            <span class="notification-badge-dot" id="notifBadgeDot">3</span>
+          </button>
+          <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notif-dropdown-header">
+              <span style="font-weight: 700; font-size: 0.88rem;">🔔 Notifications (<span id="notifUnreadCount">3</span>)</span>
+              <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer;" onclick="markAllNotificationsRead()">Mark Read</span>
+            </div>
+            <div class="notif-list-scroll" id="notificationsList"></div>
+            <div class="notif-dropdown-footer">
+              <button class="btn-gem" style="width: 100%; padding: 8px; font-size: 0.8rem;" onclick="openWeeklyDigestModal()">
+                📬 Open Weekly Curated Digest (5 Gems)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button id="themeToggle" class="icon-btn" title="Toggle Light/Dark Theme" onclick="toggleTheme()">
+          🌙
+        </button>
+
+        <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-gem" onclick="openAuthModal('signup')">Join Community</button>
+        </div>
+
+        <div id="authHeaderActions" style="display: none; align-items: center; gap: 12px;">
+          <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
+          
+          <div class="user-menu-wrap">
+            <div class="user-avatar-btn" id="userMenuTrigger">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
+              <span class="user-avatar-name current-user-name">Maya</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+            </div>
+
+            <div class="user-dropdown" id="userMenuDropdown">
+              <div class="dropdown-item" onclick="location.href='feed.html'">📱 Social Feed</div>
+              <div class="dropdown-item" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</div>
+              <div class="dropdown-item" onclick="openTripMode()">🚀 On-The-Road Trip Mode</div>
+              <div class="dropdown-item" onclick="openLeaderboardModal()">🏆 Monthly Top-Finders Leaderboard</div>
+              <div class="dropdown-item" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</div>
+              <div class="dropdown-item" onclick="location.href='boards.html'">📌 Collaborative Dream Boards</div>
+              <div class="dropdown-item" onclick="location.href='battles.html'">🏆 Weekly Photo Battles & Prompts</div>
+              <div class="dropdown-item" onclick="openEscapeMode()">🎧 Ambient Escape Mode</div>
+              <div class="dropdown-item" onclick="location.href='publications.html'">📰 Micro-Publications & Series</div>
+              <div class="dropdown-item" onclick="location.href='planner.html'">🗺️ Multi-Stop Route Planner</div>
+              <div class="dropdown-item" onclick="location.href='bounties.html'">🎯 Travel Bounty Board</div>
+              <div class="dropdown-item" onclick="location.href='index.html#gallery'">📸 Field Photo Gallery</div>
+              <div class="dropdown-item" onclick="location.href='index.html#mapSection'">🗺️ Interactive World Map</div>
+              <div class="dropdown-item" onclick="openDailyGemModal()">🌅 Today's Curated Gem</div>
+              <div class="dropdown-item" onclick="openPostModal()">💎 Post a Hidden Gem</div>
+              <div class="dropdown-item" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</div>
+              <div class="dropdown-item" onclick="location.href='index.html'">🌍 Discover Page</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" style="color: #ef4444;" onclick="handleUserLogout()">🚪 Log Out</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="icon-btn mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         TRAVEL BOUNTY BOARD VIEW (Crowdsourced Discovery & Gamification)
+         ========================================================================== -->
+    <div id="bountyView" class="view-section bounty-board-view active-view">
+      <div class="container" style="padding-top: 20px;">
+        
+        <!-- Bounty Hero Banner -->
+        <div class="bounty-hero-banner">
+          <div class="bounty-hero-text">
+            <div class="bounty-hero-badge">
+              <span>🏹</span> Crowdsourced Travel Requests
+            </div>
+            <h2>Travel <span>Bounty Board</span></h2>
+            <p>Can you find the world's most elusive hidden spots? Solve community discovery bounties to earn XP, level up your explorer rank, and unlock exclusive badges!</p>
+
+            <div class="bounty-stats-strip">
+              <div class="bounty-stat-pill"><span>🏹</span> <strong><span id="bountyActiveQuestsCount">4</span></strong> Active Quests</div>
+              <div class="bounty-stat-pill"><span>💎</span> <strong><span id="bountyXpPool">6,350</span></strong> XP Prize Pool</div>
+              <div class="bounty-stat-pill"><span>✅</span> <strong><span id="bountySolvedTotalCount">4</span></strong> Solved Bounties</div>
+              <div class="bounty-stat-pill stat-pill-gold"><span>🏆</span> Top Hunter: <strong>@mateotravels</strong></div>
+            </div>
+          </div>
+
+          <div class="bounty-hero-actions">
+            <button class="btn-gem" onclick="openPostBountyModal()">
+              <span>🏹</span> + Post a Bounty Request
+            </button>
+          </div>
+        </div>
+
+        <!-- 3-Step "How Bounties Work" Guide Strip -->
+        <div class="how-bounties-work-grid">
+          <div class="how-bounty-step-card">
+            <div class="how-bounty-icon-box">🏹</div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 0.98rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">1. Post a Travel Quest</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">Hunting for a secret cliff cove, speakeasy, or alpine hut? Post a request with an XP bounty.</p>
+            </div>
+          </div>
+          <div class="how-bounty-step-card">
+            <div class="how-bounty-icon-box">🔍</div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 0.98rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">2. Explorers Share Intel</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">Community travelers uncover exact GPS coordinates, access paths, and photos from their journals.</p>
+            </div>
+          </div>
+          <div class="how-bounty-step-card">
+            <div class="how-bounty-icon-box">💎</div>
+            <div>
+              <h4 style="font-family: var(--font-heading); font-size: 0.98rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">3. Claim the XP Bounty</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">The first verified recommendation claims the XP bounty and earns the prestigious Bounty Hunter badge!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bounty Category & Status Filter Tabs -->
+        <div class="bounty-tabs-bar">
+          <button class="bounty-tab-btn active" data-bounty-filter="all" onclick="setBountyFilter('all', this)">🔥 All Bounties (<span id="bountyTotalCount">5</span>)</button>
+          <button class="bounty-tab-btn" data-bounty-filter="high-reward" onclick="setBountyFilter('high-reward', this)">💎 High Reward (600+ XP)</button>
+          <button class="bounty-tab-btn" data-bounty-filter="nature" onclick="setBountyFilter('nature', this)">🌿 Nature & Alps</button>
+          <button class="bounty-tab-btn" data-bounty-filter="culture" onclick="setBountyFilter('culture', this)">⛩️ Sacred & Ancient</button>
+          <button class="bounty-tab-btn" data-bounty-filter="coastal" onclick="setBountyFilter('coastal', this)">🌊 Coastal & Grottoes</button>
+          <button class="bounty-tab-btn" data-bounty-filter="solved" onclick="setBountyFilter('solved', this)">✅ Solved & Verified (<span id="bountySolvedCount">4</span>)</button>
+        </div>
+
+        <!-- Bounty Grid -->
+        <div class="bounty-grid" id="bountyGrid">
+          <!-- Dynamically populated via bounties.js -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== Ultra-Premium Animated Footer ==================== -->
+    <footer class="footer">
+      <div class="container">
+        <!-- Animated Weekly Dispatch Bar -->
+        <div class="footer-newsletter-bar reveal">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">
+              <span>📬</span>
+              <span>The Friday Hidden Gem Dispatch</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0;">Get 5 secret GPS coordinates & photo stories delivered to your inbox every Friday morning.</p>
+          </div>
+
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Friday Dispatch Subscription'); showToast('🎉 Subscribed to Friday Gem Dispatch!'); this.reset();">
+            <input type="email" class="footer-newsletter-input" placeholder="Enter your explorer email..." required>
+            <button type="submit" class="btn-gem" style="padding: 8px 18px; font-size: 0.82rem; white-space: nowrap;">
+              Join 14,000+ Explorers ✨
+            </button>
+          </form>
+        </div>
+
+        <div class="footer-top">
+          <div class="footer-brand reveal">
+            <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+              <div class="brand-icon">💎</div>
+              <span>Hop<span>Stop</span></span>
+            </div>
+            <p>The global social community for discovering and protecting the world's most underrated destinations, secret viewpoints, and hidden cultural gems.</p>
+            
+            <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
+              <span class="cloud-status-dot" style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
+              <span>All Systems Operational • 12 Active Waypoints</span>
+            </div>
+
+            <div class="footer-social-row">
+              <a href="javascript:void(0)" class="footer-social-btn discord" onclick="showToast('Joined Discord Community! 💬')">💬 Discord</a>
+              <a href="javascript:void(0)" class="footer-social-btn instagram" onclick="showToast('Opening Instagram @hopstopgems 📸')">📸 Instagram</a>
+              <a href="javascript:void(0)" class="footer-social-btn twitter" onclick="showToast('Opening X @hopstopapp 🐦')">🐦 X</a>
+              <a href="javascript:void(0)" class="footer-social-btn rss" onclick="showToast('RSS Feed Copied! 📡')">📡 RSS</a>
+            </div>
+          </div>
+
+          <!-- Column 1: Explore & Feed -->
+          <div class="footer-column reveal stagger-1">
+            <h4>🗺️ Explore</h4>
+            <ul>
+              <li><a href="feed.html">📱 Social Feed</a></li>
+              <li><a href="boards.html">📌 Dream Boards <span class="footer-badge-tag">Co-Save</span></a></li>
+              <li><a href="battles.html">🏆 Photo Battles <span class="footer-badge-tag gold">Active</span></a></li>
+              <li><a href="index.html#mapSection">🌍 Interactive Map</a></li>
+              <li><a href="index.html#gallery">📸 Photo Stream Wall</a></li>
+              <li><button class="footer-link-btn" onclick="openDailyGemModal()">🌅 Today's Curated Gem</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Trip Tools -->
+          <div class="footer-column reveal stagger-2">
+            <h4>🧭 Smart Tools</h4>
+            <ul>
+              <li><a href="planner.html">🗺️ Multi-Stop Route Planner</a></li>
+              <li><button class="footer-link-btn" onclick="openTripMode()">🚀 Road-Trip Mode</button></li>
+              <li><a href="bounties.html">🎯 Travel Bounty Board</a></li>
+              <li><button class="footer-link-btn" onclick="openEscapeMode()">🎧 Ambient Escape Mode</button></li>
+              <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Compass</button></li>
+              <li><button class="footer-link-btn" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Gamification & Community -->
+          <div class="footer-column reveal stagger-3">
+            <h4>🏆 Community</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</button></li>
+              <li><button class="footer-link-btn" onclick="openLeaderboardModal()">🏆 Top-Finders Leaderboard</button></li>
+              <li><button class="footer-link-btn" onclick="openDailyStreakModal()">🔥 Daily Streak & XP</button></li>
+              <li><a href="publications.html">📰 Micro-Publications & Series</a></li>
+              <li><a href="boards.html#lockedGuidesGrid">🔒 Creator Dossiers & Guides</a></li>
+              <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Platform & Actions -->
+          <div class="footer-column reveal stagger-4">
+            <h4>⚡ Platform</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openPostModal()">💎 Post a Hidden Gem</button></li>
+              <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
+              <li><button class="footer-link-btn" onclick="openCloudModal()">⚡ Supabase Cloud Backend</button></li>
+              <li><button class="footer-link-btn" onclick="openAuthModal('signin')">🔑 Sign In / Join</button></li>
+              <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
+              <li>
+                <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                  <span>⬆</span> Back to Top
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Footer Bar -->
+        <div class="footer-bottom">
+          <p>&copy; 2026 HopStop — The Social Platform for Underrated Places in the World.</p>
+          <div class="footer-bottom-links">
+            <a href="javascript:void(0)" onclick="showToast('Leave-No-Trace Certified Explorer Network 🌿')">🌿 Leave-No-Trace Certified</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Privacy Protected: Your exact coordinates are never sold 🛡️')">🛡️ Privacy Policy</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Community Guidelines Active 📜')">📜 Terms & Guidelines</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="openCloudModal()">⚡ Free Supabase Sync</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ==================== Post a Travel Bounty Request Modal ==================== -->
+  <div class="modal-backdrop" id="postBountyModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closePostBountyModal()" aria-label="Close modal">✕</button>
+      
+      <div class="post-form-header">
+        <h2>🏹 Post a Travel Bounty</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Ask the global community for recommendations on rare, uncrowded places.</p>
+      </div>
+
+      <form id="postBountyForm" class="post-form-body">
+        <div class="form-group">
+          <label for="bountyTitleInput">Bounty Request Title *</label>
+          <input type="text" id="bountyTitleInput" class="form-control" placeholder="e.g. Seeking a quiet cliff village in Portugal with zero tourists" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="bountyCategoryInput">Vibe Category</label>
+            <select id="bountyCategoryInput" class="form-control">
+              <option value="nature">🌿 Nature & Alps</option>
+              <option value="village">🏘️ Hidden Village</option>
+              <option value="coastal">🌊 Secret Coast & Grottoes</option>
+              <option value="culture">⛩️ Sacred & Historic Sanctuary</option>
+              <option value="ruins">🏛️ Ancient Relic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bountyRewardInput">Reward Gem Bounty (XP)</label>
+            <select id="bountyRewardInput" class="form-control">
+              <option value="500">💎 500 XP Bounty</option>
+              <option value="750" selected>💎 750 XP Bounty (High Urgency)</option>
+              <option value="1000">💎 1,000 XP Bounty (Legendary)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bountyRegionInput">Target Country or Region *</label>
+          <input type="text" id="bountyRegionInput" class="form-control" placeholder="e.g. Alentejo Coast, Portugal or Dolomites, Italy" required>
+        </div>
+
+        <div class="form-group">
+          <label for="bountyDescInput">Specific Details & Criteria *</label>
+          <textarea id="bountyDescInput" class="form-control" rows="3" placeholder="Describe the vibe, budget limits, accessibility requirements..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #f97316, #ea580c); font-size: 0.95rem;">
+          🏹 Publish Bounty to Board
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== Solve a Travel Bounty Modal ==================== -->
+  <div class="modal-backdrop" id="solveBountyModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeSolveBountyModal()" aria-label="Close modal">✕</button>
+      
+      <div class="post-form-header">
+        <h2>🎯 Solve Travel Bounty</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;" id="solveBountyHeaderSubtitle">Claim the reward XP by sharing a verified hidden spot.</p>
+      </div>
+
+      <div class="cloud-info-box" id="solveBountyContextBox" style="background: rgba(249, 115, 22, 0.08); border-color: rgba(249, 115, 22, 0.25);">
+        <h4 id="solveBountyRequestTitle" style="color: #ea580c; margin-bottom: 4px;">Request Title</h4>
+        <p id="solveBountyRequestDesc" style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Request description...</p>
+      </div>
+
+      <form id="solveBountyForm" class="post-form-body">
+        <input type="hidden" id="solveBountyId">
+        <input type="hidden" id="solveBountyRewardXp">
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="solvePlaceName">Recommended Spot Name *</label>
+            <input type="text" id="solvePlaceName" class="form-control" placeholder="e.g. Odeceixe Cliff Beach" required>
+          </div>
+          <div class="form-group">
+            <label for="solveCountry">Country *</label>
+            <input type="text" id="solveCountry" class="form-control" placeholder="e.g. Portugal" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="solvePhotoUrl">Photo URL *</label>
+          <input type="url" id="solvePhotoUrl" class="form-control" placeholder="https://images.unsplash.com/photo-..." value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80" required>
+        </div>
+
+        <div class="form-group">
+          <label for="solveSecretTip">Traveler Secret Transit Tip *</label>
+          <input type="text" id="solveSecretTip" class="form-control" placeholder="e.g. Park at upper cliff viewpoint and walk the fisherman staircase down" required>
+        </div>
+
+        <div class="form-group">
+          <label for="solveStory">Why this perfectly answers the bounty *</label>
+          <textarea id="solveStory" class="form-control" rows="3" placeholder="Describe the scene, solitude, and authentic atmosphere..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #10b981, #059669); font-size: 0.95rem;">
+          ✨ Submit Solution & Claim XP Bounty
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Shared Modals (Auth, Achievement, etc.) -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box auth-modal-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">💎</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 700;">Welcome to HopStop</h2>
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tabSigninBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab-btn" id="tabSignupBtn" onclick="switchAuthTab('signup')">Create Account</button>
+      </div>
+      <form id="signinForm" class="auth-form">
+        <div class="form-group">
+          <label>Email or Username</label>
+          <input type="text" class="form-control" value="maya@wander.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" value="password123" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px;">Sign In</button>
+      </form>
+      <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">⚡ 1-Click Demo Login</button>
+    </div>
+  </div>
+
+  <!-- Achievement Modal -->
+  <div class="modal-backdrop" id="achievementModal">
+    <div class="modal-box celebration-modal">
+      <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close modal">✕</button>
+      <div class="celebration-icon-anim" id="achievementIcon">🏆</div>
+      <span class="explorer-tier-badge" style="margin-bottom: 12px;" id="achievementTypeBadge">🏅 NEW BADGE UNLOCKED!</span>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;" id="achievementTitle">Bounty Hunter</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 10px 0 20px;" id="achievementDesc">
+        You successfully solved your first community travel request!
+      </p>
+      <div style="background: rgba(6, 182, 212, 0.1); border: 1px dashed #06b6d4; border-radius: var(--radius-md); padding: 12px; margin-bottom: 20px;">
+        <span style="font-weight: 700; color: #0284c7;" id="achievementRewardText">+500 XP Added to Your Profile</span>
+      </div>
+      <button class="btn-gem" style="width: 100%; padding: 11px;" onclick="closeAchievementModal()">Awesome! Continue Exploring 🚀</button>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/data.js?v=20261103_perfect_v6"></script>
+  <script src="js/state.js?v=20261103_perfect_v6"></script>
+  <script src="js/cloud.js"></script>
+  <script src="js/map.js?v=20261103_perfect_v6"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/bounties.js?v=20261103_perfect_v6"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/planner.js?v=20261103_perfect_v6"></script>
+  <script src="js/daily-streak.js"></script>
+  <script src="js/micro-adventures.js"></script>
+  <script src="js/publications.js"></script>
+  <script src="js/escape.js"></script>
+  <script src="js/stories.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/boards.js?v=20261103_perfect_v6"></script>
+  <script src="js/battles.js"></script>
+  <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>
+  <script src="js/passport.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/trip-mode.js"></script>
+  <script src="js/leaderboard.js"></script>
+  <script src="js/crew-chat.js"></script>
+  <script src="js/ui-effects.js"></script>
+  <script src="js/app-init.js"></script>
+  <script src="js/human-craft.js?v=20261103_wanderlust_audio_hd2"></script>
+</body>
+</html>

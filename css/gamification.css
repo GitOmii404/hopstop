@@ -1,0 +1,135 @@
+/* ==========================================================================
+   HopStop — Explorer Badges, Gamification XP & Leveling
+   ========================================================================== */
+
+/* ==========================================================================
+   Explorer Badges & Gamification Progression
+   ========================================================================== */
+
+.explorer-level-card {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(249, 115, 22, 0.08) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.explorer-level-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.explorer-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+}
+
+.xp-counter-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+[data-theme="dark"] .xp-counter-text {
+  color: #38bdf8;
+}
+
+.xp-progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 8px 0;
+  position: relative;
+}
+
+.xp-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #06b6d4, #f97316);
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.badge-item:hover {
+  transform: translateY(-2px);
+  border-color: #06b6d4;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+}
+
+.badge-item.unlocked .badge-icon {
+  filter: drop-shadow(0 2px 6px rgba(6, 182, 212, 0.4));
+  transform: scale(1.05);
+}
+
+.badge-item.locked {
+  opacity: 0.45;
+  filter: grayscale(80%);
+}
+
+.badge-icon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+  transition: transform var(--transition-fast);
+}
+
+.badge-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.badge-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #090d16;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.badge-item:hover .badge-tooltip {
+  display: block;
+}

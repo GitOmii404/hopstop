@@ -1,0 +1,38 @@
+/* ==========================================================================
+   HopStop — Weekly Curated Digest Cards
+   ========================================================================== */
+
+/* ==========================================================================
+   WEEKLY CURATED DIGEST CARDS
+   ========================================================================== */
+
+.weekly-digest-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.digest-gem-card {
+  display: flex;
+  gap: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 11px;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.digest-gem-card:hover {
+  transform: translateY(-2px);
+  border-color: #06b6d4;
+  box-shadow: var(--shadow-md);
+}
+
+.digest-gem-img {
+  width: 88px;
+  height: 72px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}

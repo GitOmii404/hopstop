@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Battles — HopStop Weekly Discovery Arena</title>
+  <meta name="description" content="Vote and submit hidden gem photography in HopStop's weekly prompt battles. Compete for the Gem Finder badge and XP rewards.">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="styles.css?v=20261103_high_contrast_clean">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261103_high_contrast_clean">
+</head>
+<body>
+
+  <!-- ==================== Global Header ==================== -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+        <div class="brand-icon">💎</div>
+        <span>Hop<span>Stop</span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="feed.html" class="nav-link">📱 Feed</a></li>
+          <li><a href="index.html#gallery" class="nav-link">📸 Gallery</a></li>
+          <li><a href="boards.html" class="nav-link">📌 Boards</a></li>
+          <li><a href="battles.html" class="nav-link active">🏆 Battles</a></li>
+          <li><a href="planner.html" class="nav-link">🗺️ Planner</a></li>
+          <li><a href="bounties.html" class="nav-link">🎯 Bounties</a></li>
+          <li><a href="index.html#mapSection" class="nav-link">🌍 World Map</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Cloud Backend Status Indicator -->
+        <button id="cloudStatusBtn" class="cloud-status-badge disconnected" onclick="openCloudModal()" title="Configure Supabase Free Cloud Backend">
+          <span class="cloud-status-dot" id="cloudStatusDot"></span>
+          <span id="cloudStatusLabel">Local Storage</span>
+        </button>
+
+        <!-- Notification Center Bell -->
+        <div class="notification-bell-wrap" style="position: relative;">
+          <button id="notifBellBtn" class="icon-btn" onclick="toggleNotificationDropdown(event)" title="Notifications & Weekly Digest">
+            🔔
+            <span class="notification-badge-dot" id="notifBadgeDot">3</span>
+          </button>
+
+          <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notif-dropdown-header">
+              <span style="font-weight: 700; font-size: 0.88rem;">🔔 Notifications (<span id="notifUnreadCount">3</span>)</span>
+              <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer;" onclick="markAllNotificationsRead()">Mark Read</span>
+            </div>
+            
+            <div class="notif-list-scroll" id="notificationsList"></div>
+
+            <div class="notif-dropdown-footer">
+              <button class="btn-gem" style="width: 100%; padding: 8px; font-size: 0.8rem;" onclick="openWeeklyDigestModal()">
+                📬 Open Weekly Curated Digest (5 Gems)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="icon-btn" title="Toggle Light/Dark Theme" onclick="toggleTheme()">
+          🌙
+        </button>
+
+        <!-- Guest Actions -->
+        <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-gem" onclick="openAuthModal('signup')">Join Community</button>
+        </div>
+
+        <!-- Authenticated Actions -->
+        <div id="authHeaderActions" style="display: none; align-items: center; gap: 12px;">
+          <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
+          
+          <div class="user-menu-wrap">
+            <div class="user-avatar-btn" id="userMenuTrigger">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
+              <span class="user-avatar-name current-user-name">Maya</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+            </div>
+
+            <div class="user-dropdown" id="userMenuDropdown">
+              <div class="dropdown-item" onclick="location.href='feed.html'">📱 Social Feed</div>
+              <div class="dropdown-item" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</div>
+              <div class="dropdown-item" onclick="openTripMode()">🚀 On-The-Road Trip Mode</div>
+              <div class="dropdown-item" onclick="openLeaderboardModal()">🏆 Monthly Top-Finders Leaderboard</div>
+              <div class="dropdown-item" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</div>
+              <div class="dropdown-item" onclick="location.href='boards.html'">📌 Collaborative Dream Boards</div>
+              <div class="dropdown-item" onclick="location.href='battles.html'">🏆 Weekly Photo Battles & Prompts</div>
+              <div class="dropdown-item" onclick="openEscapeMode()">🎧 Ambient Escape Mode</div>
+              <div class="dropdown-item" onclick="location.href='publications.html'">📰 Micro-Publications & Series</div>
+              <div class="dropdown-item" onclick="location.href='planner.html'">🗺️ Multi-Stop Route Planner</div>
+              <div class="dropdown-item" onclick="location.href='bounties.html'">🎯 Travel Bounty Board</div>
+              <div class="dropdown-item" onclick="location.href='index.html#gallery'">📸 Field Photo Gallery</div>
+              <div class="dropdown-item" onclick="location.href='index.html#mapSection'">🗺️ Interactive World Map</div>
+              <div class="dropdown-item" onclick="openDailyGemModal()">🌅 Today's Curated Gem</div>
+              <div class="dropdown-item" onclick="openPostModal()">💎 Post a Hidden Gem</div>
+              <div class="dropdown-item" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</div>
+              <div class="dropdown-item" onclick="location.href='index.html'">🌍 Discover Page</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" style="color: #ef4444;" onclick="handleUserLogout()">🚪 Log Out</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="icon-btn mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         WEEKLY COMMUNITY BOUNTIES & PHOTO BATTLES VIEW
+         ========================================================================== -->
+    <div id="photoBattlesView" class="view-section battles-view active-view">
+      <div class="container" style="padding-top: 24px;">
+        
+        <!-- Photo Battle Hero Banner -->
+        <div class="battle-hero-banner">
+          <div class="battle-hero-left">
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.2); color: #facc15; padding: 5px 14px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 800; margin-bottom: 12px; border: 1px solid rgba(245, 158, 11, 0.35);">
+              <span>🏆</span> Weekly Discovery Arena • Round #42 Active
+            </div>
+            <h2 id="battlePromptTitle" style="font-size: 2.1rem; font-weight: 800; margin-bottom: 8px; line-height: 1.25;">
+              Prompt: "Best Hidden Sunrise Spot Under $10"
+            </h2>
+            <p id="battlePromptDesc" style="font-size: 0.95rem; line-height: 1.55; max-width: 680px; color: #e2e8f0; margin-bottom: 14px;">
+              Submit your most spectacular, uncrowded sunrise vista. Sunday midnight the community votes crown the top 3 explorers on the global Discover wall!
+            </p>
+            
+            <div class="battle-timer-pill-wrap">
+              <span>⏳ Sunday Voting Closes In:</span>
+              <strong id="battleCountdownTimer">2d 14h 32m 18s</strong>
+              <span class="battle-prize-badge">🏅 Winner gets "Gem Finder" Badge & +500 XP</span>
+            </div>
+
+            <!-- Live Arena KPI Strip -->
+            <div class="battle-stats-row">
+              <div class="battle-stat-chip">
+                <span>📸</span> <strong id="battleStatsSubCount">6</strong> Submissions
+              </div>
+              <div class="battle-stat-chip">
+                <span>🗳️</span> <strong id="battleStatsVoteCount">142</strong> Votes Cast
+              </div>
+              <div class="battle-stat-chip" style="background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); color: #facc15;">
+                <span>💎</span> <strong>1,000 XP</strong> Prize Pool
+              </div>
+            </div>
+          </div>
+
+          <div class="battle-hero-right" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+            <button class="btn-gem" style="padding: 14px 28px; font-size: 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);" onclick="openSubmitBattleModal()">
+              📸 + Submit Your Battle Photo
+            </button>
+            <button class="btn-popup-read" style="color: #ffffff; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08);" onclick="document.getElementById('arenaRulesSection').scrollIntoView({behavior:'smooth'})">
+              📜 How Arena Scoring Works
+            </button>
+          </div>
+        </div>
+
+        <!-- Toolbar: Search Bar & Sort Filters -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: var(--radius-full); min-width: 280px; box-shadow: var(--shadow-sm);">
+            <span style="font-size: 1rem; color: var(--text-muted);">🔍</span>
+            <input type="text" placeholder="Search entries by place, creator, or note..." oninput="searchBattleSubmissions(this.value)" style="border: none; outline: none; background: transparent; width: 100%; color: var(--text-primary); font-size: 0.88rem;">
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="battleSortTabs">
+            <button class="bounty-tab-btn active" data-sort="votes" onclick="sortBattleEntries('votes')">🔥 Highest Community Votes</button>
+            <button class="bounty-tab-btn" data-sort="recent" onclick="sortBattleEntries('recent')">⏱️ Newest Entries</button>
+            <button class="bounty-tab-btn" data-sort="free" onclick="sortBattleEntries('free')">🏷️ Free Entry ($0)</button>
+          </div>
+        </div>
+
+        <!-- Live Battle Submissions Grid -->
+        <div class="battle-grid" id="battleSubmissionsGrid">
+          <!-- Dynamically populated via js/battles.js -->
+        </div>
+
+        <!-- Past Battle Hall of Fame Section -->
+        <div style="margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 800; margin-bottom: 6px;">
+                <span>👑</span> ARCHIVED CHAMPIONS
+              </div>
+              <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                Photo Battle Hall of Fame
+              </h3>
+            </div>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Weekly winners immortalized with permanent Gem Finder stamps</span>
+          </div>
+
+          <div class="hall-fame-grid">
+            <div class="hall-fame-card">
+              <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=400&q=80" alt="Speakeasy" class="hall-fame-img">
+              <div>
+                <span style="font-size: 0.72rem; font-weight: 800; color: #f59e0b;">ROUND #41 WINNER</span>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 2px 0 4px; color: var(--text-primary);">Hidden Speakeasy Behind Bookshelf</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0 0 6px;">Photographer: <strong>@sarah</strong> • 248 Votes</p>
+                <span class="battle-rank-pill gold" style="position: static; padding: 2px 8px; font-size: 0.72rem;">🥇 1st Place</span>
+              </div>
+            </div>
+
+            <div class="hall-fame-card">
+              <img src="https://images.unsplash.com/photo-1790378338449-e189c8bec45c?auto=format&fit=crop&w=400&q=80" alt="Dolomite Rifugio" class="hall-fame-img">
+              <div>
+                <span style="font-size: 0.72rem; font-weight: 800; color: #f59e0b;">ROUND #40 WINNER</span>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 2px 0 4px; color: var(--text-primary);">Dolomite Rifugio Above Sea of Clouds</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0 0 6px;">Photographer: <strong>@elena</strong> • 312 Votes</p>
+                <span class="battle-rank-pill gold" style="position: static; padding: 2px 8px; font-size: 0.72rem;">🥇 1st Place</span>
+              </div>
+            </div>
+
+            <div class="hall-fame-card">
+              <img src="https://images.unsplash.com/photo-1601531364909-4199c3050f52?auto=format&fit=crop&w=400&q=80" alt="Milos Sea Caves" class="hall-fame-img">
+              <div>
+                <span style="font-size: 0.72rem; font-weight: 800; color: #f59e0b;">ROUND #39 WINNER</span>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 2px 0 4px; color: var(--text-primary);">Secret Turquoise Lagoon in Milos</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0 0 6px;">Photographer: <strong>@leo</strong> • 196 Votes</p>
+                <span class="battle-rank-pill gold" style="position: static; padding: 2px 8px; font-size: 0.72rem;">🥇 1st Place</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arena Rules & Scoring Section -->
+        <div id="arenaRulesSection" style="margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border-color); margin-bottom: 40px;">
+          <div style="text-align: left; margin-bottom: 20px;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.12); color: #2563eb; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 800; margin-bottom: 6px;">
+              <span>⚖️</span> ARENA RULES & FAIR SCORING
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+              How Weekly Photo Battles Work
+            </h3>
+          </div>
+
+          <div class="battle-rules-grid">
+            <div class="battle-rule-box">
+              <div class="battle-rule-icon">📅</div>
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0 0 4px; color: var(--text-primary);">1. Monday Prompt Drop</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">Every Monday at 00:00 UTC, a fresh discovery theme is released (e.g. secret sunrises, hidden alleyways, waterfalls).</p>
+              </div>
+            </div>
+
+            <div class="battle-rule-box">
+              <div class="battle-rule-icon">🗳️</div>
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0 0 4px; color: var(--text-primary);">2. Community Voting</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">Each verified explorer gets 1 vote per submission. Casting votes earns you <span style="color: #f59e0b; font-weight: 700;">+20 XP</span> toward your explorer level.</p>
+              </div>
+            </div>
+
+            <div class="battle-rule-box">
+              <div class="battle-rule-icon">👑</div>
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0 0 4px; color: var(--text-primary);">3. Sunday Midnight Glory</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">Voting concludes Sunday 23:59 UTC. The top 3 photographers earn +500 XP, the Gem Finder passport stamp, and global homepage features.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== Ultra-Premium Animated Footer ==================== -->
+    <footer class="footer">
+      <div class="container">
+        <!-- Animated Weekly Dispatch Bar -->
+        <div class="footer-newsletter-bar reveal">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">
+              <span>📬</span>
+              <span>The Friday Hidden Gem Dispatch</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0;">Get 5 secret GPS coordinates & photo stories delivered to your inbox every Friday morning.</p>
+          </div>
+
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Friday Dispatch Subscription'); showToast('🎉 Subscribed to Friday Gem Dispatch!'); this.reset();">
+            <input type="email" class="footer-newsletter-input" placeholder="Enter your explorer email..." required>
+            <button type="submit" class="btn-gem" style="padding: 8px 18px; font-size: 0.82rem; white-space: nowrap;">
+              Join 14,000+ Explorers ✨
+            </button>
+          </form>
+        </div>
+
+        <div class="footer-top">
+          <div class="footer-brand reveal">
+            <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+              <div class="brand-icon">💎</div>
+              <span>Hop<span>Stop</span></span>
+            </div>
+            <p>The global social community for discovering and protecting the world's most underrated destinations, secret viewpoints, and hidden cultural gems.</p>
+            
+            <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
+              <span class="cloud-status-dot" style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
+              <span>All Systems Operational • 12 Active Waypoints</span>
+            </div>
+
+            <div class="footer-social-row">
+              <a href="javascript:void(0)" class="footer-social-btn discord" onclick="showToast('Joined Discord Community! 💬')">💬 Discord</a>
+              <a href="javascript:void(0)" class="footer-social-btn instagram" onclick="showToast('Opening Instagram @hopstopgems 📸')">📸 Instagram</a>
+              <a href="javascript:void(0)" class="footer-social-btn twitter" onclick="showToast('Opening X @hopstopapp 🐦')">🐦 X</a>
+              <a href="javascript:void(0)" class="footer-social-btn rss" onclick="showToast('RSS Feed Copied! 📡')">📡 RSS</a>
+            </div>
+          </div>
+
+          <!-- Column 1: Explore & Feed -->
+          <div class="footer-column reveal stagger-1">
+            <h4>🗺️ Explore</h4>
+            <ul>
+              <li><a href="feed.html">📱 Social Feed</a></li>
+              <li><a href="boards.html">📌 Dream Boards <span class="footer-badge-tag">Co-Save</span></a></li>
+              <li><a href="battles.html">🏆 Photo Battles <span class="footer-badge-tag gold">Active</span></a></li>
+              <li><a href="index.html#mapSection">🌍 Interactive Map</a></li>
+              <li><a href="index.html#gallery">📸 Photo Stream Wall</a></li>
+              <li><button class="footer-link-btn" onclick="openDailyGemModal()">🌅 Today's Curated Gem</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Trip Tools -->
+          <div class="footer-column reveal stagger-2">
+            <h4>🧭 Smart Tools</h4>
+            <ul>
+              <li><a href="planner.html">🗺️ Multi-Stop Route Planner</a></li>
+              <li><button class="footer-link-btn" onclick="openTripMode()">🚀 Road-Trip Mode</button></li>
+              <li><a href="bounties.html">🎯 Travel Bounty Board</a></li>
+              <li><button class="footer-link-btn" onclick="openEscapeMode()">🎧 Ambient Escape Mode</button></li>
+              <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Compass</button></li>
+              <li><button class="footer-link-btn" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Gamification & Community -->
+          <div class="footer-column reveal stagger-3">
+            <h4>🏆 Community</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</button></li>
+              <li><button class="footer-link-btn" onclick="openLeaderboardModal()">🏆 Top-Finders Leaderboard</button></li>
+              <li><button class="footer-link-btn" onclick="openDailyStreakModal()">🔥 Daily Streak & XP</button></li>
+              <li><a href="publications.html">📰 Micro-Publications & Series</a></li>
+              <li><a href="boards.html#lockedGuidesGrid">🔒 Creator Dossiers & Guides</a></li>
+              <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Platform & Actions -->
+          <div class="footer-column reveal stagger-4">
+            <h4>⚡ Platform</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openPostModal()">💎 Post a Hidden Gem</button></li>
+              <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
+              <li><button class="footer-link-btn" onclick="openCloudModal()">⚡ Supabase Cloud Backend</button></li>
+              <li><button class="footer-link-btn" onclick="openAuthModal('signin')">🔑 Sign In / Join</button></li>
+              <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
+              <li>
+                <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                  <span>⬆</span> Back to Top
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Footer Bar -->
+        <div class="footer-bottom">
+          <p>&copy; 2026 HopStop — The Social Platform for Underrated Places in the World.</p>
+          <div class="footer-bottom-links">
+            <a href="javascript:void(0)" onclick="showToast('Leave-No-Trace Certified Explorer Network 🌿')">🌿 Leave-No-Trace Certified</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Privacy Protected: Your exact coordinates are never sold 🛡️')">🛡️ Privacy Policy</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Community Guidelines Active 📜')">📜 Terms & Guidelines</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="openCloudModal()">⚡ Free Supabase Sync</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ==================== Submit Photo to Weekly Battle Modal ==================== -->
+  <div class="modal-backdrop" id="submitBattleModal">
+    <div class="modal-box" style="max-width: 560px;">
+      <button class="modal-close-btn" onclick="closeSubmitBattleModal()" aria-label="Close modal">✕</button>
+      
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(234, 179, 8, 0.15); color: #d97706; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; margin-bottom: 8px;">
+        <span>🏆</span> Photo Battle Entry
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;">Submit to Active Battle</h2>
+      <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 14px;">Active Prompt: <strong>"Best Hidden Sunrise Spot Under $10"</strong>. Winner receives +500 XP and Gem Finder badge on Sunday.</p>
+
+      <!-- Quick Preset Selector for Easy Testing -->
+      <div style="background: var(--bg-primary); padding: 10px 12px; border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 16px;">
+        <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 6px;">⚡ Quick Demo Presets:</span>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn-popup-read" style="font-size: 0.74rem; padding: 4px 8px;" onclick="setBattlePhotoPreset('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', 'Alps Ridge Sunrise', 'Switzerland', 'Untracked ridge trail with panoramic view of 4 alpine peaks catching the first ray of golden light.', '$0 (Free Trail)')">
+            🏔️ Swiss Ridge
+          </button>
+          <button type="button" class="btn-popup-read" style="font-size: 0.74rem; padding: 4px 8px;" onclick="setBattlePhotoPreset('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1000&q=80', 'Cinque Terre Hidden Cliff', 'Italy', 'Steep staircase leading down to a private fisherman dock at 5:30 AM before tourist ferries begin.', '$0 (Public Steps)')">
+            🌊 Cliff Dock
+          </button>
+          <button type="button" class="btn-popup-read" style="font-size: 0.74rem; padding: 4px 8px;" onclick="setBattlePhotoPreset('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80', 'Secret Sand Spits', 'Greece', 'Volcanic white sand cove reachable only during low morning tide.', '$5 (Water Taxi)')">
+            🏖️ White Sand
+          </button>
+        </div>
+      </div>
+
+      <form id="submitBattleForm" class="post-form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Place Name *</label>
+            <input type="text" id="battlePlaceName" class="form-control" placeholder="e.g. Mount Bromo Ridge Vista" required>
+          </div>
+          <div class="form-group">
+            <label>Country / Region *</label>
+            <input type="text" id="battleCountry" class="form-control" placeholder="e.g. Indonesia" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>High-Resolution Photo URL *</label>
+          <input type="url" id="battlePhotoUrl" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80" required>
+        </div>
+
+        <div class="form-group">
+          <label>Why this spot wins the prompt *</label>
+          <textarea id="battleCaption" class="form-control" placeholder="No entry fee, complete silence at dawn, and views stretching across the entire crater..." rows="2" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Estimated Cost (to match Under $10 prompt)</label>
+          <input type="text" id="battleCost" class="form-control" placeholder="e.g. $0 (Free) or $3 park permit" value="$0 (Free Public Trail)">
+        </div>
+
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800;">
+          🚀 Submit Photo to Battle Arena
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== Gallery Lightbox Modal ==================== -->
+  <div class="modal-backdrop" id="lightboxModal">
+    <button class="modal-close-btn" id="lightboxCloseBtn" onclick="document.getElementById('lightboxModal').classList.remove('open'); document.body.style.overflow='';" aria-label="Close image">✕</button>
+    <img src="" alt="Enlarged photo" class="lightbox-img" id="lightboxImg">
+    <div class="lightbox-caption-bar" id="lightboxCaption">Location & Title</div>
+  </div>
+
+  <!-- Shared Modals (Auth, Post, Cloud, etc.) -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box auth-modal-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">💎</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 700;">Welcome to HopStop</h2>
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tabSigninBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab-btn" id="tabSignupBtn" onclick="switchAuthTab('signup')">Create Account</button>
+      </div>
+      <form id="signinForm" class="auth-form">
+        <div class="form-group">
+          <label>Email or Username</label>
+          <input type="text" class="form-control" value="maya@wander.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" value="password123" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px;">Sign In</button>
+      </form>
+      <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">⚡ 1-Click Demo Login</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="postPlaceModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closePostModal()" aria-label="Close modal">✕</button>
+      <div class="post-form-header">
+        <h2>💎 Share an Underrated Place</h2>
+      </div>
+      <form id="sharePlaceForm" class="post-form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formPlaceName">Place Name *</label>
+            <input type="text" id="formPlaceName" class="form-control" placeholder="e.g. Setenil de las Bodegas" required>
+          </div>
+          <div class="form-group">
+            <label for="formCountry">Country *</label>
+            <input type="text" id="formCountry" class="form-control" placeholder="e.g. Spain" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="formTitle">Headline *</label>
+          <input type="text" id="formTitle" class="form-control" placeholder="e.g. Town Under Boulders" required>
+        </div>
+        <div class="form-group">
+          <label for="formLocationQuery">Location *</label>
+          <input type="text" id="formLocationQuery" class="form-control" placeholder="e.g. Cadiz, Spain" required>
+        </div>
+        <div class="form-group">
+          <label for="formImage">Photo URL</label>
+          <input type="url" id="formImage" class="form-control" value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80">
+        </div>
+        <div class="form-group">
+          <label for="formSecretTip">Secret Tip *</label>
+          <input type="text" id="formSecretTip" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="formStory">Story *</label>
+          <textarea id="formStory" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn-gem" style="padding: 12px; width: 100%;">🚀 Publish</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="cloudModal">
+    <div class="modal-box" style="max-width: 620px;">
+      <button class="modal-close-btn" onclick="closeCloudModal()" aria-label="Close modal">✕</button>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 2rem;">⚡</span>
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin: 0;">Supabase Cloud Backend</h2>
+        </div>
+      </div>
+      <form id="cloudConfigForm" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label for="supabaseUrlInput">Supabase Project URL</label>
+          <input type="url" id="supabaseUrlInput" class="form-control" placeholder="https://your-project-id.supabase.co">
+        </div>
+        <div class="form-group">
+          <label for="supabaseKeyInput">Supabase Anon Public Key</label>
+          <input type="password" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="submit" class="btn-gem" style="flex: 1; padding: 10px;">⚡ Save & Connect Cloud</button>
+          <button type="button" class="btn-popup-read" id="btnTestCloud" style="padding: 10px 16px;" onclick="testSupabaseConnection()">🔍 Test</button>
+          <button type="button" class="btn-direction" id="btnDisconnectCloud" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 10px 14px;" onclick="disconnectSupabase()">Disconnect</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/data.js?v=20261103_perfect_v6"></script>
+  <script src="js/state.js?v=20261103_perfect_v6"></script>
+  <script src="js/cloud.js"></script>
+  <script src="js/map.js?v=20261103_perfect_v6"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/bounties.js?v=20261103_perfect_v6"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/planner.js?v=20261103_perfect_v6"></script>
+  <script src="js/daily-streak.js"></script>
+  <script src="js/micro-adventures.js"></script>
+  <script src="js/publications.js"></script>
+  <script src="js/escape.js"></script>
+  <script src="js/stories.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/boards.js?v=20261103_perfect_v6"></script>
+  <script src="js/battles.js"></script>
+  <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>
+  <script src="js/passport.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/trip-mode.js"></script>
+  <script src="js/leaderboard.js"></script>
+  <script src="js/crew-chat.js"></script>
+  <script src="js/ui-effects.js"></script>
+  <script src="js/app-init.js"></script>
+  <script src="js/human-craft.js?v=20261103_wanderlust_audio_hd2"></script>
+</body>
+</html>

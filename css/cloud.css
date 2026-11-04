@@ -1,0 +1,100 @@
+/* ==========================================================================
+   HopStop — Supabase Cloud Backend Modal & SQL Box
+   ========================================================================== */
+
+/* ==========================================================================
+   Supabase Cloud Backend Modal, Status Pill & SQL Box
+   ========================================================================== */
+
+.cloud-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.cloud-status-badge:hover {
+  transform: translateY(-1px);
+  border-color: #06b6d4;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+}
+
+.cloud-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #94a3b8;
+  display: inline-block;
+}
+
+.cloud-status-badge.connected .cloud-status-dot {
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseGreen 2s infinite ease-in-out;
+}
+
+.cloud-status-badge.disconnected .cloud-status-dot {
+  background: #f59e0b;
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.cloud-info-box {
+  background: rgba(6, 182, 212, 0.07);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.cloud-steps-list {
+  padding-left: 20px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.cloud-steps-list strong {
+  color: var(--text-main);
+}
+
+.sql-code-box {
+  background: #090d16;
+  color: #38bdf8;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  text-align: left;
+  line-height: 1.4;
+  margin: 10px 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

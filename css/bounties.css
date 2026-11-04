@@ -1,0 +1,428 @@
+/* ==========================================================================
+   HopStop — Travel Bounty Board & Crowdsourced Quests (Ultra-Polished)
+   ========================================================================== */
+
+/* 1. Page Atmosphere & Ambient Lighting */
+.bounty-board-view {
+  display: none;
+  padding-bottom: 70px;
+  position: relative;
+}
+
+.bounty-board-view.active-view {
+  display: block;
+}
+
+.bounty-board-view::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 600px;
+  background: radial-gradient(circle 500px at 15% 15%, rgba(249, 115, 22, 0.08), transparent 70%),
+              radial-gradient(circle 600px at 85% 25%, rgba(234, 88, 12, 0.07), transparent 70%),
+              radial-gradient(circle 450px at 50% 50%, rgba(245, 158, 11, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] .bounty-board-view::before {
+  background: radial-gradient(circle 500px at 15% 15%, rgba(249, 115, 22, 0.14), transparent 70%),
+              radial-gradient(circle 600px at 85% 25%, rgba(234, 88, 12, 0.12), transparent 70%),
+              radial-gradient(circle 450px at 50% 50%, rgba(245, 158, 11, 0.08), transparent 70%);
+}
+
+/* 2. Bounty Hero Banner */
+.bounty-hero-banner {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.09) 0%, rgba(234, 88, 12, 0.07) 50%, rgba(245, 158, 11, 0.06) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  border-radius: var(--radius-xl);
+  padding: 28px 26px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(249, 115, 22, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.bounty-hero-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f97316, #ea580c, #f59e0b);
+  opacity: 0.9;
+}
+
+.bounty-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(249, 115, 22, 0.12);
+  color: #ea580c;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.08);
+}
+
+[data-theme="dark"] .bounty-hero-badge {
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+.bounty-hero-text h2 {
+  font-family: var(--font-heading);
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.bounty-hero-text h2 span {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.bounty-hero-text p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  max-width: 650px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Quick Quest Stats Strip */
+.bounty-stats-strip {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.bounty-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.bounty-stat-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
+}
+
+.bounty-stat-pill.stat-pill-gold {
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.3);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+[data-theme="dark"] .bounty-stat-pill.stat-pill-gold {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(245, 158, 11, 0.15);
+}
+
+/* Post Bounty Button */
+.bounty-hero-actions .btn-gem {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.bounty-hero-actions .btn-gem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5);
+  filter: brightness(1.05);
+}
+
+/* 3. 3-Step "How Bounties Work" Guide Strip */
+.how-bounties-work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.how-bounty-step-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.how-bounty-step-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 8px 22px rgba(249, 115, 22, 0.09);
+}
+
+.how-bounty-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(245, 158, 11, 0.15));
+  color: #ea580c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+[data-theme="dark"] .how-bounty-icon-box {
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+/* 4. Category & Status Filter Tabs Bar */
+.bounty-tabs-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.bounty-tab-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bounty-tab-btn:hover {
+  border-color: #f97316;
+  color: #ea580c;
+  transform: translateY(-1px);
+}
+
+.bounty-tab-btn.active {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+  border-color: #ea580c;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+/* 5. Bounty Grid & Cards */
+.bounty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 22px;
+}
+
+.bounty-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .bounty-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.bounty-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(249, 115, 22, 0.45);
+  box-shadow: 0 16px 36px rgba(249, 115, 22, 0.12);
+}
+
+[data-theme="dark"] .bounty-card:hover {
+  box-shadow: 0 18px 40px rgba(249, 115, 22, 0.18);
+}
+
+.bounty-card.solved {
+  border-left: 4px solid #10b981;
+}
+
+.bounty-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.bounty-reward-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
+  letter-spacing: 0.02em;
+}
+
+.bounty-status-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.bounty-status-tag.active {
+  background: rgba(249, 115, 22, 0.12);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+[data-theme="dark"] .bounty-status-tag.active {
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.2);
+}
+
+.bounty-status-tag.solved {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.bounty-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.bounty-card:hover .bounty-title {
+  color: #ea580c;
+}
+
+.bounty-desc {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  flex-grow: 1;
+}
+
+.bounty-target-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #0284c7;
+  font-weight: 700;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: 18px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+[data-theme="dark"] .bounty-target-meta {
+  color: #38bdf8;
+  background: rgba(6, 182, 212, 0.16);
+}
+
+.bounty-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+}
+
+.bounty-creator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bounty-creator img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--bg-surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bounty-creator-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* 6. Badge Celebration Modal */
+.celebration-modal {
+  text-align: center;
+  max-width: 440px !important;
+}
+
+.celebration-icon-anim {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  display: inline-block;
+  animation: bounceCelebrate 1s infinite alternate cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes bounceCelebrate {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.15) translateY(-8px); }
+}

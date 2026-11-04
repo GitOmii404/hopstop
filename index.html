@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HopStop — The Social Platform & Interactive Map for Underrated Places</title>
+  <meta name="description" content="HopStop is the world's social network and interactive map for discovering, sharing, and navigating to underrated travel spots, cliff villages, and secret trails.">
+  
+  <!-- Leaflet.js Interactive Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="styles.css?v=20261103_high_contrast_clean">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261103_high_contrast_clean">
+</head>
+<body>
+
+  <!-- ==================== Global Header ==================== -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+        <div class="brand-icon">💎</div>
+        <span>Hop<span>Stop</span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="feed.html" class="nav-link">📱 Feed</a></li>
+          <li><a href="#gallery" class="nav-link" onclick="scrollToGallery()">📸 Gallery</a></li>
+          <li><a href="boards.html" class="nav-link">📌 Boards</a></li>
+          <li><a href="battles.html" class="nav-link">🏆 Battles</a></li>
+          <li><a href="planner.html" class="nav-link">🗺️ Planner</a></li>
+          <li><a href="bounties.html" class="nav-link">🎯 Bounties</a></li>
+          <li><a href="#mapSection" class="nav-link" onclick="scrollToMap()">🌍 World Map</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Cloud Backend Status Indicator -->
+        <button id="cloudStatusBtn" class="cloud-status-badge disconnected" onclick="openCloudModal()" title="Configure Supabase Free Cloud Backend">
+          <span class="cloud-status-dot" id="cloudStatusDot"></span>
+          <span id="cloudStatusLabel">Local Storage</span>
+        </button>
+
+        <!-- Notification Center Bell -->
+        <div class="notification-bell-wrap" style="position: relative;">
+          <button id="notifBellBtn" class="icon-btn" onclick="toggleNotificationDropdown(event)" title="Notifications & Weekly Digest">
+            🔔
+            <span class="notification-badge-dot" id="notifBadgeDot">3</span>
+          </button>
+
+          <!-- Notifications Dropdown Tray -->
+          <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notif-dropdown-header">
+              <span style="font-weight: 700; font-size: 0.88rem;">🔔 Notifications (<span id="notifUnreadCount">3</span>)</span>
+              <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer;" onclick="markAllNotificationsRead()">Mark Read</span>
+            </div>
+            
+            <div class="notif-list-scroll" id="notificationsList">
+              <!-- Injected via notifications.js -->
+            </div>
+
+            <div class="notif-dropdown-footer">
+              <button class="btn-gem" style="width: 100%; padding: 8px; font-size: 0.8rem;" onclick="openWeeklyDigestModal()">
+                📬 Open Weekly Curated Digest (5 Gems)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="icon-btn" title="Toggle Light/Dark Theme" onclick="toggleTheme()">
+          🌙
+        </button>
+
+        <!-- Guest Actions (When Logged Out) -->
+        <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-gem" onclick="openAuthModal('signup')">Join Community</button>
+        </div>
+
+        <!-- Authenticated Actions (When Logged In) -->
+        <div id="authHeaderActions" style="display: none; align-items: center; gap: 12px;">
+          <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
+          
+          <div class="user-menu-wrap">
+            <div class="user-avatar-btn" id="userMenuTrigger">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
+              <span class="user-avatar-name current-user-name">Maya</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+            </div>
+
+            <!-- User Dropdown Menu -->
+            <div class="user-dropdown" id="userMenuDropdown">
+              <div class="dropdown-item" onclick="location.href='feed.html'">📱 Social Feed</div>
+              <div class="dropdown-item" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</div>
+              <div class="dropdown-item" onclick="openTripMode()">🚀 On-The-Road Trip Mode</div>
+              <div class="dropdown-item" onclick="openLeaderboardModal()">🏆 Monthly Top-Finders Leaderboard</div>
+              <div class="dropdown-item" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</div>
+              <div class="dropdown-item" onclick="location.href='boards.html'">📌 Collaborative Dream Boards</div>
+              <div class="dropdown-item" onclick="location.href='battles.html'">🏆 Weekly Photo Battles & Prompts</div>
+              <div class="dropdown-item" onclick="openEscapeMode()">🎧 Ambient Escape Mode</div>
+              <div class="dropdown-item" onclick="location.href='publications.html'">📰 Micro-Publications & Series</div>
+              <div class="dropdown-item" onclick="location.href='planner.html'">🗺️ Multi-Stop Route Planner</div>
+              <div class="dropdown-item" onclick="location.href='bounties.html'">🎯 Travel Bounty Board</div>
+              <div class="dropdown-item" onclick="scrollToGallery()">📸 Field Photo Gallery</div>
+              <div class="dropdown-item" onclick="scrollToMap()">🗺️ Interactive World Map</div>
+              <div class="dropdown-item" onclick="openDailyGemModal()">🌅 Today's Curated Gem</div>
+              <div class="dropdown-item" onclick="openPostModal()">💎 Post a Hidden Gem</div>
+              <div class="dropdown-item" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</div>
+              <div class="dropdown-item" onclick="location.href='index.html'">🌍 Discover Page</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" style="color: #ef4444;" onclick="handleUserLogout()">🚪 Log Out</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="icon-btn mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         LANDING PAGE / DISCOVER VIEW
+         ========================================================================== -->
+    <div id="landingView" class="view-section active-view">
+      
+      <!-- Hero Section -->
+      <section class="hero" id="home">
+        <div class="container hero-content">
+          <div class="hero-text reveal-left">
+            <div class="hero-badge">
+              <span>✨</span> The Social Travel Platform for Underrated Places
+            </div>
+            <h1 class="hero-title">
+              Escape the Crowds. <br><span>Discover Secret Places.</span>
+            </h1>
+            <p class="hero-subtitle">
+              Explore authentic cliff towns, hidden desert oases, subterranean monasteries, and secret trails shared by real travelers. Pinpointed on an interactive world map.
+            </p>
+
+            <div class="hero-cta-group">
+              <button class="btn-gem" onclick="openAuthModal('signup')" style="padding: 12px 26px; font-size: 1rem;">
+                🚀 Join HopStop Free
+              </button>
+              <button class="btn-direction" onclick="scrollToMap()" style="padding: 12px 24px; font-size: 0.95rem;">
+                🗺️ Explore World Map
+              </button>
+              <button class="btn-surprise" onclick="teleportRandomGem()" title="Spin the explorer globe and jump to a random secret gem" style="background: linear-gradient(135deg, #0284c7, #06b6d4); color: white; padding: 12px 22px; border-radius: var(--radius-full); font-size: 0.95rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.4); transition: all 0.2s ease; cursor: pointer;">
+                <span>🎲 Surprise Me</span>
+              </button>
+            </div>
+
+            <div class="hero-search-box">
+              <span style="font-size: 1.2rem; color: var(--text-muted);">🔍</span>
+              <input type="text" id="heroSearch" placeholder="Search Spain boulder town, Bosnia monastery, Peru oasis...">
+            </div>
+
+            <!-- Trending Quick Discovery Pills -->
+            <div class="hero-trending-tags">
+              <span class="trending-label">🔥 Trending:</span>
+              <button type="button" class="hero-tag-pill" onclick="searchFor('Spain')">🇪🇸 Andalusia Caves</button>
+              <button type="button" class="hero-tag-pill" onclick="searchFor('Bosnia')">🇧🇦 Mostar Spring</button>
+              <button type="button" class="hero-tag-pill" onclick="searchFor('Peru')">🇵🇪 Desert Oasis</button>
+              <button type="button" class="hero-tag-pill" onclick="searchFor('Georgia')">🇬🇪 Svaneti Towers</button>
+              <button type="button" class="hero-tag-pill" onclick="searchFor('Netherlands')">🇳🇱 Whisper Canals</button>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-item">
+                <h3 class="stat-number" data-target="98" data-suffix="%">98%</h3>
+                <p>Underrated Rating</p>
+              </div>
+              <div class="stat-item">
+                <h3 class="stat-number" data-target="180" data-suffix="+">180+</h3>
+                <p>Secret Stops</p>
+              </div>
+              <div class="stat-item">
+                <h3 class="stat-number" data-target="34" data-suffix="k">34k</h3>
+                <p>Community Members</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal-right" style="position: relative;">
+            <!-- Floating Human Traveler Stickers -->
+            <div class="human-sticker sticker-1" style="--rot: -4deg;" title="Click for community note">
+              <span>🌿</span> No Tour Buses
+            </div>
+            <div class="human-sticker sticker-2" style="--rot: 3deg;" title="Click for community note">
+              <span>☕</span> 50¢ Local Cortado
+            </div>
+            <div class="human-sticker sticker-3" style="--rot: 5deg;" title="Click for community note">
+              <span>🧭</span> 36°58'N 5°10'W
+            </div>
+            <div class="human-sticker sticker-4" style="--rot: -3deg;" title="Click for community note">
+              <span>✨</span> Hand-verified by Maya
+            </div>
+
+            <div class="hero-card-stack" id="heroCardStack" onclick="cycleHeroCard()" title="Click to cycle next destination">
+              <!-- Card 1 (Setenil de las Bodegas, Spain) -->
+              <div class="hero-stacked-card pos-0" data-index="0">
+                <img src="https://images.unsplash.com/photo-1684862363333-4f5ab43e7edf?auto=format&fit=crop&w=1000&q=80" alt="Setenil de las Bodegas Spain">
+                <div class="hero-card-overlay">
+                  <span class="hero-card-tag" style="background: #06b6d4;">Featured Gem</span>
+                  <h3>Setenil de las Bodegas, Spain</h3>
+                  <p>Houses built underneath colossal natural boulders</p>
+                </div>
+              </div>
+
+              <!-- Card 2 (Blagaj Tekke, Bosnia & Herzegovina) -->
+              <div class="hero-stacked-card pos-1" data-index="1">
+                <img src="https://images.unsplash.com/photo-1652287350277-db5ba07dfd46?auto=format&fit=crop&w=1000&q=80" alt="Blagaj Tekke Bosnia">
+                <div class="hero-card-overlay">
+                  <span class="hero-card-tag" style="background: #10b981;">Emerald Cavern</span>
+                  <h3>Blagaj Tekke, Bosnia & Herzegovina</h3>
+                  <p>600-year Dervish monastery on an emerald karst spring</p>
+                </div>
+              </div>
+
+              <!-- Card 3 (Ushguli & Svaneti Watchtowers, Georgia) -->
+              <div class="hero-stacked-card pos-2" data-index="2">
+                <img src="https://images.unsplash.com/photo-1788094710338-7f13749c72e4?auto=format&fit=crop&w=1000&q=80" alt="Svaneti Towers Georgia">
+                <div class="hero-card-overlay">
+                  <span class="hero-card-tag" style="background: #f59e0b;">Caucasus Fortress</span>
+                  <h3>Ushguli, Svaneti, Georgia</h3>
+                  <p>Medieval stone towers guarded by glaciers of Mount Shkhara</p>
+                </div>
+              </div>
+
+              <!-- Card 4 (Giethoorn Roadless Water Village, Netherlands) -->
+              <div class="hero-stacked-card pos-3" data-index="3">
+                <img src="https://images.unsplash.com/photo-1590435525959-40d4af82c270?auto=format&fit=crop&w=1000&q=80" alt="Giethoorn Netherlands">
+                <div class="hero-card-overlay">
+                  <span class="hero-card-tag" style="background: #8b5cf6;">Canal Sanctuary</span>
+                  <h3>Giethoorn, Netherlands</h3>
+                  <p>Roadless village with 176 wooden bridges & whisper boats</p>
+                </div>
+              </div>
+
+              <!-- Floating Traveler Profile Card -->
+              <div class="hero-floating-card" id="heroFloatingCard">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Traveler" class="floating-avatar" id="heroFloatingAvatar">
+                <div class="floating-info">
+                  <h4 id="heroFloatingName">Leila Halilovic</h4>
+                  <p id="heroFloatingLocation">📍 Setenil de las Bodegas • Verified</p>
+                </div>
+              </div>
+
+              <!-- Pagination Dots & Interaction Hint -->
+              <div class="hero-stack-controls">
+                <div class="hero-stack-dots" id="heroStackDots">
+                  <span class="hero-stack-dot active" onclick="event.stopPropagation(); setHeroCard(0)"></span>
+                  <span class="hero-stack-dot" onclick="event.stopPropagation(); setHeroCard(1)"></span>
+                  <span class="hero-stack-dot" onclick="event.stopPropagation(); setHeroCard(2)"></span>
+                  <span class="hero-stack-dot" onclick="event.stopPropagation(); setHeroCard(3)"></span>
+                </div>
+                <div class="hero-stack-hint">
+                  <span>👆 Click card to cycle</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           LEAFLET.JS INTERACTIVE WORLD MAP SECTION
+           ========================================================================== -->
+      <section class="section map-section" id="mapSection">
+        <div class="container">
+          <div class="section-header reveal">
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(6, 182, 212, 0.12); color: #0284c7; padding: 4px 14px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; border: 1px solid rgba(6, 182, 212, 0.3);">
+              <span>🌍</span> Real-Time Geospatial Hidden Gem Canvas
+            </div>
+            <h2 class="section-title">Interactive World Map of Hidden Gems</h2>
+            <p class="section-subtitle">Click on glowing diamond pins to explore secret local tips, coordinates, authentic photos, and launch 1-click GPS turn-by-turn navigation.</p>
+            
+            <!-- Live Map Stats Strip -->
+            <div class="map-stats-strip" style="justify-content: center;">
+              <div class="map-stat-chip">
+                <span>📍</span> <strong id="mapTotalGemsCount">12</strong> Verified Waypoints
+              </div>
+              <div class="map-stat-chip">
+                <span>🌍</span> <strong id="mapTotalCountriesCount">9</strong> Countries
+              </div>
+              <div class="map-stat-chip">
+                <span>💎</span> <strong>9.4 / 10</strong> Avg Gem Authenticity
+              </div>
+              <div class="map-stat-chip" style="color: #0284c7; background: rgba(6, 182, 212, 0.1);">
+                <span>🧭</span> 1-Click GPS Routing
+              </div>
+            </div>
+          </div>
+
+          <!-- Cartographer Telemetry HUD Bar -->
+          <div class="cartography-hud-bar reveal">
+            <div class="hud-item">
+              <span class="hud-radar-dot"></span>
+              <span>LIVE CARTOGRAPHY SENSOR</span>
+            </div>
+            <div class="hud-item">
+              <span>🧭 Active Center:</span>
+              <strong id="hudCoordsDisplay">36°58'N 5°10'W (Setenil de las Bodegas)</strong>
+            </div>
+            <div class="hud-item">
+              <span>⛰️ Elevation:</span>
+              <strong>640m Above Sea Level</strong>
+            </div>
+            <div class="hud-item">
+              <span>☀️ Field Status:</span>
+              <strong>12 Underrated Stops Plotted</strong>
+            </div>
+          </div>
+
+          <!-- Map Control Panel -->
+          <div class="map-controls-panel reveal stagger-1">
+            <div class="map-filter-group">
+              <button class="map-pill-btn active" data-map-filter="all" onclick="filterMapPins('all')">💎 All Pins</button>
+              <button class="map-pill-btn" data-map-filter="village" onclick="filterMapPins('village')">🏘️ Villages</button>
+              <button class="map-pill-btn" data-map-filter="nature" onclick="filterMapPins('nature')">🌿 Nature</button>
+              <button class="map-pill-btn" data-map-filter="culture" onclick="filterMapPins('culture')">⛩️ Sacred / Culture</button>
+              <button class="map-pill-btn" data-map-filter="coastal" onclick="filterMapPins('coastal')">🌊 Lakes & Coasts</button>
+            </div>
+
+            <div class="map-actions-group">
+              <!-- Map Tile Layer Theme Switcher -->
+              <div class="map-jump-group">
+                <span style="font-size: 0.76rem; color: var(--text-muted); margin-right: 2px;">Map Layer:</span>
+                <button class="map-jump-btn map-theme-btn active" data-theme="google" onclick="setMapTileTheme('google')">🗺️ Google Maps</button>
+                <button class="map-jump-btn map-theme-btn" data-theme="satellite" onclick="setMapTileTheme('satellite')">🛰️ Satellite</button>
+                <button class="map-jump-btn map-theme-btn" data-theme="osm" onclick="setMapTileTheme('osm')">🌍 OpenStreet</button>
+                <button class="map-jump-btn map-theme-btn" data-theme="dark" onclick="setMapTileTheme('dark')">🌙 Dark</button>
+              </div>
+
+              <!-- Region Fly-To Jump -->
+              <div class="map-jump-group">
+                <span style="font-size: 0.76rem; color: var(--text-muted); margin-right: 2px;">Fly To:</span>
+                <button class="map-jump-btn" onclick="flyMapTo('europe')">🇪🇺 Europe</button>
+                <button class="map-jump-btn" onclick="flyMapTo('asia')">⛩️ Asia</button>
+                <button class="map-jump-btn" onclick="flyMapTo('americas')">🌎 Americas</button>
+                <button class="map-jump-btn" onclick="flyMapTo('global')">🎯 Global</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Canvas Container Frame -->
+          <div class="map-container-frame reveal stagger-2">
+            <div id="hopstopWorldMap"></div>
+            
+            <div class="map-floating-overlay">
+              <button class="map-floating-btn" onclick="flyMapTo('global')" title="Reset Map View">
+                <span>🎯 Fit Global View</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Discover Section — Expanding 3D Destination Carousel -->
+      <section class="section" id="explore">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-tag">🌟 CURATED EXPEDITION SHOWCASE</span>
+            <h2 class="section-title">Underrated Places of the World</h2>
+            <p class="section-subtitle">Real travel stories, secret tips, and direct 1-click Google Maps directions. Click cards to expand or scrub with controls.</p>
+          </div>
+
+          <!-- Expanding 3D Destination Stage Carousel -->
+          <div class="hopstop-stage-wrap reveal">
+            <div class="hopstop-stage-container">
+              <div class="hopstop-stage-slide" id="hopstopStageSlide">
+                
+                <!-- Slide 1: Setenil de las Bodegas -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1684862363333-4f5ab43e7edf?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Setenil de las Bodegas</h5>
+                    <span>Cadiz, Spain • 💎 9.8</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.8 Underrated Score • Spain</span>
+                    <div class="name">Setenil de las Bodegas</div>
+                    <div class="location-subtitle">📍 Cadiz, Andalusia, Spain</div>
+                    <div class="des">An ancient whitewashed village sculpted directly under colossal 50-ton natural river gorge boulders. Pure Andalusian silence and cave cafes.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Walk into Cuevas del Sol at sunset for local wine inside the bedrock.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(1)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Setenil de las Bodegas Spain')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 1)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 2: Blagaj Tekke -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1652287350277-db5ba07dfd46?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Blagaj Tekke</h5>
+                    <span>Mostar, Bosnia • 💎 9.9</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.9 Underrated Score • Bosnia</span>
+                    <div class="name">Blagaj Tekke</div>
+                    <div class="location-subtitle">📍 Mostar Basin, Bosnia & Herzegovina</div>
+                    <div class="des">A 600-year-old Ottoman Dervish monastery perched dramatically at the mouth of an icy emerald karst spring cascading from a 200m vertical cliff.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Order Bosnian mountain tea on the wooden stilts over the spring.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(2)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Blagaj Tekke Bosnia')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 2)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 3: Huacachina Desert Oasis -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1769358758778-5b12f301051b?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Huacachina Oasis</h5>
+                    <span>Ica, Peru • 💎 9.7</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.7 Underrated Score • Peru</span>
+                    <div class="name">Huacachina Oasis</div>
+                    <div class="location-subtitle">📍 Ica Desert, Peru</div>
+                    <div class="des">A surreal sapphire lagoon surrounded by towering palm trees nestled deep within South America's most gigantic golden rolling sand dunes.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Hike to the northern ridge at 6:15 PM for zero tourists and golden dune shadows.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(3)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Huacachina Desert Oasis Peru')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 3)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 4: Giethoorn Roadless Village -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1590435525959-40d4af82c270?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Giethoorn Village</h5>
+                    <span>Overijssel, Netherlands • 💎 9.6</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.6 Underrated Score • Netherlands</span>
+                    <div class="name">Giethoorn Village</div>
+                    <div class="location-subtitle">📍 Overijssel, Netherlands</div>
+                    <div class="des">A completely car-free fairy-tale settlement with 176 hand-built wooden bridges and electric whisper boats sliding through reflective canals.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Rent an electric punter boat before 9 AM when morning mist hangs over the canals.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(4)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Giethoorn Netherlands')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 4)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 5: Svaneti Medieval Towers -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1788094710338-7f13749c72e4?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Svaneti Fortresses</h5>
+                    <span>Ushguli, Georgia • 💎 9.8</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.8 Underrated Score • Georgia</span>
+                    <div class="name">Svaneti Fortresses</div>
+                    <div class="location-subtitle">📍 Ushguli, Caucasus, Georgia</div>
+                    <div class="des">Glacial stone defense towers dating to the 9th century, guarded by the towering 5,200m icy peaks of Mount Shkhara. Pure off-grid wilderness.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Stay in a stone family guesthouse to taste homemade Kubdari pie.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(5)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Ushguli Svaneti Georgia')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 5)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 6: Chefchaouen Blue Medina -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Chefchaouen Medina</h5>
+                    <span>Rif, Morocco • 💎 9.5</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.5 Underrated Score • Morocco</span>
+                    <div class="name">Chefchaouen Blue Medina</div>
+                    <div class="location-subtitle">📍 Rif Mountains, Morocco</div>
+                    <div class="des">An ancient mountain city painted in 50 shades of celestial electric cobalt, indigo, and powder blue against rugged mountain peaks.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Climb up to the Spanish Mosque at twilight for the blue glow over the valley.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(7)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Chefchaouen Morocco')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 7)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 7: Meteora Monasteries -->
+                <div class="item" style="background-image: url('https://images.unsplash.com/photo-1682187233368-73b848553081?auto=format&fit=crop&w=1600&q=80');">
+                  <div class="item-preview-label">
+                    <h5>Meteora Monasteries</h5>
+                    <span>Thessaly, Greece • 💎 9.9</span>
+                  </div>
+                  <div class="content">
+                    <span class="stage-badge-pill">💎 9.9 Underrated Score • Greece</span>
+                    <div class="name">Meteora Monasteries</div>
+                    <div class="location-subtitle">📍 Thessaly, Greece</div>
+                    <div class="des">Centuries-old Eastern Orthodox monasteries miraculously perched on top of colossal natural sandstone rock pillars rising 400 meters into the sky.</div>
+                    <div class="stage-secret-memo">🤫 <strong>Traveler Secret:</strong> Hike the hidden monk trail behind Holy Trinity Monastery.</div>
+                    <div class="stage-actions-group">
+                      <button class="stage-btn-explore" onclick="openArticleModal(8)">📖 Read Full Story</button>
+                      <button class="stage-btn-directions" onclick="openDirections(event, 'Meteora Greece')">🧭 1-Click Directions</button>
+                      <button class="stage-btn-save" onclick="toggleBookmark(event, 8)">📌 Save</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Navigation Arrows -->
+              <div class="hopstop-stage-controls">
+                <button class="stage-nav-arrow" id="stagePrevBtn" aria-label="Previous Destination">◁</button>
+                <button class="stage-nav-arrow" id="stageNextBtn" aria-label="Next Destination">▷</button>
+              </div>
+
+              <!-- Auto-Advance Timeline Progress Bar -->
+              <div class="stage-progress-track">
+                <div class="stage-progress-bar" id="stageProgressBar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden Grid Storage (Preserves data sync safely) -->
+          <div id="postsGrid" style="display: none;"></div>
+        </div>
+      </section>
+
+      <!-- 35mm Field Slide & Fine-Art Polaroid Gallery -->
+      <section class="section" id="gallery">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-tag">📸 THE 35mm FIELD DISPATCHES • UNCROWDED ROLLS</span>
+            <h2 class="section-title">Field Photo Gallery & Slides</h2>
+            <p class="section-subtitle">Authentic, unedited 35mm dispatches from travelers on the road. Hover to pause the reel, click any slide to inspect camera metadata.</p>
+          </div>
+
+          <div class="gallery-controls-bar reveal stagger-1">
+            <div class="gallery-filter-tabs">
+              <button class="gallery-filter-btn active" data-gallery-filter="all" onclick="setGalleryFilter('all', this)">✨ All Slides</button>
+              <button class="gallery-filter-btn" data-gallery-filter="craft" onclick="setGalleryFilter('craft', this)">🪵 Woodworks & Masonry</button>
+              <button class="gallery-filter-btn" data-gallery-filter="nature" onclick="setGalleryFilter('nature', this)">🏔️ Nature & Peaks</button>
+              <button class="gallery-filter-btn" data-gallery-filter="village" onclick="setGalleryFilter('village', this)">🏘️ Secret Villages</button>
+              <button class="gallery-filter-btn" data-gallery-filter="coastal" onclick="setGalleryFilter('coastal', this)">🌊 Lakes & Coasts</button>
+              <button class="gallery-filter-btn" data-gallery-filter="culture" onclick="setGalleryFilter('culture', this)">⛩️ Heritage</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <button class="btn-reel-scrub" onclick="nudgeGallery('left')" title="Scrub reel backward">
+                <span>⏪</span> Scrub Left
+              </button>
+              <button class="btn-reel-scrub" onclick="nudgeGallery('right')" title="Scrub reel forward">
+                Scrub Right <span>⏩</span>
+              </button>
+              <button class="btn-shuffle" id="toggleGalleryPlayBtn" onclick="toggleGalleryPause()" title="Pause or Resume Stream">
+                <span id="galleryPlayIcon">⏸️</span> <span id="galleryPlayText">Pause</span>
+              </button>
+              <button class="btn-shuffle" id="shuffleGalleryBtn" onclick="shuffleGallery()" title="Shuffle & Randomize Photos">
+                <span class="shuffle-icon">🎲</span> Randomize
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seamless Infinite Dual-Track Carousel Viewport -->
+        <div class="gallery-carousel-viewport" id="galleryCarouselViewport">
+          <div class="gallery-carousel-track track-top" id="galleryTrackTop">
+            <!-- Dynamically populated via gallery.js -->
+          </div>
+          <div class="gallery-carousel-track track-bottom" id="galleryTrackBottom">
+            <!-- Dynamically populated via gallery.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Saved Bucket List Section -->
+      <section class="section" id="toolkit">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="section-tag">Route & Saved Stops</span>
+            <h2 class="section-title">Your Secret Itinerary</h2>
+            <p class="section-subtitle">Stops you saved from community posts with quick one-tap directions.</p>
+          </div>
+
+          <div class="toolkit-card reveal-left">
+            <div class="toolkit-header">
+              <h3>📌 Saved Secret Stops</h3>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Synced locally on this device</span>
+            </div>
+            <div class="bucket-list-items" id="bucketListContainer">
+              <!-- Dynamically populated by state.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter Section -->
+      <section class="section" id="contact" style="padding-top: 20px;">
+        <div class="container">
+          <div class="newsletter-card reveal">
+            <div class="newsletter-text">
+              <h3>Get Secret Spots Before They Get Crowded 📬</h3>
+              <p>Join 34,000+ conscious travelers getting our private weekly digest of hidden villages, unmapped lagoons, and flight deals.</p>
+            </div>
+            <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Newsletter Subscription'); showToast('🎉 Welcome to the HopStop Explorer Digest!'); this.reset();">
+              <div class="newsletter-input-group">
+                <input type="email" id="newsletterEmail" placeholder="Enter your email address..." required>
+                <button type="submit" class="btn-primary" style="padding: 8px 22px;">Subscribe</button>
+              </div>
+              <span style="font-size: 0.75rem; color: #94a3b8; text-align: left;">100% free. No ads. Unsubscribe anytime.</span>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== Ultra-Premium Animated Footer ==================== -->
+      <footer class="footer">
+        <div class="container">
+          <!-- Animated Weekly Dispatch Bar -->
+          <div class="footer-newsletter-bar reveal">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">
+                <span>📬</span>
+                <span>The Friday Hidden Gem Dispatch</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0;">Get 5 secret GPS coordinates & photo stories delivered to your inbox every Friday morning.</p>
+            </div>
+
+            <form class="footer-newsletter-form" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Friday Dispatch Subscription'); showToast('🎉 Subscribed to Friday Gem Dispatch!'); this.reset();">
+              <input type="email" class="footer-newsletter-input" placeholder="Enter your explorer email..." required>
+              <button type="submit" class="btn-gem" style="padding: 8px 18px; font-size: 0.82rem; white-space: nowrap;">
+                Join 14,000+ Explorers ✨
+              </button>
+            </form>
+          </div>
+
+          <div class="footer-top">
+            <div class="footer-brand reveal">
+              <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+                <div class="brand-icon">💎</div>
+                <span>Hop<span>Stop</span></span>
+              </div>
+              <p>The global social community for discovering and protecting the world's most underrated destinations, secret viewpoints, and hidden cultural gems.</p>
+              
+              <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
+                <span class="cloud-status-dot" style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
+                <span>All Systems Operational • 12 Active Waypoints</span>
+              </div>
+
+              <div class="footer-social-row">
+                <a href="javascript:void(0)" class="footer-social-btn discord" onclick="showToast('Joined Discord Community! 💬')">💬 Discord</a>
+                <a href="javascript:void(0)" class="footer-social-btn instagram" onclick="showToast('Opening Instagram @hopstopgems 📸')">📸 Instagram</a>
+                <a href="javascript:void(0)" class="footer-social-btn twitter" onclick="showToast('Opening X @hopstopapp 🐦')">🐦 X</a>
+                <a href="javascript:void(0)" class="footer-social-btn rss" onclick="showToast('RSS Feed Copied! 📡')">📡 RSS</a>
+              </div>
+            </div>
+
+            <!-- Column 1: Explore & Feed -->
+            <div class="footer-column reveal stagger-1">
+              <h4>🗺️ Explore</h4>
+              <ul>
+                <li><a href="feed.html">📱 Social Feed</a></li>
+                <li><a href="boards.html">📌 Dream Boards <span class="footer-badge-tag">Co-Save</span></a></li>
+                <li><a href="battles.html">🏆 Photo Battles <span class="footer-badge-tag gold">Active</span></a></li>
+                <li><a href="index.html#mapSection" onclick="scrollToMap()">🌍 Interactive Map</a></li>
+                <li><a href="index.html#gallery" onclick="scrollToGallery()">📸 Photo Stream Wall</a></li>
+                <li><button class="footer-link-btn" onclick="openDailyGemModal()">🌅 Today's Curated Gem</button></li>
+              </ul>
+            </div>
+
+            <!-- Column 2: Trip Tools -->
+            <div class="footer-column reveal stagger-2">
+              <h4>🧭 Smart Tools</h4>
+              <ul>
+                <li><a href="planner.html">🗺️ Multi-Stop Route Planner</a></li>
+                <li><button class="footer-link-btn" onclick="openTripMode()">🚀 Road-Trip Mode</button></li>
+                <li><a href="bounties.html">🎯 Travel Bounty Board</a></li>
+                <li><button class="footer-link-btn" onclick="openEscapeMode()">🎧 Ambient Escape Mode</button></li>
+                <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Compass</button></li>
+                <li><button class="footer-link-btn" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</button></li>
+              </ul>
+            </div>
+
+            <!-- Column 3: Gamification & Community -->
+            <div class="footer-column reveal stagger-3">
+              <h4>🏆 Community</h4>
+              <ul>
+                <li><button class="footer-link-btn" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</button></li>
+                <li><button class="footer-link-btn" onclick="openLeaderboardModal()">🏆 Top-Finders Leaderboard</button></li>
+                <li><button class="footer-link-btn" onclick="openDailyStreakModal()">🔥 Daily Streak & XP</button></li>
+                <li><a href="publications.html">📰 Micro-Publications & Series</a></li>
+                <li><a href="boards.html#lockedGuidesGrid">🔒 Creator Dossiers & Guides</a></li>
+                <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
+              </ul>
+            </div>
+
+            <!-- Column 4: Platform & Actions -->
+            <div class="footer-column reveal stagger-4">
+              <h4>⚡ Platform</h4>
+              <ul>
+                <li><button class="footer-link-btn" onclick="openPostModal()">💎 Post a Hidden Gem</button></li>
+                <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
+                <li><button class="footer-link-btn" onclick="openCloudModal()">⚡ Supabase Cloud Backend</button></li>
+                <li><button class="footer-link-btn" onclick="openAuthModal('signin')">🔑 Sign In / Join</button></li>
+                <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
+                <li>
+                  <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                    <span>⬆</span> Back to Top
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="footer-bottom">
+            <p>&copy; 2026 HopStop — The Social Platform for Underrated Places in the World.</p>
+            <div class="footer-bottom-links">
+              <a href="javascript:void(0)" onclick="showToast('Leave-No-Trace Certified Explorer Network 🌿')">🌿 Leave-No-Trace Certified</a>
+              <span>•</span>
+              <a href="javascript:void(0)" onclick="showToast('Privacy Protected: Your exact coordinates are never sold 🛡️')">🛡️ Privacy Policy</a>
+              <span>•</span>
+              <a href="javascript:void(0)" onclick="showToast('Community Guidelines Active 📜')">📜 Terms & Guidelines</a>
+              <span>•</span>
+              <a href="javascript:void(0)" onclick="openCloudModal()">⚡ Free Supabase Sync</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <!-- ==================== Sign In / Sign Up Modal ==================== -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box auth-modal-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+      
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">💎</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 700;">Welcome to HopStop</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem;">The social network for hidden gems & secret travel blogs.</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tabSigninBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab-btn" id="tabSignupBtn" onclick="switchAuthTab('signup')">Create Account</button>
+      </div>
+
+      <form id="signinForm" class="auth-form">
+        <div class="form-group">
+          <label>Email or Username</label>
+          <input type="text" class="form-control" placeholder="maya@wander.com" value="maya@wander.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="••••••••" value="password123" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px; margin-top: 6px;">Sign In to Feed</button>
+      </form>
+
+      <form id="signupForm" class="auth-form" style="display: none;">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="signupName" class="form-control" placeholder="e.g. Leo Ramos" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" placeholder="leo@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Create Password</label>
+          <input type="password" class="form-control" placeholder="At least 6 characters" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px; margin-top: 6px;">Create Explorer Profile</button>
+      </form>
+
+      <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">
+        ⚡ 1-Click Instant Demo Login (Maya Lin)
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== Post a Hidden Place Modal ==================== -->
+  <div class="modal-backdrop" id="postPlaceModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closePostModal()" aria-label="Close modal">✕</button>
+      
+      <div class="post-form-header">
+        <h2>💎 Share an Underrated Place</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Help fellow wanderers discover hidden spots, coordinates, and secret tips.</p>
+      </div>
+
+      <form id="sharePlaceForm" class="post-form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formPlaceName">Place Name *</label>
+            <input type="text" id="formPlaceName" class="form-control" placeholder="e.g. Setenil de las Bodegas" required>
+          </div>
+          <div class="form-group">
+            <label for="formCountry">Country / Region *</label>
+            <input type="text" id="formCountry" class="form-control" placeholder="e.g. Spain" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formTitle">Story Title / Headline *</label>
+          <input type="text" id="formTitle" class="form-control" placeholder="e.g. The Town Built Under Colossal Boulders" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formCategory">Vibe Category</label>
+            <select id="formCategory" class="form-control">
+              <option value="village">🏘️ Hidden Village</option>
+              <option value="nature">🌿 Natural Wonder</option>
+              <option value="culture">⛩️ Sacred / Cultural Sanctuary</option>
+              <option value="coastal">🌊 Secret Coast / Water</option>
+              <option value="ruins">🏛️ Ancient Relic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="formGemScore">Underrated Gem Score (1-10)</label>
+            <input type="text" id="formGemScore" class="form-control" placeholder="e.g. 9.8" value="9.8">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formLocationQuery">Google Maps Location / Query *</label>
+            <input type="text" id="formLocationQuery" class="form-control" placeholder="e.g. Setenil de las Bodegas, Cadiz, Spain" required>
+          </div>
+          <div class="form-group">
+            <label for="formCoordinates">GPS Coordinates (Optional: Lat, Lng)</label>
+            <input type="text" id="formCoordinates" class="form-control" placeholder="e.g. 36.8642, -5.1814">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formBestTime">Best Time to Visit</label>
+            <input type="text" id="formBestTime" class="form-control" placeholder="e.g. May - October" value="Spring & Autumn">
+          </div>
+          <div class="form-group">
+            <label for="formBudget">Estimated Daily Budget</label>
+            <input type="text" id="formBudget" class="form-control" placeholder="e.g. $40 - $70 / day" value="$40 - $70 / day">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formImage">Photo URL (Unsplash or direct image link)</label>
+          <input type="url" id="formImage" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80">
+        </div>
+
+        <div class="form-group">
+          <label for="formVideo">🎥 Optional Video Reel / Motion Link (MP4 / WebM)</label>
+          <input type="url" id="formVideo" class="form-control" placeholder="https://... direct video link">
+        </div>
+
+        <div class="form-group">
+          <label for="formSecretTip">🤫 Your Secret Tip for Visitors *</label>
+          <input type="text" id="formSecretTip" class="form-control" placeholder="e.g. Arrive before 10 AM to have the cliff trail to yourself." required>
+        </div>
+
+        <div class="form-group">
+          <label for="formStory">Tell The Story & Why It's Underrated *</label>
+          <textarea id="formStory" class="form-control" placeholder="Describe the atmosphere, how to get there, and what made it magical..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-gem" style="padding: 12px; font-size: 1rem; width: 100%; margin-top: 10px;">
+          🚀 Publish Hidden Gem to Map & Feed
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== Article & Discussion Reader Modal ==================== -->
+  <div class="modal-backdrop" id="articleModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeArticleModal()" aria-label="Close article">✕</button>
+      
+      <img src="" alt="Post cover" class="modal-hero-img" id="modalHeroImg">
+      
+      <div class="modal-content-inner">
+        <div class="modal-location-header">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <span class="modal-tag" id="modalTag" style="background: rgba(6, 182, 212, 0.12); color: #0284c7; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700;">Category</span>
+            <span id="modalGemScore" style="color: #06b6d4; font-size: 0.85rem; font-weight: 700;">💎 Gem Score: 9.8/10</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-popup-read" id="modalAddItineraryBtn" style="padding: 6px 12px; background: rgba(249, 115, 22, 0.12); color: #ea580c; border: 1px solid rgba(249, 115, 22, 0.3);">
+              🗺️ + Itinerary
+            </button>
+            <button class="btn-popup-read" id="modalViewOnMapBtn" style="padding: 6px 14px;">
+              📍 View on Map
+            </button>
+            <button class="btn-direction" id="modalDirectionsBtn">
+              🧭 Directions
+            </button>
+          </div>
+        </div>
+
+        <h2 class="modal-title" id="modalTitle">Article Title</h2>
+        
+        <p style="color: #0284c7; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px;" id="modalLocationText">📍 Place, Country</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 12px;" id="modalAuthorInfo">Shared by author</p>
+
+        <!-- Live Destination Weather Radar Box -->
+        <div class="weather-box-large" id="modalWeatherBox">
+          <div class="weather-box-left">
+            <span class="weather-box-icon" id="modalWeatherIcon">☀️</span>
+            <div>
+              <div class="weather-box-temp" id="modalWeatherTemp">22°C</div>
+              <div class="weather-box-condition" id="modalWeatherCondition">Clear Sky • Pleasant Mountain Breeze</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span class="weather-badge" id="modalBestSeasonPill">🌸 Best: Spring & Autumn</span>
+          </div>
+        </div>
+
+        <div class="modal-secret-box">
+          <div style="font-size: 1.6rem;">🤫</div>
+          <div>
+            <h4>Traveler's Secret Tip</h4>
+            <p id="modalSecretTipText">Secret tip goes here...</p>
+          </div>
+        </div>
+
+        <div class="modal-body" id="modalBody"></div>
+
+        <!-- Like & Interactions Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 30px; padding: 16px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+          <button class="btn-gem" id="modalLikeBtn" style="padding: 8px 18px;">
+            ❤️ <span id="modalLikeCount">0</span> Likes
+          </button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Share with friends who love secret spots</span>
+        </div>
+
+        <!-- Comments & Discussion Feed -->
+        <section class="comments-section">
+          <div class="comments-header">
+            <h3>💬 Traveler Discussion (<span id="commentsCount">0</span>)</h3>
+          </div>
+
+          <form id="addCommentForm" class="comment-input-wrap">
+            <div class="comment-author-row">
+              <input type="text" id="commentAuthorInput" class="form-control" placeholder="Your name (e.g. Leo Ramos)">
+            </div>
+            <div class="comment-input-row">
+              <textarea id="commentTextInput" class="form-control" placeholder="Ask a question or share your experience about this place..." rows="2" required></textarea>
+              <button type="submit" class="btn-primary" style="align-self: flex-end; padding: 10px 18px;">Post</button>
+            </div>
+          </form>
+
+          <ul class="comments-list" id="commentsList"></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Gallery Lightbox Modal ==================== -->
+  <div class="modal-backdrop" id="lightboxModal">
+    <button class="modal-close-btn" id="lightboxCloseBtn" aria-label="Close image">✕</button>
+    <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrevBtn" aria-label="Previous image">❮</button>
+    <button class="lightbox-nav-btn lightbox-next" id="lightboxNextBtn" aria-label="Next image">❯</button>
+    
+    <img src="" alt="Enlarged photo" class="lightbox-img" id="lightboxImg">
+    <div class="lightbox-caption-bar" id="lightboxCaption">Location & Title</div>
+  </div>
+
+  <!-- ==================== Supabase Free Cloud Backend Modal ==================== -->
+  <div class="modal-backdrop" id="cloudModal">
+    <div class="modal-box" style="max-width: 620px;">
+      <button class="modal-close-btn" onclick="closeCloudModal()" aria-label="Close modal">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 2rem;">⚡</span>
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin: 0;">Supabase Cloud Backend</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">100% Free Tier: Multi-device sync for posts, likes, comments & user accounts</p>
+        </div>
+      </div>
+
+      <div class="cloud-info-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <strong>Current Backend Status:</strong>
+          <span id="cloudModalStatusPill" class="cloud-status-badge disconnected">
+            <span class="cloud-status-dot"></span>
+            <span id="cloudModalStatusText">Local Storage (Offline)</span>
+          </span>
+        </div>
+        <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">
+          Connecting your free Supabase project allows multiple users on different phones and computers to share posts, like, and comment live in real-time.
+        </p>
+      </div>
+
+      <form id="cloudConfigForm" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label for="supabaseUrlInput">Supabase Project URL</label>
+          <input type="url" id="supabaseUrlInput" class="form-control" placeholder="https://your-project-id.supabase.co">
+        </div>
+        <div class="form-group">
+          <label for="supabaseKeyInput">Supabase Anon Public Key</label>
+          <input type="password" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="submit" class="btn-gem" style="flex: 1; padding: 10px;">⚡ Save & Connect Cloud</button>
+          <button type="button" class="btn-popup-read" id="btnTestCloud" style="padding: 10px 16px;" onclick="testSupabaseConnection()">🔍 Test Connection</button>
+          <button type="button" class="btn-direction" id="btnDisconnectCloud" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 10px 14px;" onclick="disconnectSupabase()">Disconnect</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== Ambient Escape Mode ==================== -->
+  <div class="escape-modal-backdrop" id="escapeModal">
+    <div class="escape-backdrop-container">
+      <div class="escape-image-bg" id="escapeImageBg"></div>
+      <video src="" class="escape-video-bg" id="escapeVideoBg" autoplay loop muted playsinline></video>
+      <div class="escape-atmospheric-glow"></div>
+      <div class="escape-vignette-overlay"></div>
+    </div>
+    <div class="escape-top-bar">
+      <div class="escape-brand">
+        <span style="font-size: 1.5rem;">🎧</span>
+        <div>
+          <div style="font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;">HopStop Escape Mode</div>
+          <div style="font-size: 0.75rem; color: #cbd5e1;">Full-Screen Ambient Getaway & Spatial Audio</div>
+        </div>
+        <span class="escape-badge-live">● AMBIENT SOUND LIVE</span>
+      </div>
+      <div class="escape-scenes-quicknav" id="escapeScenesQuickNav"></div>
+      <button class="escape-close-btn" onclick="closeEscapeMode()" aria-label="Exit Escape Mode">✕</button>
+    </div>
+    <div class="escape-center-content">
+      <div class="escape-scene-location" id="escapeSceneLocation">📍 Blagaj, Bosnia & Herzegovina</div>
+      <h1 class="escape-scene-title" id="escapeSceneTitle">Emerald Karst Spring & Cavern Drips</h1>
+      <p class="escape-scene-quote" id="escapeSceneQuote">"Ice-cold emerald water emerging from a 200m cliff face while rain patters on ancient dervish wood."</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px;">
+        <button class="btn-gem" id="escapeAddItineraryBtn" style="padding: 10px 22px; font-size: 0.9rem;" onclick="addCurrentEscapeToItinerary()">🗺️ + Add to Itinerary</button>
+        <button class="btn-popup-read" style="padding: 10px 20px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.18); color: #fff;" onclick="viewCurrentEscapeOnMap()">📍 Pin on Map</button>
+      </div>
+    </div>
+    <div class="escape-bottom-controls">
+      <div class="escape-sound-mixer">
+        <span style="font-size: 0.8rem; color: #e2e8f0; font-weight: 600;">Audio Engine:</span>
+        <button class="escape-sound-btn active" id="btnSoundRain" onclick="toggleEscapeSound('rain')">🌧️</button>
+        <button class="escape-sound-btn active" id="btnSoundWind" onclick="toggleEscapeSound('wind')">🌬️</button>
+        <button class="escape-sound-btn" id="btnSoundWaves" onclick="toggleEscapeSound('waves')">🌊</button>
+        <button class="escape-sound-btn" id="btnSoundFire" onclick="toggleEscapeSound('fire')">🔥</button>
+        <input type="range" id="escapeVolumeSlider" min="0" max="1" step="0.05" value="0.7" style="width: 80px;" oninput="setEscapeVolume(this.value)">
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="font-size: 0.8rem; color: #cbd5e1;">Zen Timer:</span>
+        <button class="escape-timer-pill" id="timer3m" onclick="startEscapeZenTimer(3)">3m</button>
+        <button class="escape-timer-pill" id="timer5m" onclick="startEscapeZenTimer(5)">5m</button>
+        <button class="escape-timer-pill" id="timer10m" onclick="startEscapeZenTimer(10)">10m</button>
+        <span id="escapeTimerCountdown" style="font-size: 0.82rem; color: #38bdf8; font-weight: 700;"></span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-popup-read" style="padding: 8px 16px; color: #fff; background: rgba(255,255,255,0.18);" onclick="navigateEscapeScene(-1)">❮ Previous</button>
+        <button class="btn-popup-read" style="padding: 8px 16px; color: #fff; background: rgba(255,255,255,0.18);" onclick="navigateEscapeScene(1)">Next Scene ❯</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Travel Passport Modal ==================== -->
+  <div class="modal-backdrop" id="travelPassportModal">
+    <div class="modal-box" style="max-width: 780px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeTravelPassport()" aria-label="Close passport">✕</button>
+      <div class="passport-header-banner">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="passport-emblem">🌐</div>
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 800; color: #10b981; text-transform: uppercase;">OFFICIAL EXPLORER PASSPORT</div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin: 0;">Maya Lin's Travel Passport</h2>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Verified World Wanderer • Pass No. HP-89420</div>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981;" id="passportVisitedCount">8 / 195</div>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Countries Stamped (4.1%)</span>
+        </div>
+      </div>
+      <div class="scratch-map-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.84rem; font-weight: 700;">🗺️ Interactive Visited Countries Scratch-Off</span>
+          <span style="font-size: 0.76rem; color: #0284c7;">+100 XP per new stamp</span>
+        </div>
+        <div class="scratch-country-pills-wrap" id="scratchCountryPills"></div>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin: 20px 0 12px;">
+        🛂 Collected Visa Ink Stamps (<span id="passportStampsCount">8</span>)
+      </h3>
+      <div class="passport-stamps-grid" id="passportStampsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Weekly Curated Digest Modal ==================== -->
+  <div class="modal-backdrop" id="weeklyDigestModal">
+    <div class="modal-box" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeWeeklyDigestModal()" aria-label="Close digest">✕</button>
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.15); color: #0284c7; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 700; margin-bottom: 8px;">
+        <span>📬</span> Weekly Personalized Explorer Digest
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 4px;">5 Hidden Gems Picked For You</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Curated for your travel tastes, off-season wishlists, and moderate budget tier.</p>
+      <div class="weekly-digest-cards-list" id="weeklyDigestCardsList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== On-The-Road Active Trip Mode Modal ==================== -->
+  <div class="modal-backdrop" id="tripModeModal">
+    <div class="modal-box" style="max-width: 760px; max-height: 90vh; overflow-y: auto; background: var(--bg-card);">
+      <button class="modal-close-btn" onclick="closeTripMode()" aria-label="Close trip mode">✕</button>
+      <div class="trip-mode-hud-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="trip-hud-pulse-ring"></div>
+          <div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #f97316; text-transform: uppercase;">ACTIVE TRAVEL HUD • OFFLINE SYNC READY</div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin: 0; color: #ffffff;">HopStop On-The-Road Trip Mode</h2>
+          </div>
+        </div>
+        <button class="btn-gem" style="padding: 6px 14px; font-size: 0.78rem; background: rgba(255,255,255,0.2);" onclick="showToast('💾 Saved all itinerary stops to offline browser cache!')">
+          💾 Offline Cached (Active)
+        </button>
+      </div>
+      <div class="trip-hud-actions-grid">
+        <div class="trip-hud-action-card" onclick="location.href='planner.html'; closeTripMode();">
+          <span style="font-size: 1.6rem;">🗺️</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">Live Route Polyline</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">3 Connected Stops</p>
+        </div>
+        <div class="trip-hud-action-card" onclick="openGoogleMapsMultiStopRoute()">
+          <span style="font-size: 1.6rem;">🧭</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">1-Tap Google GPS</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">Turn-by-turn Navigation</p>
+        </div>
+        <div class="trip-hud-action-card" onclick="openPostModal(); closeTripMode();">
+          <span style="font-size: 1.6rem;">📸</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">Field Check-In</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">Confirm Gem Score</p>
+        </div>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin: 20px 0 10px;">
+        📍 Underrated Stops Near Current GPS (Within 25 km)
+      </h3>
+      <div class="trip-hud-nearby-list" id="tripHudNearbyList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Monthly Top-Finders Leaderboard Modal ==================== -->
+  <div class="modal-backdrop" id="leaderboardModal">
+    <div class="modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeLeaderboardModal()" aria-label="Close leaderboard">✕</button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="font-size: 3rem; margin-bottom: 4px;">👑</div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; margin: 0 0 4px;">Monthly Top-Finders Leaderboard</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Top contributors featured on the global Discover wall every 1st of the month.</p>
+      </div>
+      <div class="leaderboard-podium-grid" id="leaderboardPodiumGrid"></div>
+      <div class="leaderboard-table-wrap" id="leaderboardTableList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== "Gem of the Day" Modal ==================== -->
+  <div class="modal-backdrop" id="dailyGemModal">
+    <div class="modal-box" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeDailyGemModal()" aria-label="Close modal">✕</button>
+      <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 16px; max-height: 220px;">
+        <img src="" id="dailyModalHeroImg" style="width: 100%; height: 100%; object-fit: cover;" alt="Daily Gem Cover">
+        <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); color: #ea580c; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 800;">
+          🌅 GEM OF THE DAY REVEAL
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <h2 id="dailyModalTitle" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 2px;">Place Title</h2>
+          <p id="dailyModalLocation" style="color: #0284c7; font-weight: 600; font-size: 0.9rem; margin: 0;">📍 Location</p>
+        </div>
+        <span id="dailyModalScore" style="background: rgba(6, 182, 212, 0.12); color: #0284c7; padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700;">💎 9.9/10</span>
+      </div>
+      <div style="background: var(--bg-hover); border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 14px; margin-bottom: 16px;">
+        <div style="font-weight: 700; font-size: 0.82rem; color: #ea580c; text-transform: uppercase; margin-bottom: 6px;">⏱️ 30-Second Fast Read</div>
+        <p id="dailyModalSummary" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); margin-bottom: 8px;">Summary goes here...</p>
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+          <strong>🤫 Traveler Secret:</strong> <span id="dailyModalSecretTip">Tip text</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-gem" id="dailyModalAddItineraryBtn" style="flex: 1; padding: 10px;">🗺️ + Add to Itinerary</button>
+        <button class="btn-primary" id="dailyModalReadFullBtn" style="flex: 1; padding: 10px;">📖 Read Full Story & Discussion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Achievement Modal ==================== -->
+  <div class="modal-backdrop" id="achievementModal">
+    <div class="modal-box celebration-modal">
+      <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close modal">✕</button>
+      <div class="celebration-icon-anim" id="achievementIcon">🏆</div>
+      <span class="explorer-tier-badge" style="margin-bottom: 12px;" id="achievementTypeBadge">🏅 NEW BADGE UNLOCKED!</span>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;" id="achievementTitle">Bounty Hunter</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 10px 0 20px;" id="achievementDesc">
+        You successfully unlocked an achievement!
+      </p>
+      <div style="background: rgba(6, 182, 212, 0.1); border: 1px dashed #06b6d4; border-radius: var(--radius-md); padding: 12px; margin-bottom: 20px;">
+        <span style="font-weight: 700; color: #0284c7;" id="achievementRewardText">+500 XP Added to Your Profile</span>
+      </div>
+      <button class="btn-gem" style="width: 100%; padding: 11px;" onclick="closeAchievementModal()">Awesome! Continue Exploring 🚀</button>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Supabase JS Client & Leaflet -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Modular HopStop Feature Scripts -->
+  <script src="js/data.js?v=20261103_perfect_v6"></script>
+  <script src="js/state.js?v=20261103_perfect_v6"></script>
+  <script src="js/cloud.js?v=20261103_nomapwatermark"></script>
+  <script src="js/map.js?v=20261103_perfect_v6"></script>
+  <script src="js/auth.js?v=20261103_nomapwatermark"></script>
+  <script src="js/gamification.js?v=20261103_nomapwatermark"></script>
+  <script src="js/bounties.js?v=20261103_perfect_v6"></script>
+  <script src="js/feed.js?v=20261103_nomapwatermark"></script>
+  <script src="js/planner.js?v=20261103_perfect_v6"></script>
+  <script src="js/daily-streak.js?v=20261103_nomapwatermark"></script>
+  <script src="js/micro-adventures.js?v=20261103_nomapwatermark"></script>
+  <script src="js/publications.js?v=20261103_nomapwatermark"></script>
+  <script src="js/escape.js?v=20261103_nomapwatermark"></script>
+  <script src="js/stories.js?v=20261103_nomapwatermark"></script>
+  <script src="js/postcard-thread.js?v=20261103_wind_motion_perfect"></script>
+  <script src="js/gallery.js?v=20261103_woodworks_mesh_architectural"></script>
+  <script src="js/boards.js?v=20261103_perfect_v6"></script>
+  <script src="js/battles.js?v=20261103_nomapwatermark"></script>
+  <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>
+  <script src="js/passport.js?v=20261103_nomapwatermark"></script>
+  <script src="js/notifications.js?v=20261103_nomapwatermark"></script>
+  <script src="js/trip-mode.js?v=20261103_nomapwatermark"></script>
+  <script src="js/leaderboard.js?v=20261103_nomapwatermark"></script>
+  <script src="js/crew-chat.js?v=20261103_nomapwatermark"></script>
+  <script src="js/ui-effects.js?v=20261103_nomapwatermark"></script>
+  <script src="js/app-init.js?v=20261103_nomapwatermark"></script>
+  <script src="js/human-craft.js?v=20261103_wanderlust_audio_hd2"></script>
+</body>
+</html>

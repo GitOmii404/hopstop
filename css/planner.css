@@ -1,0 +1,532 @@
+/* ==========================================================================
+   HopStop — Multi-Stop Itinerary Builder & Live Weather Widget (Ultra-Polished)
+   ========================================================================== */
+
+/* 1. View & Ambient Lighting */
+.itinerary-view {
+  display: none;
+  padding-bottom: 70px;
+  position: relative;
+}
+
+.itinerary-view.active-view {
+  display: block;
+}
+
+.itinerary-view::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 550px;
+  background: radial-gradient(circle 500px at 20% 15%, rgba(6, 182, 212, 0.08), transparent 70%),
+              radial-gradient(circle 600px at 80% 25%, rgba(59, 130, 246, 0.07), transparent 70%),
+              radial-gradient(circle 400px at 50% 50%, rgba(139, 92, 246, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] .itinerary-view::before {
+  background: radial-gradient(circle 500px at 20% 15%, rgba(6, 182, 212, 0.14), transparent 70%),
+              radial-gradient(circle 600px at 80% 25%, rgba(59, 130, 246, 0.12), transparent 70%),
+              radial-gradient(circle 400px at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%);
+}
+
+/* 2. Hero Bar */
+.itinerary-hero-bar {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.09) 0%, rgba(59, 130, 246, 0.07) 50%, rgba(139, 92, 246, 0.06) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.28);
+  border-radius: var(--radius-xl);
+  padding: 26px 24px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(6, 182, 212, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.itinerary-hero-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #06b6d4, #3b82f6, #8b5cf6);
+  opacity: 0.9;
+}
+
+.itinerary-title-wrap h2 {
+  font-family: var(--font-heading);
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.itinerary-title-wrap h2 span {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.itinerary-title-wrap p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  max-width: 650px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 3. Route Statistics Grid */
+.itinerary-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+@media (max-width: 768px) {
+  .itinerary-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.itinerary-stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 16px 18px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+}
+
+.itinerary-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.1);
+}
+
+.itinerary-stat-val {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0284c7;
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+[data-theme="dark"] .itinerary-stat-val {
+  color: #38bdf8;
+}
+
+.itinerary-stat-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 6px;
+}
+
+/* 4. Two-Column Layout */
+.itinerary-layout-split {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 26px;
+  align-items: flex-start;
+}
+
+@media (max-width: 992px) {
+  .itinerary-layout-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 5. Route Legs Timeline */
+.itinerary-legs-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.itinerary-leg-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+/* Step Badge Number */
+.itinerary-step-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4), 0 0 0 3px #ffffff;
+  margin-top: 14px;
+  z-index: 2;
+}
+
+[data-theme="dark"] .itinerary-step-badge {
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4), 0 0 0 3px #0f172a;
+}
+
+/* Leg Card Container */
+.itinerary-leg-card {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+}
+
+[data-theme="dark"] .itinerary-leg-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.itinerary-leg-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(6, 182, 212, 0.45);
+  box-shadow: 0 14px 34px rgba(6, 182, 212, 0.12);
+}
+
+[data-theme="dark"] .itinerary-leg-card:hover {
+  box-shadow: 0 16px 36px rgba(6, 182, 212, 0.18);
+}
+
+/* Header Row */
+.itinerary-leg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.itinerary-leg-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0284c7;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  display: inline-block;
+}
+
+[data-theme="dark"] .itinerary-leg-num {
+  color: #38bdf8;
+  background: rgba(6, 182, 212, 0.18);
+}
+
+.itinerary-leg-title {
+  font-family: var(--font-heading);
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 4px 0 2px;
+  cursor: pointer;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+
+.itinerary-leg-title:hover {
+  color: #0284c7;
+}
+
+.itinerary-leg-country {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Actions (Move Up, Move Down, Delete) */
+.itinerary-leg-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.itinerary-btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.itinerary-btn-icon:hover:not(:disabled) {
+  background: var(--bg-surface);
+  border-color: #0284c7;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.itinerary-btn-icon.remove:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Content: Thumbnail + Details */
+.itinerary-leg-content {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+@media (max-width: 600px) {
+  .itinerary-leg-content {
+    flex-direction: column;
+  }
+}
+
+.itinerary-leg-thumb {
+  width: 110px;
+  height: 110px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.itinerary-leg-thumb:hover {
+  transform: scale(1.05);
+}
+
+.itinerary-leg-details {
+  flex: 1;
+}
+
+.itinerary-leg-desc {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.itinerary-leg-meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.itinerary-meta-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.itinerary-tip-callout {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.04) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .itinerary-tip-callout {
+  color: #fed7aa;
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+/* 6. Route Connector Between Stops */
+.itinerary-connector {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 8px 0 8px 18px;
+  padding-left: 36px;
+}
+
+.itinerary-connector-line {
+  position: absolute;
+  left: 0;
+  top: -12px;
+  bottom: -12px;
+  width: 2px;
+  background: linear-gradient(180deg, #06b6d4, #0284c7);
+  opacity: 0.8;
+}
+
+.itinerary-connector-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0284c7;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.12);
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .itinerary-connector-badge {
+  color: #38bdf8;
+  background: #0f172a;
+  border-color: rgba(6, 182, 212, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.itinerary-connector-badge:hover {
+  transform: scale(1.03);
+  border-color: #0284c7;
+}
+
+/* 7. Sticky Live Route Map Canvas */
+.itinerary-map-sticky {
+  position: sticky;
+  top: calc(var(--header-height) + 20px);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .itinerary-map-sticky {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+.itinerary-map-canvas {
+  width: 100%;
+  height: 400px;
+}
+
+/* Itinerary Route Glowing Numbered Pins on Map */
+.itinerary-custom-marker-wrapper {
+  background: transparent !important;
+  border: none !important;
+}
+
+.itinerary-map-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.itinerary-map-marker-pin {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading, sans-serif);
+  font-weight: 800;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.6), 0 0 0 3px #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.itinerary-map-marker-pin:hover {
+  transform: scale(1.22) translateY(-2px);
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.7), 0 0 0 3px #ffffff;
+}
+
+[data-theme="dark"] .itinerary-map-marker-pin {
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.6), 0 0 0 2px #0f172a;
+}
+
+.itinerary-map-controls {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.itinerary-map-controls .btn-popup-read {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.itinerary-map-controls .btn-popup-read.active {
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  color: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.35);
+}
+
+.itinerary-map-controls .btn-direction {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.itinerary-map-controls .btn-direction:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.5);
+  filter: brightness(1.06);
+}

@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed — HopStop Social Discovery & Stories</title>
+  <meta name="description" content="Discover secret spots, travel stories, daily streaks, and micro-adventures shared by authentic wanderers on HopStop.">
+  
+  <!-- Leaflet.js Interactive Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="styles.css?v=20261103_high_contrast_clean">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261103_high_contrast_clean">
+</head>
+<body>
+
+  <!-- ==================== Global Header ==================== -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+        <div class="brand-icon">💎</div>
+        <span>Hop<span>Stop</span></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="feed.html" class="nav-link active">📱 Feed</a></li>
+          <li><a href="index.html#gallery" class="nav-link">📸 Gallery</a></li>
+          <li><a href="boards.html" class="nav-link">📌 Boards</a></li>
+          <li><a href="battles.html" class="nav-link">🏆 Battles</a></li>
+          <li><a href="planner.html" class="nav-link">🗺️ Planner</a></li>
+          <li><a href="bounties.html" class="nav-link">🎯 Bounties</a></li>
+          <li><a href="index.html#mapSection" class="nav-link">🌍 World Map</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Cloud Backend Status Indicator -->
+        <button id="cloudStatusBtn" class="cloud-status-badge disconnected" onclick="openCloudModal()" title="Configure Supabase Free Cloud Backend">
+          <span class="cloud-status-dot" id="cloudStatusDot"></span>
+          <span id="cloudStatusLabel">Local Storage</span>
+        </button>
+
+        <!-- Notification Center Bell -->
+        <div class="notification-bell-wrap" style="position: relative;">
+          <button id="notifBellBtn" class="icon-btn" onclick="toggleNotificationDropdown(event)" title="Notifications & Weekly Digest">
+            🔔
+            <span class="notification-badge-dot" id="notifBadgeDot">3</span>
+          </button>
+
+          <!-- Notifications Dropdown Tray -->
+          <div class="notifications-dropdown" id="notificationsDropdown">
+            <div class="notif-dropdown-header">
+              <span style="font-weight: 700; font-size: 0.88rem;">🔔 Notifications (<span id="notifUnreadCount">3</span>)</span>
+              <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer;" onclick="markAllNotificationsRead()">Mark Read</span>
+            </div>
+            
+            <div class="notif-list-scroll" id="notificationsList">
+              <!-- Injected via app.js -->
+            </div>
+
+            <div class="notif-dropdown-footer">
+              <button class="btn-gem" style="width: 100%; padding: 8px; font-size: 0.8rem;" onclick="openWeeklyDigestModal()">
+                📬 Open Weekly Curated Digest (5 Gems)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="icon-btn" title="Toggle Light/Dark Theme" onclick="toggleTheme()">
+          🌙
+        </button>
+
+        <!-- Guest Actions (When Logged Out) -->
+        <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-gem" onclick="openAuthModal('signup')">Join Community</button>
+        </div>
+
+        <!-- Authenticated Actions (When Logged In) -->
+        <div id="authHeaderActions" style="display: none; align-items: center; gap: 12px;">
+          <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
+          
+          <div class="user-menu-wrap">
+            <div class="user-avatar-btn" id="userMenuTrigger">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
+              <span class="user-avatar-name current-user-name">Maya</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+            </div>
+
+            <!-- User Dropdown Menu -->
+            <div class="user-dropdown" id="userMenuDropdown">
+              <div class="dropdown-item" onclick="location.href='feed.html'">📱 Social Feed</div>
+              <div class="dropdown-item" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</div>
+              <div class="dropdown-item" onclick="openTripMode()">🚀 On-The-Road Trip Mode</div>
+              <div class="dropdown-item" onclick="openLeaderboardModal()">🏆 Monthly Top-Finders Leaderboard</div>
+              <div class="dropdown-item" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</div>
+              <div class="dropdown-item" onclick="location.href='boards.html'">📌 Collaborative Dream Boards</div>
+              <div class="dropdown-item" onclick="location.href='battles.html'">🏆 Weekly Photo Battles & Prompts</div>
+              <div class="dropdown-item" onclick="openEscapeMode()">🎧 Ambient Escape Mode</div>
+              <div class="dropdown-item" onclick="location.href='publications.html'">📰 Micro-Publications & Series</div>
+              <div class="dropdown-item" onclick="location.href='planner.html'">🗺️ Multi-Stop Route Planner</div>
+              <div class="dropdown-item" onclick="location.href='bounties.html'">🎯 Travel Bounty Board</div>
+              <div class="dropdown-item" onclick="location.href='index.html#gallery'">📸 Field Photo Gallery</div>
+              <div class="dropdown-item" onclick="location.href='index.html#mapSection'">🗺️ Interactive World Map</div>
+              <div class="dropdown-item" onclick="openDailyGemModal()">🌅 Today's Curated Gem</div>
+              <div class="dropdown-item" onclick="openPostModal()">💎 Post a Hidden Gem</div>
+              <div class="dropdown-item" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</div>
+              <div class="dropdown-item" onclick="location.href='index.html'">🌍 Discover Page</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" style="color: #ef4444;" onclick="handleUserLogout()">🚪 Log Out</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="icon-btn mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         AUTHENTICATED SOCIAL APP VIEW (Instagram / Social Feed for Travel)
+         ========================================================================== -->
+    <div id="appView" class="view-section active-view">
+      <div class="app-layout">
+        
+        <!-- Left Quick Navigation Sidebar -->
+        <aside class="app-sidebar-left">
+          <button class="sidebar-nav-btn active" id="sidebarFeedBtn" onclick="location.href='feed.html'">
+            <span class="nav-icon">🏠</span> Feed Stream
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarPassportBtn" onclick="openTravelPassport()">
+            <span class="nav-icon">🛂</span> Travel Passport <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #10b981; color:#fff;">8 Visited</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarTripModeBtn" onclick="openTripMode()" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(234, 179, 8, 0.1)); border-color: rgba(249, 115, 22, 0.3);">
+            <span class="nav-icon">🚀</span> Trip Mode <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #f97316;">Live GPS</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarBoardsBtn" onclick="location.href='boards.html'">
+            <span class="nav-icon">📌</span> Dream Boards <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #ec4899;">Co-Save</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarBattlesBtn" onclick="location.href='battles.html'">
+            <span class="nav-icon">🏆</span> Photo Battles <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #eab308; color: #000;">Live Vote</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarLeaderboardBtn" onclick="openLeaderboardModal()">
+            <span class="nav-icon">👑</span> Top Finders <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">Ranks</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarEscapeBtn" onclick="openEscapeMode()" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(139, 92, 246, 0.12)); border-color: rgba(6, 182, 212, 0.3);">
+            <span class="nav-icon">🎧</span> Escape Mode <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem; background: #06b6d4;">HD Audio</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarPubBtn" onclick="location.href='publications.html'">
+            <span class="nav-icon">📰</span> Publications <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">Series</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarItineraryBtn" onclick="location.href='planner.html'">
+            <span class="nav-icon">🗺️</span> Route Planner <span class="bounty-status-tag active" id="sidebarItineraryCount" style="margin-left: auto; font-size: 0.65rem;">3 Legs</span>
+          </button>
+          <button class="sidebar-nav-btn" id="sidebarBountyBtn" onclick="location.href='bounties.html'">
+            <span class="nav-icon">🎯</span> Bounty Board <span class="bounty-status-tag active" style="margin-left: auto; font-size: 0.65rem;">3 Active</span>
+          </button>
+          <button class="sidebar-nav-btn" onclick="location.href='index.html#gallery'">
+            <span class="nav-icon">📸</span> Field Gallery
+          </button>
+          <button class="sidebar-nav-btn" onclick="location.href='index.html#mapSection'">
+            <span class="nav-icon">🗺️</span> World Map
+          </button>
+          <button class="sidebar-nav-btn" onclick="location.href='index.html'">
+            <span class="nav-icon">🧭</span> Discover Wall
+          </button>
+          <button class="sidebar-nav-btn" onclick="openPostModal()">
+            <span class="nav-icon">✨</span> Post Discovery
+          </button>
+          <button class="sidebar-nav-btn" onclick="openCloudModal()">
+            <span class="nav-icon">⚡</span> Cloud Backend
+          </button>
+          <button class="sidebar-nav-btn" onclick="handleUserLogout()">
+            <span class="nav-icon">🚪</span> Sign Out
+          </button>
+
+          <button class="btn-gem sidebar-post-cta" onclick="openPostModal()">
+            💎 + Share a Stop
+          </button>
+        </aside>
+
+        <!-- Center Feed Stream -->
+        <div class="app-feed-stream">
+          
+          <!-- Stories / Highlights Bar -->
+          <div class="stories-tray" id="storiesTray">
+            <!-- Dynamically populated via stories.js -->
+          </div>
+
+          <!-- Daily Habit Ritual: Gem of the Day & Discovery Streak Banner -->
+          <div class="daily-gem-banner" id="dailyGemBanner">
+            <div class="daily-banner-top">
+              <div class="streak-pill-wrap">
+                <span class="streak-flame">🔥</span>
+                <span id="streakDaysCount">5-Day Discovery Streak</span>
+                <button class="btn-gem" id="claimDailyCheckinBtn" style="padding: 2px 8px; font-size: 0.72rem; margin-left: 4px;" onclick="claimDailyCheckin()">
+                  ✨ Claim +50 XP
+                </button>
+              </div>
+
+              <div class="daily-countdown-pill">
+                <span>⏳ Next Reveal:</span>
+                <strong id="dailyRevealTimer">07:35:12</strong>
+              </div>
+            </div>
+
+            <div class="daily-gem-card-inner">
+              <img src="https://images.unsplash.com/photo-1684862363333-4f5ab43e7edf?auto=format&fit=crop&w=300&q=80" alt="Daily Curated Gem" class="daily-gem-thumb" id="dailyGemThumb" onclick="openDailyGemModal()">
+              <div class="daily-gem-info">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 0.5px;">🌅 TODAY'S REVEALED SECRET SPOT</div>
+                <div class="daily-gem-title" id="dailyGemTitle" onclick="openDailyGemModal()">Setenil de las Bodegas: Town Built Under Boulders</div>
+                <div class="daily-gem-meta">
+                  <span id="dailyGemLocation">📍 Cadiz, Spain</span>
+                  <span>⏱️ 30-Sec Fast Read</span>
+                  <span style="color: #06b6d4; font-weight: 700;">💎 9.9/10 Underrated</span>
+                </div>
+              </div>
+              <button class="btn-primary" style="padding: 8px 14px; font-size: 0.8rem; white-space: nowrap;" onclick="openDailyGemModal()">
+                ⚡ Read 30s
+              </button>
+            </div>
+          </div>
+
+          <!-- Local Micro-Adventures (Radius Filter) Toolbar -->
+          <div class="micro-adventure-bar" id="microAdventuresBar">
+            <div class="micro-adv-header">
+              <div class="micro-adv-title">
+                <span>📍</span>
+                <span>Micro-Adventures Near You</span>
+              </div>
+              <div class="location-detect-badge" id="userLocationBadge" onclick="requestUserGeolocation()" title="Click to detect GPS or choose city">
+                <span>🎯</span>
+                <span id="userLocationLabel">Madrid, Spain (Auto)</span>
+              </div>
+            </div>
+
+            <div class="radius-pills-wrap">
+              <button class="radius-pill-btn active" data-radius="all" onclick="setRadiusFilter('all')">🌍 Worldwide</button>
+              <button class="radius-pill-btn" data-radius="15" onclick="setRadiusFilter(15)">📍 < 15 km (Walk / Bike)</button>
+              <button class="radius-pill-btn" data-radius="50" onclick="setRadiusFilter(50)">🚗 < 50 km (Day Trip)</button>
+              <button class="radius-pill-btn" data-radius="150" onclick="setRadiusFilter(150)">🏕️ < 150 km (Weekend Trip)</button>
+              <button class="radius-pill-btn" data-radius="500" onclick="setRadiusFilter(500)">✈️ < 500 km (Regional)</button>
+            </div>
+          </div>
+
+          <!-- Feed Algorithm & Personalization Ranking Bar -->
+          <div class="feed-algo-bar" style="margin-bottom: 20px;">
+            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
+              <button class="feed-algo-btn active" data-feed-sort="foryou" onclick="setFeedSortMode('foryou')">🔥 For You (Smart Match)</button>
+              <button class="feed-algo-btn" data-feed-sort="fresh" onclick="setFeedSortMode('fresh')">⏱️ Fresh Finds</button>
+              <button class="feed-algo-btn" data-feed-sort="topgem" onclick="setFeedSortMode('topgem')">💎 9.8+ Gem Score</button>
+              <button class="feed-algo-btn" data-feed-sort="wishlist" onclick="setFeedSortMode('wishlist')">🏷️ Wishlist Matches</button>
+            </div>
+          </div>
+
+          <!-- Quick "What Secret Place Did You Discover?" Box -->
+          <div class="feed-create-box">
+            <div class="create-box-top">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="social-author-img current-user-avatar">
+              <div class="create-box-input-trigger" onclick="openPostModal()">
+                What secret stop or cliff town did you discover? Share it...
+              </div>
+            </div>
+            <div class="create-box-actions">
+              <div class="create-action-tag" onclick="openPostModal()">
+                <span>📸</span> Add Photo
+              </div>
+              <div class="create-action-tag" onclick="openPostModal()">
+                <span>📍</span> Tag Location
+              </div>
+              <div class="create-action-tag" onclick="openPostModal()">
+                <span>🤫</span> Secret Tip
+              </div>
+              <button class="btn-gem" style="padding: 6px 16px; font-size: 0.82rem;" onclick="openPostModal()">Post</button>
+            </div>
+          </div>
+
+          <!-- Social Posts Stream -->
+          <div id="socialFeedContainer" style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Injected via feed.js -->
+          </div>
+        </div>
+
+        <!-- Right Suggested Explorers & Trending Sidebar -->
+        <aside class="app-sidebar-right">
+          
+          <!-- User Profile & Gamification Level Card -->
+          <div class="explorer-level-card">
+            <div class="explorer-level-header">
+              <span class="explorer-tier-badge" id="userTierBadge">⚡ Level 2: Trailblazer</span>
+              <span class="xp-counter-text" id="userXpText">450 / 600 XP</span>
+            </div>
+
+            <div class="xp-progress-bar-wrap">
+              <div class="xp-progress-bar-fill" id="userXpFill" style="width: 75%;"></div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0 6px;">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="widget-user-avatar current-user-avatar" style="width: 44px; height: 44px;">
+              <div>
+                <h4 class="current-user-name" style="font-size: 0.92rem; font-weight: 700;">Maya Lin</h4>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">150 XP to Level 3 Master</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-main);">🏅 Badges Showcase (<span id="unlockedBadgeCount">5</span>/8)</span>
+                <span style="font-size: 0.72rem; color: #0284c7; cursor: pointer;" onclick="location.href='bounties.html'">+ Earn XP</span>
+              </div>
+              <div class="badge-grid" id="sidebarBadgeGrid">
+                <!-- Dynamically rendered via gamification.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Travel Passport Scratch-Off Widget -->
+          <div class="sidebar-widget" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%); border-color: rgba(16, 185, 129, 0.25);">
+            <div class="widget-title" style="color: #10b981;">
+              <span>🛂 Travel Passport</span>
+              <span class="bounty-status-tag active" style="font-size: 0.7rem; background: #10b981; color: #fff;" id="sidebarPassportCount">8 Stamped</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px;">
+              Scratch off visited countries and collect authentic custom visa stamps!
+            </p>
+            <button class="btn-gem" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #10b981, #059669);" onclick="openTravelPassport()">
+              Open Passport & Stamps 🛂
+            </button>
+          </div>
+
+          <!-- Monthly Top-Finders Leaderboard Widget -->
+          <div class="sidebar-widget" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border-color: rgba(234, 179, 8, 0.25);">
+            <div class="widget-title" style="color: #eab308;">
+              <span>👑 Monthly Top-Finders</span>
+              <span style="font-size: 0.72rem; color: #0284c7; cursor: pointer;" onclick="openLeaderboardModal()">Full Podium ❯</span>
+            </div>
+            <div id="sidebarLeaderboardList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+              <!-- Injected dynamically via leaderboard.js -->
+            </div>
+            <button class="btn-popup-read" style="width: 100%; padding: 7px; font-size: 0.8rem;" onclick="openLeaderboardModal()">
+              🏆 View Global Leaderboard
+            </button>
+          </div>
+
+          <!-- Bounty Board Mini Widget -->
+          <div class="sidebar-widget" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border-color: rgba(249, 115, 22, 0.25);">
+            <div class="widget-title" style="color: #ea580c;">
+              <span>🎯 Travel Bounties</span>
+              <span class="bounty-status-tag active" style="font-size: 0.7rem;">3 Open</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px;">
+              Help travelers find requested secret spots to earn XP & unlock the <strong>🎯 Bounty Hunter</strong> badge!
+            </p>
+            <button class="btn-gem" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #f97316, #ea580c);" onclick="location.href='bounties.html'">
+              Explore Bounty Board 🏹
+            </button>
+          </div>
+
+          <!-- Suggested Explorers Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-title">
+              <span>Top Explorers</span>
+              <span style="font-size: 0.75rem; color: #0284c7; cursor: pointer;">See All</span>
+            </div>
+            <ul class="widget-list" id="suggestedUsersList">
+              <!-- Injected via feed.js -->
+            </ul>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- ==================== Ultra-Premium Animated Footer ==================== -->
+    <footer class="footer">
+      <div class="container">
+        <!-- Animated Weekly Dispatch Bar -->
+        <div class="footer-newsletter-bar reveal">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">
+              <span>📬</span>
+              <span>The Friday Hidden Gem Dispatch</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0;">Get 5 secret GPS coordinates & photo stories delivered to your inbox every Friday morning.</p>
+          </div>
+
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Friday Dispatch Subscription'); showToast('🎉 Subscribed to Friday Gem Dispatch!'); this.reset();">
+            <input type="email" class="footer-newsletter-input" placeholder="Enter your explorer email..." required>
+            <button type="submit" class="btn-gem" style="padding: 8px 18px; font-size: 0.82rem; white-space: nowrap;">
+              Join 14,000+ Explorers ✨
+            </button>
+          </form>
+        </div>
+
+        <div class="footer-top">
+          <div class="footer-brand reveal">
+            <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer;">
+              <div class="brand-icon">💎</div>
+              <span>Hop<span>Stop</span></span>
+            </div>
+            <p>The global social community for discovering and protecting the world's most underrated destinations, secret viewpoints, and hidden cultural gems.</p>
+            
+            <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
+              <span class="cloud-status-dot" style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
+              <span>All Systems Operational • 12 Active Waypoints</span>
+            </div>
+
+            <div class="footer-social-row">
+              <a href="javascript:void(0)" class="footer-social-btn discord" onclick="showToast('Joined Discord Community! 💬')">💬 Discord</a>
+              <a href="javascript:void(0)" class="footer-social-btn instagram" onclick="showToast('Opening Instagram @hopstopgems 📸')">📸 Instagram</a>
+              <a href="javascript:void(0)" class="footer-social-btn twitter" onclick="showToast('Opening X @hopstopapp 🐦')">🐦 X</a>
+              <a href="javascript:void(0)" class="footer-social-btn rss" onclick="showToast('RSS Feed Copied! 📡')">📡 RSS</a>
+            </div>
+          </div>
+
+          <!-- Column 1: Explore & Feed -->
+          <div class="footer-column reveal stagger-1">
+            <h4>🗺️ Explore</h4>
+            <ul>
+              <li><a href="feed.html">📱 Social Feed</a></li>
+              <li><a href="boards.html">📌 Dream Boards <span class="footer-badge-tag">Co-Save</span></a></li>
+              <li><a href="battles.html">🏆 Photo Battles <span class="footer-badge-tag gold">Active</span></a></li>
+              <li><a href="index.html#mapSection">🌍 Interactive Map</a></li>
+              <li><a href="index.html#gallery">📸 Photo Stream Wall</a></li>
+              <li><button class="footer-link-btn" onclick="openDailyGemModal()">🌅 Today's Curated Gem</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Trip Tools -->
+          <div class="footer-column reveal stagger-2">
+            <h4>🧭 Smart Tools</h4>
+            <ul>
+              <li><a href="planner.html">🗺️ Multi-Stop Route Planner</a></li>
+              <li><button class="footer-link-btn" onclick="openTripMode()">🚀 Road-Trip Mode</button></li>
+              <li><a href="bounties.html">🎯 Travel Bounty Board</a></li>
+              <li><button class="footer-link-btn" onclick="openEscapeMode()">🎧 Ambient Escape Mode</button></li>
+              <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Compass</button></li>
+              <li><button class="footer-link-btn" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</button></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Gamification & Community -->
+          <div class="footer-column reveal stagger-3">
+            <h4>🏆 Community</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</button></li>
+              <li><button class="footer-link-btn" onclick="openLeaderboardModal()">🏆 Top-Finders Leaderboard</button></li>
+              <li><button class="footer-link-btn" onclick="openDailyStreakModal()">🔥 Daily Streak & XP</button></li>
+              <li><a href="publications.html">📰 Micro-Publications & Series</a></li>
+              <li><a href="boards.html#lockedGuidesGrid">🔒 Creator Dossiers & Guides</a></li>
+              <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Platform & Actions -->
+          <div class="footer-column reveal stagger-4">
+            <h4>⚡ Platform</h4>
+            <ul>
+              <li><button class="footer-link-btn" onclick="openPostModal()">💎 Post a Hidden Gem</button></li>
+              <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
+              <li><button class="footer-link-btn" onclick="openCloudModal()">⚡ Supabase Cloud Backend</button></li>
+              <li><button class="footer-link-btn" onclick="openAuthModal('signin')">🔑 Sign In / Join</button></li>
+              <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
+              <li>
+                <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                  <span>⬆</span> Back to Top
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Footer Bar -->
+        <div class="footer-bottom">
+          <p>&copy; 2026 HopStop — The Social Platform for Underrated Places in the World.</p>
+          <div class="footer-bottom-links">
+            <a href="javascript:void(0)" onclick="showToast('Leave-No-Trace Certified Explorer Network 🌿')">🌿 Leave-No-Trace Certified</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Privacy Protected: Your exact coordinates are never sold 🛡️')">🛡️ Privacy Policy</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="showToast('Community Guidelines Active 📜')">📜 Terms & Guidelines</a>
+            <span>•</span>
+            <a href="javascript:void(0)" onclick="openCloudModal()">⚡ Free Supabase Sync</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ==================== Sign In / Sign Up Modal ==================== -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-box auth-modal-box">
+      <button class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+      
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">💎</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 700;">Welcome to HopStop</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem;">The social network for hidden gems & secret travel blogs.</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tabSigninBtn" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab-btn" id="tabSignupBtn" onclick="switchAuthTab('signup')">Create Account</button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signinForm" class="auth-form">
+        <div class="form-group">
+          <label>Email or Username</label>
+          <input type="text" class="form-control" placeholder="maya@wander.com" value="maya@wander.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="••••••••" value="password123" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px; margin-top: 6px;">Sign In to Feed</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="auth-form" style="display: none;">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="signupName" class="form-control" placeholder="e.g. Leo Ramos" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" placeholder="leo@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Create Password</label>
+          <input type="password" class="form-control" placeholder="At least 6 characters" required>
+        </div>
+        <button type="submit" class="btn-gem" style="width: 100%; padding: 11px; margin-top: 6px;">Create Explorer Profile</button>
+      </form>
+
+      <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">
+        ⚡ 1-Click Instant Demo Login (Maya Lin)
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== Instagram-Style Stories Full-Screen Viewer ==================== -->
+  <div class="story-viewer-modal" id="storyViewerModal">
+    <div class="story-viewer-frame">
+      <div class="story-progress-bar-wrap" id="storyProgressBarWrap"></div>
+      <div class="story-header-overlay">
+        <div class="story-header-user">
+          <img src="" alt="Avatar" class="story-header-avatar" id="storyAvatarDisplay">
+          <span class="story-header-name" id="storyNameDisplay">Author</span>
+        </div>
+        <button class="story-close-btn" id="closeStoryBtn">✕</button>
+      </div>
+
+      <div class="story-nav-touch-left" onclick="prevStorySlide(event)"></div>
+      <div class="story-nav-touch-right" onclick="nextStorySlide(event)"></div>
+      <img src="" alt="Story" class="story-image-display" id="storyImgDisplay">
+
+      <div class="story-bottom-overlay">
+        <h3 class="story-caption-title" id="storyTitleDisplay">Title</h3>
+        <p class="story-caption-desc" id="storyDescDisplay">Description</p>
+        <button class="btn-gem" style="width: 100%; padding: 8px;" onclick="closeStoryViewer(); openPostModal();">
+          ✈️ Share Your Story
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Post a Hidden Place Modal ==================== -->
+  <div class="modal-backdrop" id="postPlaceModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closePostModal()" aria-label="Close modal">✕</button>
+      
+      <div class="post-form-header">
+        <h2>💎 Share an Underrated Place</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Help fellow wanderers discover hidden spots, coordinates, and secret tips.</p>
+      </div>
+
+      <form id="sharePlaceForm" class="post-form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formPlaceName">Place Name *</label>
+            <input type="text" id="formPlaceName" class="form-control" placeholder="e.g. Setenil de las Bodegas" required>
+          </div>
+          <div class="form-group">
+            <label for="formCountry">Country / Region *</label>
+            <input type="text" id="formCountry" class="form-control" placeholder="e.g. Spain" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formTitle">Story Title / Headline *</label>
+          <input type="text" id="formTitle" class="form-control" placeholder="e.g. The Town Built Under Colossal Boulders" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formCategory">Vibe Category</label>
+            <select id="formCategory" class="form-control">
+              <option value="village">🏘️ Hidden Village</option>
+              <option value="nature">🌿 Natural Wonder</option>
+              <option value="culture">⛩️ Sacred / Cultural Sanctuary</option>
+              <option value="coastal">🌊 Secret Coast / Water</option>
+              <option value="ruins">🏛️ Ancient Relic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="formGemScore">Underrated Gem Score (1-10)</label>
+            <input type="text" id="formGemScore" class="form-control" placeholder="e.g. 9.8" value="9.8">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formLocationQuery">Google Maps Location / Query *</label>
+            <input type="text" id="formLocationQuery" class="form-control" placeholder="e.g. Setenil de las Bodegas, Cadiz, Spain" required>
+          </div>
+          <div class="form-group">
+            <label for="formCoordinates">GPS Coordinates (Optional: Lat, Lng)</label>
+            <input type="text" id="formCoordinates" class="form-control" placeholder="e.g. 36.8642, -5.1814">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="formBestTime">Best Time to Visit</label>
+            <input type="text" id="formBestTime" class="form-control" placeholder="e.g. May - October" value="Spring & Autumn">
+          </div>
+          <div class="form-group">
+            <label for="formBudget">Estimated Daily Budget</label>
+            <input type="text" id="formBudget" class="form-control" placeholder="e.g. $40 - $70 / day" value="$40 - $70 / day">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formImage">Photo URL (Unsplash or direct image link)</label>
+          <input type="url" id="formImage" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80">
+        </div>
+
+        <div class="form-group">
+          <label for="formVideo">🎥 Optional Video Reel / Motion Link (MP4 / WebM)</label>
+          <input type="url" id="formVideo" class="form-control" placeholder="https://... direct video link for ambient feed motion">
+        </div>
+
+        <div class="form-group">
+          <label for="formSecretTip">🤫 Your Secret Tip for Visitors *</label>
+          <input type="text" id="formSecretTip" class="form-control" placeholder="e.g. Arrive before 10 AM to have the cliff trail to yourself." required>
+        </div>
+
+        <div class="form-group">
+          <label for="formStory">Tell The Story & Why It's Underrated *</label>
+          <textarea id="formStory" class="form-control" placeholder="Describe the atmosphere, how to get there, and what made it magical..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-gem" style="padding: 12px; font-size: 1rem; width: 100%; margin-top: 10px;">
+          🚀 Publish Hidden Gem to Map & Feed
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== Article & Discussion Reader Modal ==================== -->
+  <div class="modal-backdrop" id="articleModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeArticleModal()" aria-label="Close article">✕</button>
+      
+      <img src="" alt="Post cover" class="modal-hero-img" id="modalHeroImg">
+      
+      <div class="modal-content-inner">
+        <div class="modal-location-header">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <span class="modal-tag" id="modalTag" style="background: rgba(6, 182, 212, 0.12); color: #0284c7; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700;">Category</span>
+            <span id="modalGemScore" style="color: #06b6d4; font-size: 0.85rem; font-weight: 700;">💎 Gem Score: 9.8/10</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-popup-read" id="modalAddItineraryBtn" style="padding: 6px 12px; background: rgba(249, 115, 22, 0.12); color: #ea580c; border: 1px solid rgba(249, 115, 22, 0.3);">
+              🗺️ + Itinerary
+            </button>
+            <button class="btn-popup-read" id="modalViewOnMapBtn" style="padding: 6px 14px;">
+              📍 View on Map
+            </button>
+            <button class="btn-direction" id="modalDirectionsBtn">
+              🧭 Directions
+            </button>
+          </div>
+        </div>
+
+        <h2 class="modal-title" id="modalTitle">Article Title</h2>
+        
+        <p style="color: #0284c7; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px;" id="modalLocationText">📍 Place, Country</p>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 12px;" id="modalAuthorInfo">Shared by author</p>
+
+        <!-- Live Destination Weather Radar Box -->
+        <div class="weather-box-large" id="modalWeatherBox">
+          <div class="weather-box-left">
+            <span class="weather-box-icon" id="modalWeatherIcon">☀️</span>
+            <div>
+              <div class="weather-box-temp" id="modalWeatherTemp">22°C</div>
+              <div class="weather-box-condition" id="modalWeatherCondition">Clear Sky • Pleasant Mountain Breeze</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span class="weather-badge" id="modalBestSeasonPill">🌸 Best: Spring & Autumn</span>
+          </div>
+        </div>
+
+        <div class="modal-secret-box">
+          <div style="font-size: 1.6rem;">🤫</div>
+          <div>
+            <h4>Traveler's Secret Tip</h4>
+            <p id="modalSecretTipText">Secret tip goes here...</p>
+          </div>
+        </div>
+
+        <div class="modal-body" id="modalBody"></div>
+
+        <!-- Like & Interactions Row -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 30px; padding: 16px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+          <button class="btn-gem" id="modalLikeBtn" style="padding: 8px 18px;">
+            ❤️ <span id="modalLikeCount">0</span> Likes
+          </button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Share with friends who love secret spots</span>
+        </div>
+
+        <!-- Comments & Discussion Feed -->
+        <section class="comments-section">
+          <div class="comments-header">
+            <h3>💬 Traveler Discussion (<span id="commentsCount">0</span>)</h3>
+          </div>
+
+          <form id="addCommentForm" class="comment-input-wrap">
+            <div class="comment-author-row">
+              <input type="text" id="commentAuthorInput" class="form-control" placeholder="Your name (e.g. Leo Ramos)">
+            </div>
+            <div class="comment-input-row">
+              <textarea id="commentTextInput" class="form-control" placeholder="Ask a question or share your experience about this place..." rows="2" required></textarea>
+              <button type="submit" class="btn-primary" style="align-self: flex-end; padding: 10px 18px;">Post</button>
+            </div>
+          </form>
+
+          <ul class="comments-list" id="commentsList"></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Gallery Lightbox Modal ==================== -->
+  <div class="modal-backdrop" id="lightboxModal">
+    <button class="modal-close-btn" id="lightboxCloseBtn" aria-label="Close image">✕</button>
+    <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrevBtn" aria-label="Previous image">❮</button>
+    <button class="lightbox-nav-btn lightbox-next" id="lightboxNextBtn" aria-label="Next image">❯</button>
+    
+    <img src="" alt="Enlarged photo" class="lightbox-img" id="lightboxImg">
+    <div class="lightbox-caption-bar" id="lightboxCaption">Location & Title</div>
+  </div>
+
+  <!-- ==================== Supabase Free Cloud Backend Modal ==================== -->
+  <div class="modal-backdrop" id="cloudModal">
+    <div class="modal-box" style="max-width: 620px;">
+      <button class="modal-close-btn" onclick="closeCloudModal()" aria-label="Close modal">✕</button>
+      
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 2rem;">⚡</span>
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin: 0;">Supabase Cloud Backend</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">100% Free Tier: Multi-device sync for posts, likes, comments & user accounts</p>
+        </div>
+      </div>
+
+      <div class="cloud-info-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <strong>Current Backend Status:</strong>
+          <span id="cloudModalStatusPill" class="cloud-status-badge disconnected">
+            <span class="cloud-status-dot"></span>
+            <span id="cloudModalStatusText">Local Storage (Offline)</span>
+          </span>
+        </div>
+        <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">
+          Connecting your free Supabase project allows multiple users on different phones and computers to share posts, like, and comment live in real-time.
+        </p>
+      </div>
+
+      <form id="cloudConfigForm" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label for="supabaseUrlInput">Supabase Project URL</label>
+          <input type="url" id="supabaseUrlInput" class="form-control" placeholder="https://your-project-id.supabase.co">
+        </div>
+        <div class="form-group">
+          <label for="supabaseKeyInput">Supabase Anon Public Key</label>
+          <input type="password" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="submit" class="btn-gem" style="flex: 1; min-width: 160px; padding: 10px;">⚡ Save & Connect Cloud</button>
+          <button type="button" class="btn-popup-read" id="btnTestCloud" style="padding: 10px 16px;" onclick="testSupabaseConnection()">🔍 Test Connection</button>
+          <button type="button" class="btn-direction" id="btnDisconnectCloud" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 10px 14px;" onclick="disconnectSupabase()">Disconnect</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== "Gem of the Day" Modal ==================== -->
+  <div class="modal-backdrop" id="dailyGemModal">
+    <div class="modal-box" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeDailyGemModal()" aria-label="Close modal">✕</button>
+      <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 16px; max-height: 220px;">
+        <img src="" id="dailyModalHeroImg" style="width: 100%; height: 100%; object-fit: cover;" alt="Daily Gem Cover">
+        <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); color: #ea580c; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 800;">
+          🌅 GEM OF THE DAY REVEAL
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: gap; gap: 8px;">
+        <div>
+          <h2 id="dailyModalTitle" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; margin-bottom: 2px;">Place Title</h2>
+          <p id="dailyModalLocation" style="color: #0284c7; font-weight: 600; font-size: 0.9rem; margin: 0;">📍 Location</p>
+        </div>
+        <span id="dailyModalScore" style="background: rgba(6, 182, 212, 0.12); color: #0284c7; padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700;">💎 9.9/10</span>
+      </div>
+      <div style="background: var(--bg-hover); border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 14px; margin-bottom: 16px;">
+        <div style="font-weight: 700; font-size: 0.82rem; color: #ea580c; text-transform: uppercase; margin-bottom: 6px;">⏱️ 30-Second Fast Read</div>
+        <p id="dailyModalSummary" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); margin-bottom: 8px;">Summary goes here...</p>
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+          <strong>🤫 Traveler Secret:</strong> <span id="dailyModalSecretTip">Tip text</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-gem" id="dailyModalAddItineraryBtn" style="flex: 1; padding: 10px;">🗺️ + Add to Itinerary</button>
+        <button class="btn-primary" id="dailyModalReadFullBtn" style="flex: 1; padding: 10px;">📖 Read Full Story & Discussion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Ambient Escape Mode Modal ==================== -->
+  <div class="escape-modal-backdrop" id="escapeModal">
+    <div class="escape-backdrop-container">
+      <div class="escape-image-bg" id="escapeImageBg"></div>
+      <video src="" class="escape-video-bg" id="escapeVideoBg" autoplay loop muted playsinline></video>
+      <div class="escape-atmospheric-glow"></div>
+      <div class="escape-vignette-overlay"></div>
+    </div>
+    <div class="escape-top-bar">
+      <div class="escape-brand">
+        <span style="font-size: 1.5rem;">🎧</span>
+        <div>
+          <div style="font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;">HopStop Escape Mode</div>
+          <div style="font-size: 0.75rem; color: #cbd5e1;">Full-Screen Ambient Getaway & Spatial Audio</div>
+        </div>
+        <span class="escape-badge-live">● AMBIENT SOUND LIVE</span>
+      </div>
+      <div class="escape-scenes-quicknav" id="escapeScenesQuickNav"></div>
+      <button class="escape-close-btn" onclick="closeEscapeMode()" aria-label="Exit Escape Mode">✕</button>
+    </div>
+    <div class="escape-center-content">
+      <div class="escape-scene-location" id="escapeSceneLocation">📍 Blagaj, Bosnia & Herzegovina</div>
+      <h1 class="escape-scene-title" id="escapeSceneTitle">Emerald Karst Spring & Cavern Drips</h1>
+      <p class="escape-scene-quote" id="escapeSceneQuote">"Ice-cold emerald water emerging from a 200m cliff face while rain patters on ancient dervish wood."</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px;">
+        <button class="btn-gem" id="escapeAddItineraryBtn" style="padding: 10px 22px; font-size: 0.9rem;" onclick="addCurrentEscapeToItinerary()">🗺️ + Add to Itinerary</button>
+        <button class="btn-popup-read" style="padding: 10px 20px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.18); color: #fff;" onclick="viewCurrentEscapeOnMap()">📍 Pin on Map</button>
+      </div>
+    </div>
+    <div class="escape-bottom-controls">
+      <div class="escape-sound-mixer">
+        <span style="font-size: 0.8rem; color: #e2e8f0; font-weight: 600;">Audio Engine:</span>
+        <button class="escape-sound-btn active" id="btnSoundRain" onclick="toggleEscapeSound('rain')">🌧️</button>
+        <button class="escape-sound-btn active" id="btnSoundWind" onclick="toggleEscapeSound('wind')">🌬️</button>
+        <button class="escape-sound-btn" id="btnSoundWaves" onclick="toggleEscapeSound('waves')">🌊</button>
+        <button class="escape-sound-btn" id="btnSoundFire" onclick="toggleEscapeSound('fire')">🔥</button>
+        <input type="range" id="escapeVolumeSlider" min="0" max="1" step="0.05" value="0.7" style="width: 80px;" oninput="setEscapeVolume(this.value)">
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="font-size: 0.8rem; color: #cbd5e1;">Zen Timer:</span>
+        <button class="escape-timer-pill" id="timer3m" onclick="startEscapeZenTimer(3)">3m</button>
+        <button class="escape-timer-pill" id="timer5m" onclick="startEscapeZenTimer(5)">5m</button>
+        <button class="escape-timer-pill" id="timer10m" onclick="startEscapeZenTimer(10)">10m</button>
+        <span id="escapeTimerCountdown" style="font-size: 0.82rem; color: #38bdf8; font-weight: 700;"></span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-popup-read" style="padding: 8px 16px; color: #fff; background: rgba(255,255,255,0.18);" onclick="navigateEscapeScene(-1)">❮ Previous</button>
+        <button class="btn-popup-read" style="padding: 8px 16px; color: #fff; background: rgba(255,255,255,0.18);" onclick="navigateEscapeScene(1)">Next Scene ❯</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Travel Passport Modal ==================== -->
+  <div class="modal-backdrop" id="travelPassportModal">
+    <div class="modal-box" style="max-width: 780px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeTravelPassport()" aria-label="Close passport">✕</button>
+      <div class="passport-header-banner">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="passport-emblem">🌐</div>
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 800; color: #10b981; text-transform: uppercase;">OFFICIAL EXPLORER PASSPORT</div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin: 0;">Maya Lin's Travel Passport</h2>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Verified World Wanderer • Pass No. HP-89420</div>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981;" id="passportVisitedCount">8 / 195</div>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Countries Stamped (4.1%)</span>
+        </div>
+      </div>
+      <div class="scratch-map-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.84rem; font-weight: 700;">🗺️ Interactive Visited Countries Scratch-Off</span>
+          <span style="font-size: 0.76rem; color: #0284c7;">+100 XP per new stamp</span>
+        </div>
+        <div class="scratch-country-pills-wrap" id="scratchCountryPills"></div>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; margin: 20px 0 12px;">
+        🛂 Collected Visa Ink Stamps (<span id="passportStampsCount">8</span>)
+      </h3>
+      <div class="passport-stamps-grid" id="passportStampsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Weekly Curated Digest Modal ==================== -->
+  <div class="modal-backdrop" id="weeklyDigestModal">
+    <div class="modal-box" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeWeeklyDigestModal()" aria-label="Close digest">✕</button>
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.15); color: #0284c7; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 700; margin-bottom: 8px;">
+        <span>📬</span> Weekly Personalized Explorer Digest
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 4px;">5 Hidden Gems Picked For You</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Curated for your travel tastes, off-season wishlists, and moderate budget tier.</p>
+      <div class="weekly-digest-cards-list" id="weeklyDigestCardsList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== On-The-Road Active Trip Mode Modal ==================== -->
+  <div class="modal-backdrop" id="tripModeModal">
+    <div class="modal-box" style="max-width: 760px; max-height: 90vh; overflow-y: auto; background: var(--bg-card);">
+      <button class="modal-close-btn" onclick="closeTripMode()" aria-label="Close trip mode">✕</button>
+      <div class="trip-mode-hud-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="trip-hud-pulse-ring"></div>
+          <div>
+            <div style="font-size: 0.74rem; font-weight: 800; color: #f97316; text-transform: uppercase;">ACTIVE TRAVEL HUD • OFFLINE SYNC READY</div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin: 0; color: #ffffff;">HopStop On-The-Road Trip Mode</h2>
+          </div>
+        </div>
+        <button class="btn-gem" style="padding: 6px 14px; font-size: 0.78rem; background: rgba(255,255,255,0.2);" onclick="showToast('💾 Saved all itinerary stops to offline browser cache!')">
+          💾 Offline Cached (Active)
+        </button>
+      </div>
+      <div class="trip-hud-actions-grid">
+        <div class="trip-hud-action-card" onclick="location.href='planner.html'; closeTripMode();">
+          <span style="font-size: 1.6rem;">🗺️</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">Live Route Polyline</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">3 Connected Stops</p>
+        </div>
+        <div class="trip-hud-action-card" onclick="openGoogleMapsMultiStopRoute()">
+          <span style="font-size: 1.6rem;">🧭</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">1-Tap Google GPS</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">Turn-by-turn Navigation</p>
+        </div>
+        <div class="trip-hud-action-card" onclick="openPostModal(); closeTripMode();">
+          <span style="font-size: 1.6rem;">📸</span>
+          <div style="font-weight: 700; font-size: 0.88rem;">Field Check-In</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 0;">Confirm Gem Score</p>
+        </div>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin: 20px 0 10px;">
+        📍 Underrated Stops Near Current GPS (Within 25 km)
+      </h3>
+      <div class="trip-hud-nearby-list" id="tripHudNearbyList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Monthly Top-Finders Leaderboard Modal ==================== -->
+  <div class="modal-backdrop" id="leaderboardModal">
+    <div class="modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" onclick="closeLeaderboardModal()" aria-label="Close leaderboard">✕</button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="font-size: 3rem; margin-bottom: 4px;">👑</div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; margin: 0 0 4px;">Monthly Top-Finders Leaderboard</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Top contributors featured on the global Discover wall every 1st of the month.</p>
+      </div>
+      <div class="leaderboard-podium-grid" id="leaderboardPodiumGrid"></div>
+      <div class="leaderboard-table-wrap" id="leaderboardTableList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Achievement Modal ==================== -->
+  <div class="modal-backdrop" id="achievementModal">
+    <div class="modal-box celebration-modal">
+      <button class="modal-close-btn" onclick="closeAchievementModal()" aria-label="Close modal">✕</button>
+      <div class="celebration-icon-anim" id="achievementIcon">🏆</div>
+      <span class="explorer-tier-badge" style="margin-bottom: 12px;" id="achievementTypeBadge">🏅 NEW BADGE UNLOCKED!</span>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;" id="achievementTitle">Bounty Hunter</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 10px 0 20px;" id="achievementDesc">
+        You successfully solved your first community travel request!
+      </p>
+      <div style="background: rgba(6, 182, 212, 0.1); border: 1px dashed #06b6d4; border-radius: var(--radius-md); padding: 12px; margin-bottom: 20px;">
+        <span style="font-weight: 700; color: #0284c7;" id="achievementRewardText">+500 XP Added to Your Profile</span>
+      </div>
+      <button class="btn-gem" style="width: 100%; padding: 11px;" onclick="closeAchievementModal()">Awesome! Continue Exploring 🚀</button>
+    </div>
+  </div>
+
+  <!-- ==================== Toast Notifications ==================== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/data.js?v=20261103_perfect_v6"></script>
+  <script src="js/state.js?v=20261103_perfect_v6"></script>
+  <script src="js/cloud.js"></script>
+  <script src="js/map.js?v=20261103_perfect_v6"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/bounties.js?v=20261103_perfect_v6"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/planner.js?v=20261103_perfect_v6"></script>
+  <script src="js/daily-streak.js"></script>
+  <script src="js/micro-adventures.js"></script>
+  <script src="js/publications.js"></script>
+  <script src="js/escape.js"></script>
+  <script src="js/stories.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/boards.js?v=20261103_perfect_v6"></script>
+  <script src="js/battles.js"></script>
+  <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>
+  <script src="js/passport.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/trip-mode.js"></script>
+  <script src="js/leaderboard.js"></script>
+  <script src="js/crew-chat.js"></script>
+  <script src="js/ui-effects.js"></script>
+  <script src="js/app-init.js"></script>
+  <script src="js/human-craft.js?v=20261103_wanderlust_audio_hd2"></script>
+</body>
+</html>
