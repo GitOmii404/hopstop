@@ -106,12 +106,23 @@
   grid-row: 1 !important;
   position: sticky !important;
   top: 76px !important;
+  max-height: calc(100vh - 86px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
   align-self: start !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 14px !important;
   width: 100% !important;
   z-index: 20 !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding-bottom: 30px !important;
+}
+
+.app-sidebar-left::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
 }
 
 .app-feed-stream {
@@ -129,12 +140,23 @@
   grid-row: 1 !important;
   position: sticky !important;
   top: 76px !important;
+  max-height: calc(100vh - 86px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
   align-self: start !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 16px !important;
   width: 100% !important;
   z-index: 20 !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding-bottom: 30px !important;
+}
+
+.app-sidebar-right::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
 }
 
 .sidebar-post-cta {
@@ -1181,15 +1203,7 @@
 /* --------------------------------------------------------------------------
    7. RIGHT SIDEBAR (PROFILE, BOUNTIES, LEADERBOARD, PASSPORT)
    -------------------------------------------------------------------------- */
-.app-sidebar-right {
-  position: sticky !important;
-  top: 76px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 16px !important;
-  width: 100% !important;
-  z-index: 20 !important;
-}
+/* .app-sidebar-right base styles defined in Section 1 */
 
 .explorer-level-card {
   background: var(--bg-surface);
