@@ -1209,10 +1209,11 @@
   background: var(--bg-surface) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 20px !important;
-  padding: 16px 18px !important;
+  padding: 18px 20px !important;
   box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05) !important;
   display: flex !important;
   flex-direction: column !important;
+  overflow: visible !important;
   transition: all 0.25s ease !important;
 }
 
@@ -1230,16 +1231,16 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 6px 12px 6px 6px !important;
-  background: rgba(6, 182, 212, 0.06) !important;
-  border: 1px solid rgba(6, 182, 212, 0.18) !important;
-  border-radius: 9999px !important;
-  margin-bottom: 10px !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 0 12px 0 !important;
+  margin: 0 !important;
 }
 
 [data-theme="dark"] .explorer-level-header {
-  background: rgba(6, 182, 212, 0.1) !important;
-  border-color: rgba(6, 182, 212, 0.25) !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .explorer-tier-badge {
@@ -1248,29 +1249,45 @@
   gap: 6px !important;
   background: linear-gradient(135deg, #0891b2 0%, #0284c7 100%) !important;
   color: #ffffff !important;
-  font-size: 0.76rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.02em !important;
-  padding: 5px 12px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  padding: 6px 14px !important;
   border-radius: 9999px !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35) !important;
-  line-height: 1 !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3) !important;
+  line-height: 1.3 !important;
 }
 
 .xp-counter-text {
   display: inline-flex !important;
   align-items: center !important;
   gap: 4px !important;
-  font-size: 0.8rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #0f172a) !important;
+  line-height: 1.3 !important;
+}
+
+.xp-counter-text .xp-current {
+  color: #0284c7 !important;
   font-weight: 800 !important;
-  color: #0369a1 !important;
-  letter-spacing: -0.01em !important;
-  padding-right: 4px !important;
-  line-height: 1 !important;
+}
+
+[data-theme="dark"] .xp-counter-text .xp-current {
+  color: #38bdf8 !important;
+}
+
+.xp-counter-text .xp-divider {
+  color: var(--text-muted, #94a3b8) !important;
+  margin: 0 2px !important;
+}
+
+.xp-counter-text .xp-total {
+  color: var(--text-muted, #64748b) !important;
 }
 
 [data-theme="dark"] .xp-counter-text {
-  color: #38bdf8 !important;
+  color: #f1f5f9 !important;
 }
 
 .xp-progress-bar-wrap {
@@ -1280,7 +1297,7 @@
   border-radius: 9999px !important;
   overflow: hidden !important;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08) !important;
-  margin-bottom: 10px !important;
+  margin-bottom: 12px !important;
 }
 
 .xp-progress-bar-fill {
