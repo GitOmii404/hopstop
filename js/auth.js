@@ -38,16 +38,27 @@ function syncAuthState() {
   const guestHeaderActions = document.getElementById('guestHeaderActions');
   const currentUserNameEls = document.querySelectorAll('.current-user-name');
   const currentUserAvatarEls = document.querySelectorAll('.current-user-avatar');
+  const currentUserHandleEls = document.querySelectorAll('.current-user-handle');
+  const sidebarUserLevelCard = document.getElementById('sidebarUserLevelCard');
+  const sidebarGuestCard = document.getElementById('sidebarGuestCard');
+  const messengerGuestBanners = document.querySelectorAll('.messenger-guest-banner');
 
   if (currentUser) {
     if (authHeaderActions) authHeaderActions.style.display = 'flex';
     if (guestHeaderActions) guestHeaderActions.style.display = 'none';
+    if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'block';
+    if (sidebarGuestCard) sidebarGuestCard.style.display = 'none';
+    messengerGuestBanners.forEach(b => b.style.display = 'none');
 
     currentUserNameEls.forEach(el => el.textContent = currentUser.name);
     currentUserAvatarEls.forEach(el => el.src = currentUser.avatar);
+    currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@mayawanders');
   } else {
     if (authHeaderActions) authHeaderActions.style.display = 'none';
     if (guestHeaderActions) guestHeaderActions.style.display = 'flex';
+    if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'none';
+    if (sidebarGuestCard) sidebarGuestCard.style.display = 'block';
+    messengerGuestBanners.forEach(b => b.style.display = 'flex');
   }
 }
 

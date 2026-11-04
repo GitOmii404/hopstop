@@ -181,6 +181,21 @@ function mountMessengerUI() {
         </div>
 
         <!-- Search Bar -->
+        
+        <!-- Guest Explorer Mode Pill Banner -->
+        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser ? 'none' : 'flex'};">
+          <div class="guest-banner-left">
+            <span class="guest-badge-icon">🧭</span>
+            <div>
+              <strong>Guest Explorer Mode</strong>
+              <span>You can DM & chat freely!</span>
+            </div>
+          </div>
+          <button type="button" class="guest-demo-tap-btn" onclick="loginAsDemo();" title="Activate full explorer profile with 1 tap">
+            ⚡ 1-Tap Login
+          </button>
+        </div>
+
         <div class="messenger-search-wrap">
           <input type="text" class="messenger-search-input" id="messengerSearchInput" placeholder="🔍 Search online explorers..." oninput="window.filterMessengerExplorers(this.value)">
         </div>
@@ -218,6 +233,21 @@ function mountMessengerUI() {
         </div>
 
         <!-- Messages Scroll Container -->
+        
+        <!-- Guest Explorer Mode Pill Banner -->
+        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser ? 'none' : 'flex'};">
+          <div class="guest-banner-left">
+            <span class="guest-badge-icon">🧭</span>
+            <div>
+              <strong>Guest Explorer Mode</strong>
+              <span>You can DM & chat freely!</span>
+            </div>
+          </div>
+          <button type="button" class="guest-demo-tap-btn" onclick="loginAsDemo();" title="Activate full explorer profile with 1 tap">
+            ⚡ 1-Tap Login
+          </button>
+        </div>
+
         <div class="dm-messages-container" id="dmMessagesContainer"></div>
 
         <!-- Quick Emoji Reaction Bar -->
@@ -440,7 +470,8 @@ function renderDirectMessages(explorerId) {
 
   container.innerHTML = messages.map(m => {
     const isMine = m.sender === 'me';
-    const avatar = isMine ? (currentUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80') : explorer.avatar;
+    const avatar = isMine ? (currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80') : explorer.avatar;
+    const senderLabel = isMine ? (currentUser ? currentUser.name : 'You (Guest Wanderer)') : explorer.name;
     
     let contentHtml = '';
     if (m.text) {
@@ -457,6 +488,7 @@ function renderDirectMessages(explorerId) {
       <div class="dm-msg ${isMine ? 'mine' : 'theirs'}">
         <img src="${avatar}" class="dm-msg-avatar" alt="${isMine ? 'You' : explorer.name}">
         <div class="dm-msg-bubble">
+          <div style="font-size: 0.68rem; font-weight: 700; opacity: 0.8; margin-bottom: 2px;">${senderLabel}</div>
           ${contentHtml}
           <span class="dm-msg-time">${m.time || 'Just now'}</span>
         </div>
