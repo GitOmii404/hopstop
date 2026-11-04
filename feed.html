@@ -9,7 +9,7 @@
   <!-- Leaflet.js Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <link rel="stylesheet" href="styles.css?v=20261104_remove_footer_v20">
-  <link rel="stylesheet" href="css/human-craft.css?v=20261104_audio_restored_v21">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261104_post_modal_v22">
   <link rel="stylesheet" href="css/feed.css?v=20261104_audio_restored_v21">
 </head>
 <body>
@@ -452,94 +452,154 @@
   </div>
 
   <!-- ==================== Post a Hidden Place Modal ==================== -->
+    <!-- ==================== Share an Underrated Place Modal ==================== -->
   <div class="modal-backdrop" id="postPlaceModal">
     <div class="modal-box">
       <button class="modal-close-btn" onclick="closePostModal()" aria-label="Close modal">✕</button>
       
       <div class="post-form-header">
+        <div class="post-modal-badge"><span class="badge-dot"></span> Cartographic Dispatch Studio</div>
         <h2>💎 Share an Underrated Place</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Help fellow wanderers discover hidden spots, coordinates, and secret tips.</p>
+        <p>Document a hidden waypoint, secret coordinates, and authentic local intel for the HopStop community.</p>
       </div>
 
       <form id="sharePlaceForm" class="post-form-body">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="formPlaceName">Place Name *</label>
-            <input type="text" id="formPlaceName" class="form-control" placeholder="e.g. Setenil de las Bodegas" required>
+        
+        <!-- Section 1: Waypoint & Story -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <span class="section-icon-pill">📍</span>
+            <span>1. Waypoint Identity & Category</span>
           </div>
-          <div class="form-group">
-            <label for="formCountry">Country / Region *</label>
-            <input type="text" id="formCountry" class="form-control" placeholder="e.g. Spain" required>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label for="formTitle">Story Title / Headline *</label>
-          <input type="text" id="formTitle" class="form-control" placeholder="e.g. The Town Built Under Colossal Boulders" required>
-        </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="formPlaceName">📍 Place Name *</label>
+              <input type="text" id="formPlaceName" class="form-control" placeholder="e.g. Setenil de las Bodegas" required>
+            </div>
+            <div class="form-group">
+              <label for="formCountry">🌍 Country / Region *</label>
+              <input type="text" id="formCountry" class="form-control" placeholder="e.g. Spain" required>
+            </div>
+          </div>
 
-        <div class="form-grid">
           <div class="form-group">
-            <label for="formCategory">Vibe Category</label>
-            <select id="formCategory" class="form-control">
-              <option value="village">🏘️ Hidden Village</option>
-              <option value="nature">🌿 Natural Wonder</option>
-              <option value="culture">⛩️ Sacred / Cultural Sanctuary</option>
-              <option value="coastal">🌊 Secret Coast / Water</option>
-              <option value="ruins">🏛️ Ancient Relic</option>
-            </select>
+            <label for="formTitle">✍️ Story Title / Headline *</label>
+            <input type="text" id="formTitle" class="form-control" placeholder="e.g. The Town Built Under Colossal Boulders" required>
           </div>
-          <div class="form-group">
-            <label for="formGemScore">Underrated Gem Score (1-10)</label>
-            <input type="text" id="formGemScore" class="form-control" placeholder="e.g. 9.8" value="9.8">
-          </div>
-        </div>
 
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="formLocationQuery">Google Maps Location / Query *</label>
-            <input type="text" id="formLocationQuery" class="form-control" placeholder="e.g. Setenil de las Bodegas, Cadiz, Spain" required>
-          </div>
-          <div class="form-group">
-            <label for="formCoordinates">GPS Coordinates (Optional: Lat, Lng)</label>
-            <input type="text" id="formCoordinates" class="form-control" placeholder="e.g. 36.8642, -5.1814">
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="formBestTime">Best Time to Visit</label>
-            <input type="text" id="formBestTime" class="form-control" placeholder="e.g. May - October" value="Spring & Autumn">
-          </div>
-          <div class="form-group">
-            <label for="formBudget">Estimated Daily Budget</label>
-            <input type="text" id="formBudget" class="form-control" placeholder="e.g. $40 - $70 / day" value="$40 - $70 / day">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="formCategory">🏷️ Vibe Category</label>
+              <select id="formCategory" class="form-control">
+                <option value="village">🏘️ Hidden Village</option>
+                <option value="nature">🌿 Natural Wonder</option>
+                <option value="culture">⛩️ Sacred / Cultural Sanctuary</option>
+                <option value="coastal">🌊 Secret Coast / Water</option>
+                <option value="ruins">🏛️ Ancient Relic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="formGemScore">💎 Underrated Gem Score (1-10)</label>
+              <input type="text" id="formGemScore" class="form-control" placeholder="e.g. 9.8" value="9.8">
+              <div class="score-preset-pills">
+                <span class="score-chip" onclick="setGemScorePreset('9.5')">⭐ 9.5</span>
+                <span class="score-chip" onclick="setGemScorePreset('9.8')">💎 9.8 (Top)</span>
+                <span class="score-chip" onclick="setGemScorePreset('9.9')">🔥 9.9 (Pristine)</span>
+                <span class="score-chip" onclick="setGemScorePreset('10.0')">👑 10.0</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="formImage">Photo URL (Unsplash or direct image link)</label>
-          <input type="url" id="formImage" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80">
+        <!-- Section 2: Coordinates & Travel Intel -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <span class="section-icon-pill">🧭</span>
+            <span>2. Cartographic Intel & Travel Guide</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="formLocationQuery">🗺️ Google Maps Location / Query *</label>
+              <input type="text" id="formLocationQuery" class="form-control" placeholder="e.g. Setenil de las Bodegas, Cadiz, Spain" required>
+            </div>
+            <div class="form-group">
+              <label for="formCoordinates">🧭 GPS Coordinates (Optional: Lat, Lng)</label>
+              <input type="text" id="formCoordinates" class="form-control" placeholder="e.g. 36.8642, -5.1814">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="formBestTime">🗓️ Best Time to Visit</label>
+              <input type="text" id="formBestTime" class="form-control" placeholder="e.g. May - October" value="Spring & Autumn">
+            </div>
+            <div class="form-group">
+              <label for="formBudget">💰 Estimated Daily Budget</label>
+              <input type="text" id="formBudget" class="form-control" placeholder="e.g. $40 - $70 / day" value="$40 - $70 / day">
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="formVideo">🎥 Optional Video Reel / Motion Link (MP4 / WebM)</label>
-          <input type="url" id="formVideo" class="form-control" placeholder="https://... direct video link for ambient feed motion">
+        <!-- Section 3: Visuals & Live Preview -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <span class="section-icon-pill">📸</span>
+            <span>3. Visual Media & Motion Reel</span>
+          </div>
+
+          <!-- Live Photo Preview -->
+          <div class="post-photo-preview-wrap">
+            <div class="post-photo-badge">📸 Live Photo Preview</div>
+            <img id="modalImagePreview" class="post-photo-preview-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80" alt="Live Preview" onerror="this.src='https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80'">
+          </div>
+
+          <div class="form-group">
+            <label for="formImage">🔗 Cover Photo URL (Unsplash or direct image link)</label>
+            <input type="url" id="formImage" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80" oninput="updatePostPhotoPreview(this.value)">
+            <div class="photo-preset-chips">
+              <button type="button" class="photo-preset-btn" onclick="setPostImagePreset('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80')">🏔️ Alpine Valley</button>
+              <button type="button" class="photo-preset-btn" onclick="setPostImagePreset('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1000&q=80')">🏘️ Cliffside Village</button>
+              <button type="button" class="photo-preset-btn" onclick="setPostImagePreset('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80')">🌊 Secret Cove</button>
+              <button type="button" class="photo-preset-btn" onclick="setPostImagePreset('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1000&q=80')">⛩️ Sacred Temple</button>
+              <button type="button" class="photo-preset-btn" onclick="setPostImagePreset('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80')">🏛️ Ancient Citadel</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="formVideo">🎥 Optional Video Reel / Motion Link (MP4 / WebM)</label>
+            <input type="url" id="formVideo" class="form-control" placeholder="https://... direct video link for ambient feed motion">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="formSecretTip">🤫 Your Secret Tip for Visitors *</label>
-          <input type="text" id="formSecretTip" class="form-control" placeholder="e.g. Arrive before 10 AM to have the cliff trail to yourself." required>
+        <!-- Section 4: Secret Tip & Story Journal -->
+        <div class="form-section-card">
+          <div class="form-section-title">
+            <span class="section-icon-pill">🤫</span>
+            <span>4. Insider Tip & Explorer Journal</span>
+          </div>
+
+          <div class="form-group secret-tip-group">
+            <label for="formSecretTip">🤫 Your Secret Tip for Visitors *</label>
+            <input type="text" id="formSecretTip" class="form-control" placeholder="e.g. Arrive before 10 AM to have the cliff trail to yourself." value="Arrive before 10 AM to have the cliff trail to yourself." required>
+          </div>
+
+          <div class="form-group">
+            <label for="formStory">📖 Tell The Story & Why It's Underrated *</label>
+            <textarea id="formStory" class="form-control" placeholder="Describe the atmosphere, how to get there, and what made it magical..." required>Nestled deep within the cliffs, this hidden treasure is untouched by commercial tours. The walking paths wind through ancient stone archways where local families have lived for centuries.</textarea>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="formStory">Tell The Story & Why It's Underrated *</label>
-          <textarea id="formStory" class="form-control" placeholder="Describe the atmosphere, how to get there, and what made it magical..." required></textarea>
+        <!-- Footer Actions Bar -->
+        <div class="modal-actions-bar">
+          <button type="button" class="btn-modal-cancel" onclick="closePostModal()">✕ Discard</button>
+          <button type="submit" class="btn-modal-publish">
+            <span>🚀 Publish Hidden Gem to Map & Feed</span>
+            <span style="font-size: 0.78rem; opacity: 0.9; background: rgba(0,0,0,0.2); padding: 3px 8px; border-radius: 999px;">+100 XP</span>
+          </button>
         </div>
 
-        <button type="submit" class="btn-gem" style="padding: 12px; font-size: 1rem; width: 100%; margin-top: 10px;">
-          🚀 Publish Hidden Gem to Map & Feed
-        </button>
       </form>
     </div>
   </div>
@@ -914,6 +974,6 @@
   <script src="js/crew-chat.js"></script>
   <script src="js/ui-effects.js?v=20261104_scroll_reveal_v14"></script>
   <script src="js/app-init.js?v=20261104_scroll_reveal_v14"></script>
-  <script src="js/human-craft.js?v=20261104_audio_restored_v21"></script>
+  <script src="js/human-craft.js?v=20261104_post_modal_v22"></script>
 </body>
 </html>

@@ -419,3 +419,27 @@
   window.toggleWanderlustAudio = toggleWanderlustAudio;
 })();
 
+
+
+// Interactive Post Modal Live Photo & Preset Helpers
+window.updatePostPhotoPreview = function(url) {
+  const preview = document.getElementById('modalImagePreview');
+  if (preview && url) {
+    preview.src = url;
+  }
+};
+
+window.setPostImagePreset = function(url) {
+  const input = document.getElementById('formImage');
+  if (input) {
+    input.value = url;
+    window.updatePostPhotoPreview(url);
+  }
+};
+
+window.setGemScorePreset = function(score) {
+  const input = document.getElementById('formGemScore');
+  if (input) {
+    input.value = score;
+  }
+};
