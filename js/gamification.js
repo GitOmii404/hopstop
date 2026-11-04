@@ -53,8 +53,8 @@ function updateUserLevelUI() {
   const xpFill = document.getElementById('userXpFill');
   const unlockedCount = document.getElementById('unlockedBadgeCount');
 
-  if (tierBadge) tierBadge.textContent = lvl.tier;
-  if (xpText) xpText.textContent = `${userXp} / ${lvl.max} XP`;
+  if (tierBadge) tierBadge.innerHTML = `<span>⚡</span> <span>${lvl.tier}</span>`;
+  if (xpText) xpText.innerHTML = `<span>${userXp}</span> <span style="opacity: 0.6; margin: 0 2px;">/</span> <span>${lvl.max} XP</span>`;
   if (xpFill) xpFill.style.width = `${lvl.progress}%`;
   if (unlockedCount) unlockedCount.textContent = unlockedBadges.length;
 }
