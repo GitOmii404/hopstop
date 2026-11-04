@@ -380,7 +380,7 @@
     </div>
 
     <!-- ==================== Ultra-Premium Animated Footer ==================== -->
-    <footer class="footer">
+        <footer class="footer">
       <div class="container">
         <!-- Animated Weekly Dispatch Bar -->
         <div class="footer-newsletter-bar reveal">
@@ -408,9 +408,9 @@
             </div>
             <p>The global social community for discovering and protecting the world's most underrated destinations, secret viewpoints, and hidden cultural gems.</p>
             
-            <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
-              <span class="cloud-status-dot" style="background: #10b981; width: 6px; height: 6px; border-radius: 50%;"></span>
-              <span>All Systems Operational • 12 Active Waypoints</span>
+            <div style="margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.25);">
+              <span class="online-pulse-dot" style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
+              <span>14,000+ Verified Explorers Worldwide</span>
             </div>
 
             <div class="footer-social-row">
@@ -442,32 +442,29 @@
               <li><button class="footer-link-btn" onclick="openTripMode()">🚀 Road-Trip Mode</button></li>
               <li><a href="bounties.html">🎯 Travel Bounty Board</a></li>
               <li><button class="footer-link-btn" onclick="openEscapeMode()">🎧 Ambient Escape Mode</button></li>
-              <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Compass</button></li>
-              <li><button class="footer-link-btn" onclick="openWeeklyDigestModal()">📬 Weekly Curated Digest</button></li>
+              <li><button class="footer-link-btn" onclick="openMicroAdventures()">🧭 Micro-Adventures Near You</button></li>
             </ul>
           </div>
 
-          <!-- Column 3: Gamification & Community -->
+          <!-- Column 3: Community & Rewards -->
           <div class="footer-column reveal stagger-3">
             <h4>🏆 Community</h4>
             <ul>
               <li><button class="footer-link-btn" onclick="openTravelPassport()">🛂 My Travel Passport & Stamps</button></li>
               <li><button class="footer-link-btn" onclick="openLeaderboardModal()">🏆 Top-Finders Leaderboard</button></li>
               <li><button class="footer-link-btn" onclick="openDailyStreakModal()">🔥 Daily Streak & XP</button></li>
-              <li><a href="publications.html">📰 Micro-Publications & Series</a></li>
-              <li><a href="boards.html#lockedGuidesGrid">🔒 Creator Dossiers & Guides</a></li>
-              <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
+              <li><a href="publications.html">📰 Field Publications & Series</a></li>
+              <li><button class="footer-link-btn" onclick="openMessenger()">💬 Direct Messages & Explorers</button></li>
             </ul>
           </div>
 
-          <!-- Column 4: Platform & Actions -->
+          <!-- Column 4: Trust & Actions -->
           <div class="footer-column reveal stagger-4">
-            <h4>⚡ Platform</h4>
+            <h4>🌿 Trust & Actions</h4>
             <ul>
-              <li><button class="footer-link-btn" onclick="openPostModal()">💎 Post a Hidden Gem</button></li>
+              <li><button class="footer-link-btn" onclick="openPostModal()">💎 Share a Hidden Stop</button></li>
               <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
-              <li><button class="footer-link-btn" onclick="openCloudModal()">⚡ Supabase Cloud Backend</button></li>
-              <li><button class="footer-link-btn" onclick="openAuthModal('signin')">🔑 Sign In / Join</button></li>
+              <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
               <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
               <li>
                 <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
@@ -480,7 +477,7 @@
 
         <!-- Bottom Footer Bar -->
         <div class="footer-bottom">
-          <p>&copy; 2026 HopStop — The Social Platform for Underrated Places in the World.</p>
+          <p>&copy; 2026 HopStop — Discover & Protect Underrated Places in the World.</p>
           <div class="footer-bottom-links">
             <a href="javascript:void(0)" onclick="showToast('Leave-No-Trace Certified Explorer Network 🌿')">🌿 Leave-No-Trace Certified</a>
             <span>•</span>
@@ -488,7 +485,7 @@
             <span>•</span>
             <a href="javascript:void(0)" onclick="showToast('Community Guidelines Active 📜')">📜 Terms & Guidelines</a>
             <span>•</span>
-            <a href="javascript:void(0)" onclick="openCloudModal()">⚡ Free Supabase Sync</a>
+            <a href="javascript:void(0)" onclick="showToast('Community Safety & Ethics Guidelines 🛡️')">🛡️ Safety & Ethics</a>
           </div>
         </div>
       </div>
