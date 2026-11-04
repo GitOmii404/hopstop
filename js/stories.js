@@ -7,18 +7,22 @@
 // ==========================================================================
 
 window.openStoryViewer = function (index) {
-  if (!storyViewerModal) return;
+  const modal = document.getElementById('storyViewerModal');
+  if (!modal) return;
   activeStoryIndex = index;
-  storyViewerModal.classList.add('open');
+  modal.style.display = 'flex';
+  modal.classList.add('open');
   document.body.style.overflow = 'hidden';
-  awardUserXp(10, 'Viewing Traveler Stories');
+  if (typeof awardUserXp === 'function') awardUserXp(10, 'Viewing Traveler Stories');
   loadStorySlide(activeStoryIndex);
 };
 
 window.closeStoryViewer = function () {
-  if (!storyViewerModal) return;
+  const modal = document.getElementById('storyViewerModal');
+  if (!modal) return;
   clearInterval(storyTimer);
-  storyViewerModal.classList.remove('open');
+  modal.classList.remove('open');
+  modal.style.display = 'none';
   document.body.style.overflow = '';
 };
 
@@ -87,7 +91,8 @@ window.nextStorySlide = function (e) {
 
 // Keyboard Arrow Navigation for Stories
 window.addEventListener('keydown', (e) => {
-  if (!storyViewerModal || !storyViewerModal.classList.contains('open')) return;
+  const modal = document.getElementById('storyViewerModal');
+  if (!modal || !modal.classList.contains('open')) return;
   if (e.key === 'ArrowLeft') {
     prevStorySlide(e);
   } else if (e.key === 'ArrowRight' || e.key === ' ') {
