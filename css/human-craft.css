@@ -463,15 +463,66 @@ body {
 }
 
 .gallery-carousel-track.track-top {
-  animation: galleryMarqueeLeft 48s linear infinite !important;
+  animation: galleryMarqueeLeft 34s linear infinite !important;
 }
 
 .gallery-carousel-track.track-bottom {
-  animation: galleryMarqueeRight 52s linear infinite !important;
+  animation: galleryMarqueeRight 38s linear infinite !important;
+}
+
+/* Hover-to-Pause: Hovering on reel tracks gracefully pauses stream for reading */
+.gallery-carousel-viewport:hover .gallery-carousel-track:not(.paused) {
+  animation-play-state: paused !important;
 }
 
 .gallery-carousel-track.paused {
   animation-play-state: paused !important;
+}
+
+/* Live Streaming Indicator Pill */
+.gallery-live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+  transition: all 0.25s ease;
+}
+
+.gallery-live-indicator.paused {
+  background: rgba(245, 158, 11, 0.14);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.live-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: liveDotPulse 1.8s ease-in-out infinite;
+  display: inline-block;
+}
+
+.gallery-live-indicator.paused .live-pulse-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: none;
+}
+
+@keyframes liveDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
 }
 
 @keyframes galleryMarqueeLeft {

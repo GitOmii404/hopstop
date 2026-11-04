@@ -8,8 +8,8 @@
   
   <!-- Leaflet.js Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261104_clean_card_v10">
-  <link rel="stylesheet" href="css/human-craft.css?v=20261104_clean_card_v10">
+  <link rel="stylesheet" href="styles.css?v=20261104_stream_v11">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261104_stream_v11">
 </head>
 <body>
 
@@ -550,6 +550,10 @@
             </div>
 
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <span class="gallery-live-indicator" id="galleryLiveIndicator" title="Real-time 35mm film reel streaming status">
+                <span class="live-pulse-dot"></span>
+                <span id="galleryLiveText">Streaming Live</span>
+              </span>
               <button class="btn-reel-scrub" onclick="nudgeGallery('left')" title="Scrub reel backward">
                 <span>⏪</span> Scrub Left
               </button>
@@ -557,7 +561,7 @@
                 Scrub Right <span>⏩</span>
               </button>
               <button class="btn-shuffle" id="toggleGalleryPlayBtn" onclick="toggleGalleryPause()" title="Pause or Resume Stream">
-                <span id="galleryPlayIcon">⏸️</span> <span id="galleryPlayText">Pause</span>
+                <span id="galleryPlayIcon">⏸️</span> <span id="galleryPlayText">Pause Reel</span>
               </button>
               <button class="btn-shuffle" id="shuffleGalleryBtn" onclick="shuffleGallery()" title="Shuffle & Randomize Photos">
                 <span class="shuffle-icon">🎲</span> Randomize
@@ -1256,7 +1260,7 @@
   <script src="js/escape.js?v=20261103_nomapwatermark"></script>
   <script src="js/stories.js?v=20261103_nomapwatermark"></script>
   <script src="js/postcard-thread.js?v=20261103_wind_motion_perfect"></script>
-  <script src="js/gallery.js?v=20261104_itinerary_deck_v7"></script>
+  <script src="js/gallery.js?v=20261104_stream_v11"></script>
   <script src="js/boards.js?v=20261103_perfect_v6"></script>
   <script src="js/battles.js?v=20261103_nomapwatermark"></script>
   <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>

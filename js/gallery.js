@@ -239,13 +239,45 @@ function renderGallery(shouldShuffle = false) {
 window.toggleGalleryPause = function () {
   isGalleryPaused = !isGalleryPaused;
   const tracks = document.querySelectorAll('.gallery-carousel-track');
-  tracks.forEach(track => track.classList.toggle('paused', isGalleryPaused));
+  tracks.forEach(track => {
+    track.classList.toggle('paused', isGalleryPaused);
+  });
 
   const playIcon = document.getElementById('galleryPlayIcon');
   const playText = document.getElementById('galleryPlayText');
+  const indicator = document.getElementById('galleryLiveIndicator');
+  const liveText = document.getElementById('galleryLiveText');
+
   if (playIcon) playIcon.textContent = isGalleryPaused ? '▶️' : '⏸️';
-  if (playText) playText.textContent = isGalleryPaused ? 'Resume' : 'Pause';
-  showToast(`Stream ${isGalleryPaused ? 'paused ⏸️' : 'resumed ▶️'}`);
+  if (playText) playText.textContent = isGalleryPaused ? 'Play Reel' : 'Pause Reel';
+  if (indicator) indicator.classList.toggle('paused', isGalleryPaused);
+  if (liveText) liveText.textContent = isGalleryPaused ? 'Reel Paused' : 'Streaming Live';
+
+  showToast(`Reel stream ${isGalleryPaused ? 'paused ⏸️' : 'resumed ▶️'}`);
+};
+
+window.nudgeGallery = function (direction) {
+  const tracks = document.querySelectorAll('.gallery-carousel-track');
+  tracks.forEach(track => {
+    const shift = direction === 'left' ? -320 : 320;
+    track.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+    const computed = window.getComputedStyle(track);
+    const matrix = new DOMMatrixReadOnly(computed.transform);
+    track.style.transform = `translateX(${matrix.m41 + shift}px)`;
+
+    setTimeout(() => {
+      track.style.transition = '';
+      track.style.transform = '';
+      if (isGalleryPaused) {
+        track.classList.add('paused');
+      } else {
+        track.classList.remove('paused');
+      }
+    }, 450);
+  });
+  if (typeof showToast === 'function') {
+    showToast(direction === 'left' ? '⏪ Reel scrubbed backward' : '⏩ Reel scrubbed forward');
+  }
 };
 
 window.setGalleryFilter = function (filterCategory, btnEl) {
@@ -260,27 +292,6 @@ window.setGalleryFilter = function (filterCategory, btnEl) {
 };
 
 window.shuffleGallery = function () {
-  window.nudgeGallery = function (direction) {
-    const tracks = document.querySelectorAll('.gallery-carousel-track');
-    tracks.forEach(track => {
-      const current = window.getComputedStyle(track);
-      const matrix = new DOMMatrixReadOnly(current.transform);
-      const shift = direction === 'left' ? -360 : 360;
-      track.style.animationPlayState = 'paused';
-      track.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-      track.style.transform = `translateX(${matrix.m41 + shift}px)`;
-      setTimeout(() => {
-        track.style.transition = '';
-        if (!isGalleryPaused) {
-          track.style.animationPlayState = 'running';
-        }
-      }, 500);
-    });
-    if (typeof showToast === 'function') {
-      showToast(direction === 'left' ? '🎞️ Reel scrubbed backward' : '🎞️ Reel scrubbed forward');
-    }
-  };
-
   const shuffleBtn = document.getElementById('shuffleGalleryBtn');
   const icon = shuffleBtn?.querySelector('.shuffle-icon');
   if (icon) {
