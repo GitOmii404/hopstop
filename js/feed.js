@@ -1,12 +1,9 @@
-/**
- * HopStop — Social Feed Engine (Posts, Likes, Comments, Search, Category Filter)
- */
-
 // ==========================================================================
-// Social Feed Engine
+// HopStop — Authenticated Social Feed, Stories, and Discovery Stream
+// Ultra-High-End Editorial Discovery with Interactive Cartographic HUD
 // ==========================================================================
 
-function renderStories() {
+function initStories() {
   if (!storiesTray) return;
 
   storiesTray.innerHTML = `
@@ -37,7 +34,6 @@ function renderAppFeed() {
 
   // Apply Feed Algorithm & Ranking
   if (currentFeedSortMode === 'foryou') {
-    // Smart match based on high gem rating, likes, and photo rich content
     filteredPosts.sort((a, b) => (parseFloat(b.gemScore) * b.likes) - (parseFloat(a.gemScore) * a.likes));
   } else if (currentFeedSortMode === 'topgem') {
     filteredPosts.sort((a, b) => parseFloat(b.gemScore) - parseFloat(a.gemScore));
@@ -48,7 +44,6 @@ function renderAppFeed() {
       return bWish - aWish;
     });
   } else {
-    // Fresh posts (by id descending)
     filteredPosts.sort((a, b) => b.id - a.id);
   }
 
@@ -58,19 +53,11 @@ function renderAppFeed() {
         <span style="font-size: 2.8rem;">📍</span>
         <h3 style="margin-top: 10px; font-size: 1.2rem;">No Micro-Adventures within ${currentRadiusFilter} km</h3>
         <p style="color: var(--text-muted); max-width: 440px; margin: 6px auto 16px; font-size: 0.9rem;">
-          There are no secret spots pinned within ${currentRadiusFilter} km of ${userLocationName}. Expand your search radius or share the first local hidden gem!
+          Try expanding your search radius to 50 km or Worldwide to discover unmapped trails and hidden villages.
         </p>
-        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="setRadiusFilter(150)">
-            🏕️ Expand to 150 km
-          </button>
-          <button class="btn-gem" style="padding: 8px 16px; font-size: 0.85rem;" onclick="openPostModal()">
-            ✨ Post Local Discovery
-          </button>
-          <button class="btn-popup-read" style="padding: 8px 14px; font-size: 0.85rem;" onclick="setRadiusFilter('all')">
-            🌍 View All Worldwide
-          </button>
-        </div>
+        <button class="btn-gem" onclick="setRadiusFilter('all')" style="padding: 8px 18px; font-size: 0.85rem;">
+          🌍 Explore Worldwide Gems
+        </button>
       </div>
     `;
     return;
@@ -79,9 +66,9 @@ function renderAppFeed() {
   socialFeedContainer.innerHTML = filteredPosts.map(post => {
     const isSaved = savedBookmarks.includes(post.id);
     const isInItinerary = itineraryStops.includes(post.id);
-    const commentCount = post.comments ? post.comments.length : 0;
-    const authorHandle = post.author.handle || `@${post.author.name.toLowerCase().replace(/\s+/g, '')}`;
-    const weather = getDestinationWeather(post.coords[0], post.coords[1], post.category);
+    const authorHandle = `@${post.author.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+    const commentCount = (post.comments || []).length;
+    const weather = post.weather || { icon: "☀️", temp: "22°C" };
     const checkIns = post.checkInsCount || (12 + (post.id * 3));
     const isChecked = !!post.isCheckedIn;
 
@@ -95,8 +82,12 @@ function renderAppFeed() {
           ? `🏕️ ${distKm} km away`
           : `✈️ ${distKm.toLocaleString()} km away`));
 
+    const latStr = post.coords ? `${post.coords[0].toFixed(4)}° N` : '46.5386° N';
+    const lngStr = post.coords ? `${post.coords[1].toFixed(4)}° E` : '11.8542° E';
+
     return `
       <article class="social-card post-card-animated" data-id="${post.id}">
+        <!-- Top Card Header -->
         <div class="social-card-header">
           <div class="social-author-wrap">
             <div class="social-avatar-ring">
@@ -107,9 +98,10 @@ function renderAppFeed() {
                 <span>${post.author.name}</span>
                 <span class="social-verified-badge" title="Verified Field Explorer">✓</span>
               </div>
-              <span class="social-place-location" onclick="focusPostOnMap(${post.id})" style="cursor: pointer;" title="View on interactive world map">
-                📍 ${post.placeName}, ${post.country} • <span class="weather-chip">${weather.icon} ${weather.temp}</span>
-              </span>
+              <div class="social-place-location" onclick="focusPostOnMap(${post.id})" style="cursor: pointer;" title="View on interactive world map">
+                <span>📍 ${post.placeName}, ${post.country}</span>
+                <span class="weather-chip">${weather.icon} ${weather.temp}</span>
+              </div>
             </div>
           </div>
 
@@ -118,27 +110,56 @@ function renderAppFeed() {
             <button class="btn-been-here ${isChecked ? 'checked' : ''}" onclick="checkInToGem(${post.id})" title="Confirm you've visited this place">
               ${isChecked ? "✅ Visited" : `📍 Been Here (${checkIns})`}
             </button>
-            <button class="btn-header-direction" onclick="openDirections(event, '${encodeURIComponent(post.locationQuery)}')" title="1-Tap Directions">
-              🧭
-            </button>
           </div>
         </div>
 
+        <!-- 16:10 High-Def Media Frame with Smart Video Poster Fallback -->
         <div class="social-card-media" ondblclick="handleMediaDoubleTap(event, ${post.id})">
           ${post.videoUrl ? `
-            <div class="social-video-wrap">
-              <video src="${post.videoUrl}" autoplay loop muted playsinline class="social-video-player" id="feedVideo_${post.id}"></video>
-              <div class="video-badge-pill">🎥 Motion Reel</div>
-              <button class="video-control-btn" onclick="toggleFeedVideoAudio(event, ${post.id})" title="Toggle Audio">🔇</button>
-            </div>
+            <video src="${post.videoUrl}" poster="${post.image}" autoplay loop muted playsinline class="social-video-player" id="feedVideo_${post.id}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"></video>
+            <img src="${post.image}" alt="${post.title}" class="video-fallback-img" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+            <button class="video-control-btn" onclick="toggleFeedVideoAudio(event, ${post.id})" title="Toggle Audio">🔇</button>
           ` : `
-            <img src="${post.image}" alt="${post.title}" loading="lazy">
+            <img src="${post.image}" alt="${post.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'">
           `}
+          
+          <!-- Tactile Floating Badges -->
           <div class="gem-score-pill">💎 ${post.gemScore}/10 Underrated</div>
-          <div class="category-pill-tag">${post.category ? post.category.toUpperCase() : 'SECRET SPOT'}</div>
+          <div class="crowd-meter-pill">🟢 88% Uncrowded</div>
+          <div class="dispatch-stamp-badge">🛰️ DISPATCH #${String(post.id).padStart(3, '0')}</div>
           <div class="flying-heart" id="flyingHeart_${post.id}">❤️</div>
         </div>
 
+        <!-- Interactive Unique Feature: Cartographic Field Radar & Coordinates HUD -->
+        <div class="field-radar-hud" id="fieldRadarHud_${post.id}" style="display: none;">
+          <div class="radar-hud-header">
+            <div>
+              <span class="radar-blip-pulse"></span>
+              <span>EXPEDITION CARTOGRAPHIC INTEL</span>
+            </div>
+            <span class="radar-coords">🛰️ ${latStr}, ${lngStr}</span>
+          </div>
+          <div class="radar-hud-metrics">
+            <div class="radar-metric">
+              <span class="radar-metric-label">Crowd Status</span>
+              <span class="radar-metric-val green">🟢 88% Uncrowded</span>
+            </div>
+            <div class="radar-metric">
+              <span class="radar-metric-label">Access Trail</span>
+              <span class="radar-metric-val">${post.transit || 'Footpath / 4x4 Track'}</span>
+            </div>
+            <div class="radar-metric">
+              <span class="radar-metric-label">Best Lighting</span>
+              <span class="radar-metric-val">${post.bestTime || 'Golden Hour (35mm)'}</span>
+            </div>
+            <div class="radar-metric">
+              <span class="radar-metric-label">Conservation</span>
+              <span class="radar-metric-val blue">🌿 Protected Heritage</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
         <div class="social-action-bar">
           <div class="social-action-group">
             <button class="action-icon-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(event, ${post.id})" title="Like">
@@ -149,6 +170,9 @@ function renderAppFeed() {
             </button>
             <button class="action-icon-btn ${isInItinerary ? 'in-route' : ''}" onclick="addToItinerary(${post.id})" title="${isInItinerary ? 'In Itinerary Route' : 'Add to Route'}">
               🗺️ <span class="action-btn-text">${isInItinerary ? 'In Route' : '+ Route'}</span>
+            </button>
+            <button class="action-icon-btn" onclick="toggleFieldRadarHud(${post.id})" title="Toggle GPS Coordinates & Field Radar HUD">
+              🧭 <span class="action-btn-text">Radar Intel</span>
             </button>
             <button class="action-icon-btn" onclick="openAddPinModal(${post.id})" title="Co-Save to Dream Board">
               📌
@@ -166,12 +190,16 @@ function renderAppFeed() {
           </button>
         </div>
 
+        <!-- Caption Headline & Excerpt -->
         <div class="social-caption-wrap">
-          <span class="social-author-handle">${authorHandle}</span>
-          <span class="social-post-headline">${post.title}</span>
+          <div>
+            <span class="social-author-handle">${authorHandle}</span>
+            <span class="social-post-headline">${post.title}</span>
+          </div>
           <p class="social-post-desc">${post.excerpt}</p>
         </div>
 
+        <!-- Secret Field Intel Notebook Box -->
         <div class="social-secret-tip-box">
           <div class="secret-tip-header">
             <span>🤫 SECRET FIELD INTEL</span>
@@ -179,10 +207,12 @@ function renderAppFeed() {
           <p class="secret-tip-text">${post.secretTip}</p>
         </div>
 
+        <!-- Comments Link -->
         <div class="social-view-comments-btn" onclick="openArticleModal(${post.id})">
           ${commentCount > 0 ? `💬 View all ${commentCount} explorer dispatches & route notes...` : '💬 Leave the first expedition tip on this stop...'}
         </div>
 
+        <!-- Inline Comment Form -->
         <form class="social-inline-comment-form" onsubmit="handleInlineCommentSubmit(event, ${post.id})">
           <img src="${currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80'}" class="comment-author-avatar" alt="You">
           <input type="text" class="social-comment-input" placeholder="Add field notes, transit advice, or secret coordinates..." required>
@@ -192,6 +222,18 @@ function renderAppFeed() {
     `;
   }).join('');
 }
+
+window.toggleFieldRadarHud = function (postId) {
+  const hud = document.getElementById(`fieldRadarHud_${postId}`);
+  if (!hud) return;
+  const isHidden = hud.style.display === 'none';
+  if (isHidden) {
+    hud.style.display = 'flex';
+    showToast('🛰️ Field Radar & GPS Coordinates Active');
+  } else {
+    hud.style.display = 'none';
+  }
+};
 
 function renderSuggestedUsers() {
   if (!suggestedUsersList) return;
