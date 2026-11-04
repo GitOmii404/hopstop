@@ -9,7 +9,7 @@
   <!-- Leaflet.js Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <link rel="stylesheet" href="styles.css?v=20261103_high_contrast_clean">
-  <link rel="stylesheet" href="css/human-craft.css?v=20261103_high_contrast_clean">
+  <link rel="stylesheet" href="css/human-craft.css?v=20261104_itinerary_deck_v7">
 </head>
 <body>
 
@@ -583,16 +583,35 @@
           <div class="section-header reveal">
             <span class="section-tag">Route & Saved Stops</span>
             <h2 class="section-title">Your Secret Itinerary</h2>
-            <p class="section-subtitle">Stops you saved from community posts with quick one-tap directions.</p>
+            <p class="section-subtitle">Curated waypoints saved from community field journals with quick one-tap GPS navigation.</p>
           </div>
 
           <div class="toolkit-card reveal-left">
-            <div class="toolkit-header">
-              <h3>📌 Saved Secret Stops</h3>
-              <span style="font-size: 0.85rem; color: var(--text-muted);">Synced locally on this device</span>
+            <div class="toolkit-header" id="toolkitHeader">
+              <div class="toolkit-header-left">
+                <div class="toolkit-title-row">
+                  <span class="toolkit-icon">🧭</span>
+                  <h3>Expedition Waypoints</h3>
+                  <span class="toolkit-badge" id="itineraryStopsBadge">3 Stops Saved</span>
+                </div>
+                <p class="toolkit-subtitle">Offline coordinates & direct GPS route navigation synced locally on this device</p>
+              </div>
+              <div class="toolkit-header-actions">
+                <a href="planner.html" class="btn-gem" style="padding: 8px 18px; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                  <span>🗺️</span> Open Route Planner
+                </a>
+                <button type="button" class="btn-popup-read btn-itinerary-trip" onclick="openTripMode()" style="padding: 8px 16px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                  <span>🚀</span> Road-Trip Mode
+                </button>
+              </div>
             </div>
+
             <div class="bucket-list-items" id="bucketListContainer">
-              <!-- Dynamically populated by state.js -->
+              <!-- Dynamically populated by gallery.js -->
+            </div>
+
+            <div class="toolkit-footer" id="toolkitFooter">
+              <!-- Dynamically populated by gallery.js -->
             </div>
           </div>
         </div>
@@ -1237,7 +1256,7 @@
   <script src="js/escape.js?v=20261103_nomapwatermark"></script>
   <script src="js/stories.js?v=20261103_nomapwatermark"></script>
   <script src="js/postcard-thread.js?v=20261103_wind_motion_perfect"></script>
-  <script src="js/gallery.js?v=20261103_woodworks_mesh_architectural"></script>
+  <script src="js/gallery.js?v=20261104_itinerary_deck_v7"></script>
   <script src="js/boards.js?v=20261103_perfect_v6"></script>
   <script src="js/battles.js?v=20261103_nomapwatermark"></script>
   <script src="js/creator-guides.js?v=20261103_perfect_v6"></script>

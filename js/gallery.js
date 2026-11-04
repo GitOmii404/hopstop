@@ -392,32 +392,106 @@ window.toggleBookmark = function (e, postId) {
 
 function renderBucketList() {
   if (bucketCountBadge) bucketCountBadge.textContent = savedBookmarks.length;
+
+  const badgeEl = document.getElementById('itineraryStopsBadge');
+  if (badgeEl) {
+    badgeEl.textContent = `${savedBookmarks.length} ${savedBookmarks.length === 1 ? 'Stop' : 'Stops'} Saved`;
+  }
+
   if (!bucketListContainer) return;
 
   const savedList = postsData.filter(p => savedBookmarks.includes(p.id));
+  const footerEl = document.getElementById('toolkitFooter');
+
   if (savedList.length === 0) {
     bucketListContainer.innerHTML = `
-      <div class="empty-state">
-        <span class="empty-state-icon">📌</span>
-        <p>No saved stops yet. Tap 🔖 on any post to build your secret itinerary!</p>
+      <div class="itinerary-empty-deck">
+        <div class="empty-deck-icon-wrap">
+          <span class="empty-deck-compass">🧭</span>
+        </div>
+        <h4>Your Expedition Deck is Ready</h4>
+        <p>You haven't saved any secret waypoints yet. Explore the hidden gems across our interactive map or community photowall, and tap <strong>🔖 Save Stop</strong> on any destination to curate your private travel itinerary.</p>
+        <div class="empty-deck-actions">
+          <a href="#mapSection" class="btn-gem" style="text-decoration: none; padding: 9px 20px; font-size: 0.84rem;">
+            🌍 Explore Live Interactive Map
+          </a>
+          <a href="#gallery" class="btn-popup-read" style="text-decoration: none; padding: 9px 18px; font-size: 0.84rem;">
+            📸 Browse Photo Wall Stream
+          </a>
+        </div>
       </div>
     `;
+    if (footerEl) footerEl.innerHTML = '';
     return;
   }
 
-  bucketListContainer.innerHTML = savedList.map(item => `
+  bucketListContainer.innerHTML = savedList.map((item, index) => `
     <div class="bucket-item post-card-animated">
-      <img src="${item.image}" alt="${item.title}">
-      <div class="bucket-item-info">
-        <h4 onclick="openArticleModal(${item.id})" style="cursor: pointer;">${item.placeName} (${item.country})</h4>
-        <p>💎 ${item.gemScore}/10 • ${item.categoryLabel}</p>
+      <div class="bucket-item-index">${String(index + 1).padStart(2, '0')}</div>
+      <div class="bucket-item-media" onclick="openArticleModal(${item.id})" title="Click to view full photo dossier">
+        <img src="${item.image}" alt="${item.title}">
+        <span class="bucket-item-tag">${item.categoryLabel || 'Waypoint'}</span>
       </div>
-      <button class="btn-popup-read" style="padding: 4px 8px; font-size: 0.72rem;" onclick="focusPostOnMap(${item.id})">Map</button>
-      <button class="btn-direction" style="padding: 4px 8px; font-size: 0.72rem;" onclick="openDirections(event, '${encodeURIComponent(item.locationQuery)}')">Directions</button>
-      <button class="btn-icon-del" onclick="toggleBookmark(event, ${item.id})" title="Remove">✕</button>
+      <div class="bucket-item-info">
+        <div class="bucket-item-title-row">
+          <h4 onclick="openArticleModal(${item.id})">${item.placeName}</h4>
+          <span class="bucket-item-country">${item.country}</span>
+        </div>
+        <div class="bucket-item-meta-pills">
+          <span class="meta-pill gem">💎 ${item.gemScore}/10 Underrated</span>
+          <span class="meta-pill season">☀️ ${item.bestTime || 'Year-round'}</span>
+          <span class="meta-pill budget">💰 ${item.budget || '$40 - $70 / day'}</span>
+        </div>
+        <p class="bucket-item-excerpt">${item.excerpt || ''}</p>
+      </div>
+      <div class="bucket-item-actions">
+        <button type="button" class="btn-action-map" onclick="focusPostOnMap(${item.id})" title="Center Diamond Pin on Map">
+          <span>🗺️</span> <span>Locate</span>
+        </button>
+        <button type="button" class="btn-action-nav" onclick="openDirections(event, '${encodeURIComponent(item.locationQuery)}')" title="Navigate via Google Maps GPS">
+          <span>🧭</span> <span>Directions</span>
+        </button>
+        <button type="button" class="btn-action-dossier" onclick="openArticleModal(${item.id})" title="Read Full Secret Journal & Coordinates">
+          <span>📖</span> <span>Dossier</span>
+        </button>
+        <button type="button" class="btn-action-del" onclick="toggleBookmark(event, ${item.id})" title="Remove from Itinerary">
+          ✕
+        </button>
+      </div>
     </div>
   `).join('');
+
+  if (footerEl) {
+    footerEl.innerHTML = `
+      <div class="toolkit-footer-bar">
+        <div class="toolkit-footer-stats">
+          <span class="stat-bubble"><strong>${savedList.length}</strong> Waypoints</span>
+          <span class="stat-bubble"><strong>~${savedList.length * 95} km</strong> Total Distance</span>
+          <span class="stat-bubble verified">🌿 Leave-No-Trace Route</span>
+        </div>
+        <div class="toolkit-footer-buttons">
+          <button type="button" class="btn-popup-read" onclick="clearAllBookmarks()" style="font-size: 0.78rem; padding: 7px 14px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+            🗑️ Clear Itinerary
+          </button>
+          <a href="planner.html" class="btn-gem" style="text-decoration: none; padding: 8px 20px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px;">
+            🚀 Calculate Turn-by-Turn Route →
+          </a>
+        </div>
+      </div>
+    `;
+  }
 }
+
+window.clearAllBookmarks = function () {
+  if (confirm('Clear all saved stops from your itinerary?')) {
+    savedBookmarks = [];
+    localStorage.setItem('hopstop_saved', JSON.stringify(savedBookmarks));
+    renderAppFeed();
+    renderPosts();
+    renderBucketList();
+    if (typeof showToast === 'function') showToast('Cleared itinerary stops 🧹');
+  }
+};
 
 // Post Creation Form
 window.openPostModal = function () {
