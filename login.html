@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In or Join — HopStop Social Travel Network</title>
+  <meta name="description" content="Sign in to HopStop to share secret waypoints, earn daily streak XP, rank on leaderboards, and direct message online travelers worldwide.">
+  
+  <link rel="stylesheet" href="styles.css?v=20261104_navbar_perfection_v31">
+  <link rel="stylesheet" href="css/login.css?v=20261104_login_v1">
+</head>
+<body class="login-page-wrap">
+
+  <!-- ==================== Login Header Bar ==================== -->
+  <header class="login-nav">
+    <div class="login-nav-left">
+      <div class="brand-logo" onclick="location.href='index.html'" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+        <div class="brand-icon">💎</div>
+        <span style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Hop<span style="color: var(--accent);">Stop</span></span>
+      </div>
+      <a href="index.html" class="login-back-btn">
+        <span>←</span> Back to Home
+      </a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme" style="background: none; border: 1px solid var(--border-color); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 1.05rem;">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== Main Split Login Layout ==================== -->
+  <main class="login-main">
+    
+    <!-- Left Hero Pane -->
+    <div class="login-hero-pane">
+      <img src="https://images.unsplash.com/photo-1790378338449-e189c8bec45c?auto=format&fit=crop&w=1200&q=80" alt="Dolomites Rifugio" class="login-hero-bg">
+      <div class="login-hero-overlay"></div>
+
+      <div class="login-hero-content">
+        <div class="hero-pill-badge">
+          <span>✨</span> The Social Platform for Underrated Places
+        </div>
+
+        <h1 class="login-hero-quote">
+          Escape the crowds. <br>Discover <span>authentic hidden gems</span> before they get ruined.
+        </h1>
+
+        <div class="login-author-box">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Elena Vance" class="login-author-avatar">
+          <div>
+            <div style="font-weight: 800; font-size: 0.95rem;">Elena Vance</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">Alpine Seeker • Vetted Waypoint Contributor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-stats-grid">
+        <div class="login-stat-item">
+          <h4>14,000+</h4>
+          <p>Verified Explorers</p>
+        </div>
+        <div class="login-stat-item">
+          <h4>100%</h4>
+          <p>Leave-No-Trace</p>
+        </div>
+        <div class="login-stat-item">
+          <h4>Live DMs</h4>
+          <p>Wanderer Chat</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Form Pane -->
+    <div class="login-form-pane">
+      <div class="login-card-container">
+        
+        <div class="login-card-header">
+          <div style="font-size: 2.2rem; margin-bottom: 4px;">💎</div>
+          <h2 class="login-card-title">Welcome to HopStop</h2>
+          <p class="login-card-desc">Sign in for full member access, or jump in instantly as a guest to browse and DM.</p>
+        </div>
+
+        <!-- Segmented Tab Switcher -->
+        <div class="login-tab-switcher">
+          <button class="login-tab-btn active" id="tabBtnSignin" onclick="showLoginTab('signin')">Sign In</button>
+          <button class="login-tab-btn" id="tabBtnSignup" onclick="showLoginTab('signup')">Create Account</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="pageSigninForm" onsubmit="handlePageSignin(event)">
+          <div class="login-form-group">
+            <label class="login-label">Email or Explorer Handle</label>
+            <div class="login-input-wrap">
+              <input type="text" id="signinEmail" class="login-input" placeholder="maya@wander.com" value="maya@wander.com" required>
+            </div>
+          </div>
+
+          <div class="login-form-group">
+            <label class="login-label">Password</label>
+            <div class="login-input-wrap">
+              <input type="password" id="signinPassword" class="login-input" placeholder="••••••••" value="password123" required>
+            </div>
+          </div>
+
+          <div class="login-options-row">
+            <label class="login-checkbox-label">
+              <input type="checkbox" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="javascript:void(0)" onclick="alert('Demo account: Email: maya@wander.com | Password: password123')" class="login-forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-login-submit">
+            Sign In with Full Access 🚀
+          </button>
+        </form>
+
+        <!-- Create Account Form (Hidden by default) -->
+        <form id="pageSignupForm" style="display: none;" onsubmit="handlePageSignup(event)">
+          <div class="login-form-group">
+            <label class="login-label">Full Name</label>
+            <input type="text" id="signupFullName" class="login-input" placeholder="e.g. Liam Tanaka" required>
+          </div>
+
+          <div class="login-form-group">
+            <label class="login-label">Email Address</label>
+            <input type="email" id="signupEmailInput" class="login-input" placeholder="liam@explore.com" required>
+          </div>
+
+          <div class="login-form-group">
+            <label class="login-label">Create Password</label>
+            <input type="password" id="signupPasswordInput" class="login-input" placeholder="At least 6 characters" required>
+          </div>
+
+          <div class="login-options-row">
+            <label class="login-checkbox-label">
+              <input type="checkbox" checked required>
+              <span>I pledge to follow Leave-No-Trace ethics 🌿</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-login-submit">
+            Create Full Explorer Account ✨
+          </button>
+        </form>
+
+        <div class="login-divider">
+          <span>Or Choose Instant Access</span>
+        </div>
+
+        <!-- 2 Instant Access Tier Cards -->
+        <div class="access-cards-group">
+          
+          <!-- Card 1: 1-Click Demo Login (Full Access) -->
+          <div class="access-tier-card tier-demo-login" onclick="loginAsDemo()">
+            <div class="tier-header-row">
+              <span class="tier-card-title">⚡ 1-Click Demo Login (Maya Lin)</span>
+              <span class="tier-pill-badge full">👑 Full Access</span>
+            </div>
+            <div class="tier-card-desc">
+              All features unlocked: post secret gems, claim +50 XP streaks, level up badges, co-save dream boards, and live DM travelers.
+            </div>
+          </div>
+
+          <!-- Card 2: Continue as Guest (Browse & DM Only) -->
+          <div class="access-tier-card tier-guest-login" onclick="loginAsGuest()">
+            <div class="tier-header-row">
+              <span class="tier-card-title">👤 Continue as Guest</span>
+              <span class="tier-pill-badge guest">🟢 Browse & DM Only</span>
+            </div>
+            <div class="tier-card-desc">
+              No registration needed: browse all hidden gems & photo stories, and direct message (DM) online wanderers with GIFs and photos.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Feature Comparison Matrix -->
+        <div class="tier-matrix-box">
+          <div class="matrix-header">
+            <span>Platform Capabilities</span>
+            <span>Signed In vs Guest</span>
+          </div>
+          <div class="matrix-row">
+            <span>Browse Hidden Gems & Photo Wall</span>
+            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <strong class="matrix-badge-check">✓ Guest</strong></span>
+          </div>
+          <div class="matrix-row">
+            <span>Live DMs, GIFs & Chat with Online Wanderers</span>
+            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <strong class="matrix-badge-check">✓ Guest</strong></span>
+          </div>
+          <div class="matrix-row">
+            <span>Post New Waypoints, Secret Tips & Photos</span>
+            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
+          </div>
+          <div class="matrix-row">
+            <span>Daily Discovery Streaks & Explorer XP</span>
+            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
+          </div>
+          <div class="matrix-row">
+            <span>Co-Save Dream Boards & Route Planner</span>
+            <span><strong class="matrix-badge-check">✓ Full</strong> &bull; <span class="matrix-badge-lock">🔒 Sign In</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Initialize Theme
+    if (typeof initTheme === 'function') initTheme();
+
+    function showLoginTab(tab) {
+      const signinForm = document.getElementById('pageSigninForm');
+      const signupForm = document.getElementById('pageSignupForm');
+      const tabBtnSignin = document.getElementById('tabBtnSignin');
+      const tabBtnSignup = document.getElementById('tabBtnSignup');
+
+      if (tab === 'signup') {
+        signinForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        tabBtnSignin.classList.remove('active');
+        tabBtnSignup.classList.add('active');
+      } else {
+        signinForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        tabBtnSignin.classList.add('active');
+        tabBtnSignup.classList.remove('active');
+      }
+    }
+
+    function handlePageSignin(e) {
+      e.preventDefault();
+      loginAsDemo();
+    }
+
+    function handlePageSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupFullName').value.trim() || 'New Explorer';
+      const handle = '@' + name.toLowerCase().replace(/\s+/g, '');
+      currentUser = {
+        ...DEFAULT_USER,
+        id: 'user_' + Date.now(),
+        name: name,
+        handle: handle,
+        isGuest: false
+      };
+      localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
+      if (typeof showToast === 'function') showToast(`Welcome to HopStop, ${name}! 🎉`);
+      
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || 'feed.html';
+      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+    }
+  </script>
+</body>
+</html>

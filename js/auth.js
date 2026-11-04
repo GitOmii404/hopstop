@@ -40,24 +40,55 @@ function syncAuthState() {
   const currentUserAvatarEls = document.querySelectorAll('.current-user-avatar');
   const currentUserHandleEls = document.querySelectorAll('.current-user-handle');
   const sidebarUserLevelCard = document.getElementById('sidebarUserLevelCard');
+  const sidebarGuestStatusCard = document.getElementById('sidebarGuestStatusCard');
   const sidebarGuestCard = document.getElementById('sidebarGuestCard');
+  const guestFeedComposerBanner = document.getElementById('guestFeedComposerBanner');
+  const feedCreateBox = document.querySelector('.feed-create-box');
   const messengerGuestBanners = document.querySelectorAll('.messenger-guest-banner');
+  const userMenuTierBadge = document.querySelector('.user-dropdown-tier');
+  const userMenuXpWrap = document.querySelector('.user-dropdown-xp-progress');
 
   if (currentUser) {
     if (authHeaderActions) authHeaderActions.style.display = 'flex';
     if (guestHeaderActions) guestHeaderActions.style.display = 'none';
-    if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'block';
-    if (sidebarGuestCard) sidebarGuestCard.style.display = 'none';
     messengerGuestBanners.forEach(b => b.style.display = 'none');
 
-    currentUserNameEls.forEach(el => el.textContent = currentUser.name);
-    currentUserAvatarEls.forEach(el => el.src = currentUser.avatar);
-    currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@mayawanders');
+    if (currentUser.isGuest) {
+      // Guest User state: can view & DM, but no fake level/XP or composer
+      if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'none';
+      if (sidebarGuestStatusCard) sidebarGuestStatusCard.style.display = 'block';
+      if (sidebarGuestCard) sidebarGuestCard.style.display = 'block';
+      if (feedCreateBox) feedCreateBox.style.display = 'none';
+      if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'block';
+      if (userMenuTierBadge) userMenuTierBadge.textContent = 'Guest Explorer';
+      if (userMenuXpWrap) userMenuXpWrap.style.display = 'none';
+
+      currentUserNameEls.forEach(el => el.textContent = 'Guest Explorer');
+      currentUserAvatarEls.forEach(el => el.src = currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80');
+      currentUserHandleEls.forEach(el => el.textContent = '@guest');
+    } else {
+      // Full Signed-in Member state
+      if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'block';
+      if (sidebarGuestStatusCard) sidebarGuestStatusCard.style.display = 'none';
+      if (sidebarGuestCard) sidebarGuestCard.style.display = 'none';
+      if (feedCreateBox) feedCreateBox.style.display = 'block';
+      if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'none';
+      if (userMenuTierBadge) userMenuTierBadge.textContent = 'Level 2: Trailblazer';
+      if (userMenuXpWrap) userMenuXpWrap.style.display = 'block';
+
+      currentUserNameEls.forEach(el => el.textContent = currentUser.name);
+      currentUserAvatarEls.forEach(el => el.src = currentUser.avatar);
+      currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@mayawanders');
+    }
   } else {
+    // Unauthenticated state
     if (authHeaderActions) authHeaderActions.style.display = 'none';
     if (guestHeaderActions) guestHeaderActions.style.display = 'flex';
     if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'none';
+    if (sidebarGuestStatusCard) sidebarGuestStatusCard.style.display = 'block';
     if (sidebarGuestCard) sidebarGuestCard.style.display = 'block';
+    if (feedCreateBox) feedCreateBox.style.display = 'none';
+    if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'block';
     messengerGuestBanners.forEach(b => b.style.display = 'flex');
   }
 }
@@ -201,14 +232,41 @@ window.switchAuthTab = function (tab) {
 };
 
 window.loginAsDemo = function () {
-  currentUser = { ...DEFAULT_USER };
+  currentUser = { ...DEFAULT_USER, isGuest: false };
   localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
   closeAuthModal();
   syncAuthState();
-  if (typeof showToast === 'function') showToast(`👋 Welcome back, ${currentUser.name}! Demo profile activated.`);
+  if (typeof showToast === 'function') showToast(`👋 Welcome back, ${currentUser.name}! Full Member access unlocked.`);
   
   const params = new URLSearchParams(window.location.search);
-  if (params.get('redirect') === 'feed' || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
+  const redirect = params.get('redirect');
+  if (redirect && redirect.endsWith('.html')) {
+    window.location.href = redirect;
+  } else if (window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
+    window.location.href = 'feed.html';
+  } else {
+    window.location.reload();
+  }
+};
+
+window.loginAsGuest = function () {
+  currentUser = {
+    id: 'guest_' + Date.now(),
+    name: 'Guest Explorer',
+    handle: '@guest_wanderer',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+    isGuest: true
+  };
+  localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
+  closeAuthModal();
+  syncAuthState();
+  if (typeof showToast === 'function') showToast('👋 Welcome! Browsing in Guest Mode (Viewing & DMs enabled).');
+  
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get('redirect');
+  if (redirect && redirect.endsWith('.html')) {
+    window.location.href = redirect;
+  } else if (window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
     window.location.href = 'feed.html';
   } else {
     window.location.reload();
@@ -281,10 +339,7 @@ window.handleFeedNavClick = function (e) {
       if (typeof e.preventDefault === 'function') e.preventDefault();
       if (typeof e.stopPropagation === 'function') e.stopPropagation();
     }
-    openAuthModal('signin');
-    if (typeof showToast === 'function') {
-      showToast('🔒 Please sign in or use 1-Click Demo Login to access the Social Feed & Chats!');
-    }
+    window.location.href = 'login.html?redirect=feed.html';
     return false;
   }
   if (!e || !e.currentTarget || e.currentTarget.tagName !== 'A') {

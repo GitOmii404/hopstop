@@ -69,7 +69,7 @@
 
         <!-- Guest Actions -->
         <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
-          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-signin" onclick="location.href='login.html'">Sign In</button>
         </div>
 
         <!-- Authenticated Actions -->
@@ -718,6 +718,9 @@
         <button type="submit" class="btn-gem" style="width: 100%; padding: 11px; margin-top: 6px;">Create Explorer Profile</button>
       </form>
       <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">⚡ 1-Click Instant Demo Login (Maya Lin)</button>
+      <button type="button" class="quick-demo-btn" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.35); color: #059669; margin-top: 8px;" onclick="loginAsGuest()">
+        👤 Continue as Guest (Browse & DM Only)
+      </button>
     </div>
   </div>
 

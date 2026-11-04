@@ -506,6 +506,15 @@ window.clearAllBookmarks = function () {
 
 // Post Creation Form
 window.openPostModal = function () {
+  if (!currentUser || currentUser.isGuest) {
+    if (typeof showToast === 'function') {
+      showToast('🔒 Please sign in to post hidden gems! Guests can browse & chat.');
+    }
+    setTimeout(() => {
+      window.location.href = 'login.html?redirect=feed.html';
+    }, 1200);
+    return;
+  }
   const postPlaceModal = document.getElementById('postPlaceModal');
   if (!postPlaceModal) return;
   postPlaceModal.classList.add('open');

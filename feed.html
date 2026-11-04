@@ -10,19 +10,19 @@
       try {
         var raw = localStorage.getItem('hopstop_auth_user');
         if (!raw || raw === 'null' || raw === 'undefined') {
-          window.location.replace('index.html?auth=required&redirect=feed');
+          window.location.replace('login.html?redirect=feed.html');
           return;
         }
         var user = JSON.parse(raw);
         if (!user || !user.name) {
-          window.location.replace('index.html?auth=required&redirect=feed');
+          window.location.replace('login.html?redirect=feed.html');
           return;
         }
-        // Authorized: reveal page instantly
+        // Authorized (either full member or guest): reveal page instantly
         var guardStyle = document.getElementById('authGuardStyle');
         if (guardStyle) guardStyle.remove();
       } catch (e) {
-        window.location.replace('index.html?auth=required&redirect=feed');
+        window.location.replace('login.html?redirect=feed.html');
       }
     })();
   </script>
@@ -94,7 +94,7 @@
 
         <!-- Guest Actions (When Logged Out) -->
         <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
-          <button class="btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+          <button class="btn-signin" onclick="location.href='login.html'">Sign In</button>
         </div>
 
         <!-- Authenticated Actions (When Logged In) -->
@@ -386,7 +386,27 @@
             </div>
           </div>
 
-          <!-- Quick "What Secret Place Did You Discover?" Box -->
+          <!-- Guest Mode Composer Notice Banner (When logged in as guest) -->
+          <div class="guest-composer-banner" id="guestFeedComposerBanner" style="display: none; background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%); border: 1.5px solid rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 18px 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #06b6d4); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">🧭</div>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.96rem; color: var(--text-primary); margin-bottom: 2px;">
+                    Browsing in Guest Mode <span style="font-size: 0.75rem; background: #10b981; color: white; padding: 2px 8px; border-radius: 999px; margin-left: 6px;">🟢 DMs & Viewing Active</span>
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
+                    You can freely browse secret spots and <strong>direct message online travelers</strong>. Sign in to post new gems and earn XP!
+                  </div>
+                </div>
+              </div>
+              <button class="btn-gem" onclick="location.href='login.html?redirect=feed.html'" style="padding: 9px 18px; font-size: 0.84rem; white-space: nowrap;">
+                🔑 Sign In for Full Access
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick "What Secret Place Did You Discover?" Box (Members Only) -->
           <div class="feed-create-box">
             <div class="create-box-top">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="create-user-avatar current-user-avatar">
@@ -417,7 +437,31 @@
         <!-- Right Suggested Explorers & Trending Sidebar -->
         <aside class="app-sidebar-right">
           
-                    <!-- User Profile & Gamification Level Card (When logged in) -->
+          <!-- Guest Explorer Status Card (When logged in as guest) -->
+          <div class="sidebar-widget" id="sidebarGuestStatusCard" style="display: none; background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1.5px solid rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 16px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid #06b6d4; object-fit: cover;" alt="Guest Explorer">
+              <div>
+                <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0; color: var(--text-primary);">Guest Explorer</h4>
+                <span style="font-size: 0.74rem; color: #10b981; font-weight: 700;">🟢 Read & Live DM Mode</span>
+              </div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+              You have full access to explore hidden gems and <strong>chat live with online wanderers</strong>.
+            </p>
+            <div style="background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; font-size: 0.77rem; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 6px; color: #10b981; font-weight: 700;"><span>✓</span> Browse secret waypoints & photos</div>
+              <div style="display: flex; align-items: center; gap: 6px; color: #10b981; font-weight: 700;"><span>✓</span> Live DMs & Chat with wanderers</div>
+              <div style="display: flex; align-items: center; gap: 6px; color: #10b981; font-weight: 700;"><span>✓</span> Send GIFs, pictures & coords</div>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted);"><span>🔒</span> Post secret gems (Requires Sign In)</div>
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted);"><span>🔒</span> Earn XP, Streaks & Badges (Requires Sign In)</div>
+            </div>
+            <button class="btn-gem" onclick="location.href='login.html?redirect=feed.html'" style="width: 100%; padding: 9px; font-size: 0.84rem;">
+              ⚡ Upgrade to Full Account
+            </button>
+          </div>
+
+          <!-- User Profile & Gamification Level Card (When logged in as Full Member) -->
           <div class="explorer-level-card" id="sidebarUserLevelCard" style="display: block;">
             <div class="explorer-level-header">
               <span class="explorer-tier-badge" id="userTierBadge">⚡ Level 2: Trailblazer</span>
@@ -571,6 +615,9 @@
 
       <button type="button" class="quick-demo-btn" onclick="loginAsDemo()">
         ⚡ 1-Click Instant Demo Login (Maya Lin)
+      </button>
+      <button type="button" class="quick-demo-btn" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.35); color: #059669; margin-top: 8px;" onclick="loginAsGuest()">
+        👤 Continue as Guest (Browse & DM Only)
       </button>
     </div>
   </div>

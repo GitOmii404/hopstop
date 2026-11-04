@@ -183,7 +183,7 @@ function mountMessengerUI() {
         <!-- Search Bar -->
         
         <!-- Guest Explorer Mode Pill Banner -->
-        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser ? 'none' : 'flex'};">
+        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser && !currentUser.isGuest ? 'none' : 'flex'};">
           <div class="guest-banner-left">
             <span class="guest-badge-icon">🧭</span>
             <div>
@@ -191,8 +191,8 @@ function mountMessengerUI() {
               <span>You can DM & chat freely!</span>
             </div>
           </div>
-          <button type="button" class="guest-demo-tap-btn" onclick="loginAsDemo();" title="Activate full explorer profile with 1 tap">
-            ⚡ 1-Tap Login
+          <button type="button" class="guest-demo-tap-btn" onclick="location.href='login.html';" title="Activate full explorer profile with 1 tap">
+            ⚡ Upgrade
           </button>
         </div>
 
@@ -235,7 +235,7 @@ function mountMessengerUI() {
         <!-- Messages Scroll Container -->
         
         <!-- Guest Explorer Mode Pill Banner -->
-        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser ? 'none' : 'flex'};">
+        <div class="messenger-guest-banner" id="messengerGuestBanner" style="display: ${currentUser && !currentUser.isGuest ? 'none' : 'flex'};">
           <div class="guest-banner-left">
             <span class="guest-badge-icon">🧭</span>
             <div>
@@ -243,8 +243,8 @@ function mountMessengerUI() {
               <span>You can DM & chat freely!</span>
             </div>
           </div>
-          <button type="button" class="guest-demo-tap-btn" onclick="loginAsDemo();" title="Activate full explorer profile with 1 tap">
-            ⚡ 1-Tap Login
+          <button type="button" class="guest-demo-tap-btn" onclick="location.href='login.html';" title="Activate full explorer profile with 1 tap">
+            ⚡ Upgrade
           </button>
         </div>
 

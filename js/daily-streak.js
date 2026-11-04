@@ -47,6 +47,15 @@ function updateDailyCountdown() {
 }
 
 window.claimDailyCheckin = function () {
+  if (!currentUser || currentUser.isGuest) {
+    if (typeof showToast === 'function') {
+      showToast('🔒 Sign in or create an account to claim daily streak XP!');
+    }
+    setTimeout(() => {
+      window.location.href = 'login.html?redirect=feed.html';
+    }, 1200);
+    return;
+  }
   const todayStr = new Date().toDateString();
   if (lastCheckinDate === todayStr) {
     showToast(`You already claimed today's +50 XP! Streak: ${userStreakDays} Days 🔥`);
