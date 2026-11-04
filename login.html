@@ -7,7 +7,7 @@
   <meta name="description" content="Sign in to HopStop to share secret waypoints, earn daily streak XP, rank on leaderboards, and direct message online travelers worldwide.">
   
   <link rel="stylesheet" href="styles.css?v=20261104_navbar_perfection_v31">
-  <link rel="stylesheet" href="css/login.css?v=20261104_no_scroll_v2">
+  <link rel="stylesheet" href="css/login.css?v=20261104_no_scroll_v3">
 </head>
 <body class="login-page-wrap">
 
@@ -84,8 +84,8 @@
 
         <!-- Segmented Tab Switcher -->
         <div class="login-tab-switcher">
-          <button class="login-tab-btn active" id="tabBtnSignin" onclick="showLoginTab('signin')">Sign In</button>
-          <button class="login-tab-btn" id="tabBtnSignup" onclick="showLoginTab('signup')">Create Account</button>
+          <button type="button" class="login-tab-btn active" id="tabBtnSignin" onclick="showLoginTab('signin')">Sign In</button>
+          <button type="button" class="login-tab-btn" id="tabBtnSignup" onclick="showLoginTab('signup')">Create Account</button>
         </div>
 
         <!-- Sign In Form -->
@@ -109,10 +109,10 @@
               <input type="checkbox" checked>
               <span>Remember me</span>
             </label>
-            <a href="javascript:void(0)" onclick="alert('Demo account: Email: maya@wander.com | Password: password123')" class="login-forgot-link">Forgot password?</a>
+            <a href="javascript:void(0)" onclick="alert('Demo account credentials:\nEmail: maya@wander.com\nPassword: password123')" class="login-forgot-link">Forgot password?</a>
           </div>
 
-          <button type="submit" class="btn-login-submit">
+          <button type="submit" class="btn-login-submit" id="btnPageSigninSubmit">
             Sign In with Full Access 🚀
           </button>
         </form>
@@ -141,7 +141,7 @@
             </label>
           </div>
 
-          <button type="submit" class="btn-login-submit">
+          <button type="submit" class="btn-login-submit" id="btnPageSignupSubmit">
             Create Full Explorer Account ✨
           </button>
         </form>
@@ -154,7 +154,7 @@
         <div class="access-cards-grid">
           
           <!-- Card 1: 1-Click Demo Login (Full Member) -->
-          <div class="access-tier-card tier-demo-login" onclick="loginAsDemo()">
+          <div class="access-tier-card tier-demo-login" id="btnDemoLoginCard" onclick="loginAsDemo()">
             <div class="tier-header-row">
               <span class="tier-card-title">⚡ Demo Login</span>
               <span class="tier-pill-badge full">👑 Full Access</span>
@@ -165,7 +165,7 @@
           </div>
 
           <!-- Card 2: Continue as Guest (Browse & DM Only, 18+ Required) -->
-          <div class="access-tier-card tier-guest-login" onclick="openGuestEntryModal()">
+          <div class="access-tier-card tier-guest-login" id="btnGuestLoginCard" onclick="openGuestEntryModal()">
             <div class="tier-header-row">
               <span class="tier-card-title">👤 Guest Mode</span>
               <span class="tier-pill-badge guest">🔞 18+ No Password</span>
@@ -257,84 +257,148 @@
           ⛔ Access Denied: You must be at least 18 years old to access HopStop. Minors are strictly prohibited.
         </div>
 
-        <button type="submit" class="btn-guest-enter">
+        <button type="submit" class="btn-guest-enter" id="btnGuestSubmitFinal">
           Enter HopStop in Guest Mode (18+) 🚀
         </button>
       </form>
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/state.js"></script>
-  <script src="js/auth.js"></script>
+  <!-- Inline Safe Standalone Engine for Guaranteed Button Execution -->
   <script>
-    // Initialize Theme
-    if (typeof initTheme === 'function') initTheme();
+    // Theme Management
+    window.initTheme = function () {
+      const saved = localStorage.getItem('hopstop_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      window.updateThemeIcon(saved);
+    };
 
-    function showLoginTab(tab) {
+    window.toggleTheme = function () {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('hopstop_theme', newTheme);
+      window.updateThemeIcon(newTheme);
+      window.showToast(`Switched to ${newTheme === 'dark' ? '🌙 Dark' : '☀️ Light'} mode!`);
+    };
+
+    window.updateThemeIcon = function (theme) {
+      const btn = document.getElementById('themeToggle');
+      if (btn) btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    };
+
+    // Toast Notification Utility
+    window.showToast = function (msg) {
+      let toast = document.getElementById('globalToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalToast';
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#ffffff;padding:10px 18px;border-radius:999px;font-size:0.85rem;font-weight:600;z-index:99999;box-shadow:0 10px 25px rgba(0,0,0,0.3);transition:all 0.3s ease;pointer-events:none;';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        if (toast) toast.style.opacity = '0';
+      }, 2600);
+    };
+
+    // Tab Switcher
+    window.showLoginTab = function (tab) {
       const signinForm = document.getElementById('pageSigninForm');
       const signupForm = document.getElementById('pageSignupForm');
       const tabBtnSignin = document.getElementById('tabBtnSignin');
       const tabBtnSignup = document.getElementById('tabBtnSignup');
 
       if (tab === 'signup') {
-        signinForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        tabBtnSignin.classList.remove('active');
-        tabBtnSignup.classList.add('active');
+        if (signinForm) signinForm.style.display = 'none';
+        if (signupForm) signupForm.style.display = 'block';
+        tabBtnSignin?.classList.remove('active');
+        tabBtnSignup?.classList.add('active');
       } else {
-        signinForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        tabBtnSignin.classList.add('active');
-        tabBtnSignup.classList.remove('active');
+        if (signinForm) signinForm.style.display = 'block';
+        if (signupForm) signupForm.style.display = 'none';
+        tabBtnSignin?.classList.add('active');
+        tabBtnSignup?.classList.remove('active');
       }
-    }
+    };
 
-    function handlePageSignin(e) {
-      e.preventDefault();
-      loginAsDemo();
-    }
+    // Sign In (Full Member)
+    window.loginAsDemo = function () {
+      const user = {
+        id: "user_maya",
+        name: "Maya Lin",
+        handle: "@mayawanders",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        bio: "Chasing cliffside towns, misty temples & quiet valleys ✈️ 24 countries explored.",
+        followers: 1420,
+        following: 380,
+        postsCount: 12,
+        isGuest: false
+      };
+      localStorage.setItem('hopstop_auth_user', JSON.stringify(user));
+      window.showToast('👋 Welcome back, Maya Lin! Full Member access unlocked.');
 
-    function handlePageSignup(e) {
-      e.preventDefault();
-      const name = document.getElementById('signupFullName').value.trim() || 'New Explorer';
-      const handle = '@' + name.toLowerCase().replace(/\s+/g, '');
-      currentUser = {
-        ...DEFAULT_USER,
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || 'feed.html';
+      setTimeout(() => {
+        window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+      }, 300);
+    };
+
+    window.handlePageSignin = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      window.loginAsDemo();
+    };
+
+    // Create Account Form Submission
+    window.handlePageSignup = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const name = document.getElementById('signupFullName')?.value?.trim() || 'New Explorer';
+      const handle = '@' + name.toLowerCase().replace(/[^a-z0-9_]/g, '');
+      const user = {
         id: 'user_' + Date.now(),
         name: name,
         handle: handle,
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+        bio: "Passionate wanderer & Leave-No-Trace explorer.",
+        followers: 0,
+        following: 1,
+        postsCount: 0,
         isGuest: false
       };
-      localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
-      if (typeof showToast === 'function') showToast(`Welcome to HopStop, ${name}! 🎉`);
-      
+      localStorage.setItem('hopstop_auth_user', JSON.stringify(user));
+      window.showToast(`Welcome to HopStop, ${name}! 🎉 Full Profile Created.`);
+
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get('redirect') || 'feed.html';
-      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
-    }
+      setTimeout(() => {
+        window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+      }, 300);
+    };
 
     // Guest Mode 18+ Modal Handlers
-    function openGuestEntryModal() {
+    window.openGuestEntryModal = function () {
       const modal = document.getElementById('guestEntryModal');
       if (modal) {
         modal.style.display = 'flex';
         const userInp = document.getElementById('guestUsernameInput');
         if (userInp) userInp.focus();
       }
-    }
+    };
 
-    function closeGuestEntryModal() {
+    window.closeGuestEntryModal = function () {
       const modal = document.getElementById('guestEntryModal');
       if (modal) modal.style.display = 'none';
-    }
+    };
 
-    function handleGuestEntrySubmit(e) {
-      e.preventDefault();
-      const username = document.getElementById('guestUsernameInput').value.trim();
-      const age = parseInt(document.getElementById('guestAgeInput').value, 10);
-      const gender = document.getElementById('guestGenderSelect').value;
-      const termsChecked = document.getElementById('guestTermsCheck').checked;
+    window.handleGuestEntrySubmit = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const username = document.getElementById('guestUsernameInput')?.value?.trim();
+      const age = parseInt(document.getElementById('guestAgeInput')?.value, 10);
+      const gender = document.getElementById('guestGenderSelect')?.value;
+      const termsChecked = document.getElementById('guestTermsCheck')?.checked;
       const errorEl = document.getElementById('guestAgeError');
 
       if (!username) {
@@ -362,7 +426,7 @@
         avatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80';
       }
 
-      currentUser = {
+      const guestUser = {
         id: 'guest_' + Date.now(),
         name: username,
         handle: '@' + username.toLowerCase().replace(/[^a-z0-9_]/g, ''),
@@ -374,26 +438,27 @@
         disclaimerAgreedAt: new Date().toISOString()
       };
 
-      localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
-      closeGuestEntryModal();
-      if (typeof syncAuthState === 'function') syncAuthState();
-      if (typeof showToast === 'function') showToast(`👋 Welcome, ${username}! Exploring in 18+ Guest Mode.`);
+      localStorage.setItem('hopstop_auth_user', JSON.stringify(guestUser));
+      window.closeGuestEntryModal();
+      window.showToast(`👋 Welcome, ${username}! Exploring in 18+ Guest Mode.`);
 
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get('redirect') || 'feed.html';
-      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
-    }
+      setTimeout(() => {
+        window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+      }, 300);
+    };
 
-    // Auto open guest modal if url has ?guest=open
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('guest') === 'open') {
-      openGuestEntryModal();
-    }
-      
-      const params = new URLSearchParams(window.location.search);
-      const redirect = params.get('redirect') || 'feed.html';
-      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
-    }
+    // Auto-open guest modal if URL has ?guest=open
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('guest') === 'open') {
+        window.openGuestEntryModal();
+      }
+    } catch (e) {}
+
+    // Run initTheme on load
+    window.initTheme();
   </script>
 </body>
 </html>

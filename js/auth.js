@@ -2,9 +2,24 @@
  * HopStop — Theme Management, Auth Modals, and Main View Router
  */
 
-// ==========================================================================
-// Theme Management (Synced with Leaflet Tiles)
-// ==========================================================================
+// Safe Toast Utility
+if (typeof window.showToast !== 'function') {
+  window.showToast = function (msg) {
+    let toast = document.getElementById('globalToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'globalToast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#ffffff;padding:10px 18px;border-radius:999px;font-size:0.85rem;font-weight:600;z-index:99999;box-shadow:0 10px 25px rgba(0,0,0,0.3);transition:all 0.3s ease;pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+      if (toast) toast.style.opacity = '0';
+    }, 2800);
+  };
+}
 
 window.initTheme = function () {
   const savedTheme = localStorage.getItem('hopstop_theme') || 'light';
