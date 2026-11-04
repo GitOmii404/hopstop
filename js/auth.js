@@ -206,6 +206,13 @@ window.loginAsDemo = function () {
   closeAuthModal();
   syncAuthState();
   if (typeof showToast === 'function') showToast(`👋 Welcome back, ${currentUser.name}! Demo profile activated.`);
+  
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('redirect') === 'feed' || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
+    window.location.href = 'feed.html';
+  } else {
+    window.location.reload();
+  }
 };
 
 window.handleSignOut = function () {
@@ -214,6 +221,11 @@ window.handleSignOut = function () {
   if (typeof window.closeUserMenu === 'function') window.closeUserMenu();
   syncAuthState();
   if (typeof showToast === 'function') showToast('Signed out of HopStop.');
+  if (window.location.pathname.endsWith('feed.html')) {
+    window.location.replace('index.html');
+  } else {
+    window.location.reload();
+  }
 };
 
 window.logout = window.handleUserLogout = window.handleSignOut;
@@ -262,3 +274,36 @@ document.addEventListener('click', (e) => {
     window.closeUserMenu();
   }
 });
+
+window.handleFeedNavClick = function (e) {
+  if (!currentUser) {
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    openAuthModal('signin');
+    if (typeof showToast === 'function') {
+      showToast('🔒 Please sign in or use 1-Click Demo Login to access the Social Feed & Chats!');
+    }
+    return false;
+  }
+  if (!e || !e.currentTarget || e.currentTarget.tagName !== 'A') {
+    window.location.href = 'feed.html';
+  }
+  return true;
+};
+
+// Check if URL has ?auth=required or ?auth=signin
+(function checkAuthUrlParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('auth') === 'required' || params.get('auth') === 'signin') {
+      setTimeout(() => {
+        if (typeof openAuthModal === 'function') openAuthModal('signin');
+        if (typeof showToast === 'function') {
+          showToast('🔒 Please sign in to access the Social Feed and Direct Messages!');
+        }
+      }, 250);
+    }
+  } catch (e) {}
+})();

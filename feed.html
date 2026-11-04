@@ -1,6 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+  <!-- Strict Authentication Route Guard: Feed & Chat are members-only -->
+  <style id="authGuardStyle">
+    body { display: none !important; }
+  </style>
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('hopstop_auth_user');
+        if (!raw || raw === 'null' || raw === 'undefined') {
+          window.location.replace('index.html?auth=required&redirect=feed');
+          return;
+        }
+        var user = JSON.parse(raw);
+        if (!user || !user.name) {
+          window.location.replace('index.html?auth=required&redirect=feed');
+          return;
+        }
+        // Authorized: reveal page instantly
+        var guardStyle = document.getElementById('authGuardStyle');
+        if (guardStyle) guardStyle.remove();
+      } catch (e) {
+        window.location.replace('index.html?auth=required&redirect=feed');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Feed — HopStop Social Discovery & Stories</title>
@@ -393,7 +418,7 @@
         <aside class="app-sidebar-right">
           
                     <!-- User Profile & Gamification Level Card (When logged in) -->
-          <div class="explorer-level-card" id="sidebarUserLevelCard" style="display: none;">
+          <div class="explorer-level-card" id="sidebarUserLevelCard" style="display: block;">
             <div class="explorer-level-header">
               <span class="explorer-tier-badge" id="userTierBadge">⚡ Level 2: Trailblazer</span>
               <span class="xp-counter-text" id="userXpText"><span class="xp-current">475</span> <span class="xp-divider">/</span> <span class="xp-total">600 XP</span></span>
@@ -402,47 +427,6 @@
             <div class="xp-progress-bar-wrap">
               <div class="xp-progress-bar-fill" id="userXpFill" style="width: 75%;"></div>
             </div>
-
-            <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0 6px;">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="widget-user-avatar current-user-avatar" style="width: 44px; height: 44px;">
-              <div>
-                <h4 class="current-user-name" style="font-size: 0.92rem; font-weight: 700;">Maya Lin</h4>
-                <span style="font-size: 0.74rem; color: var(--text-muted);">150 XP to Level 3 Master</span>
-              </div>
-            </div>
-
-            <div style="margin-top: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-main);">🏅 Badges Showcase (<span id="unlockedBadgeCount">5</span>/8)</span>
-                <span style="font-size: 0.72rem; color: #0284c7; cursor: pointer;" onclick="location.href='bounties.html'">+ Earn XP</span>
-              </div>
-              <div class="badge-grid" id="sidebarBadgeGrid">
-                <!-- Dynamically rendered via gamification.js -->
-              </div>
-            </div>
-          </div>
-
-          <!-- Guest Welcome & Instant Demo Card (When not signed in) -->
-          <div class="sidebar-widget" id="sidebarGuestCard" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(59, 130, 246, 0.05) 100%); border-color: rgba(6, 182, 212, 0.25);">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-              <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #06b6d4); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; box-shadow: 0 3px 10px rgba(6,182,212,0.3); flex-shrink: 0;">
-                🧭
-              </div>
-              <div>
-                <h4 style="font-size: 0.94rem; font-weight: 800; color: var(--text-primary); margin: 0;">Guest Explorer</h4>
-                <span style="font-size: 0.74rem; color: #10b981; font-weight: 700;">🟢 Full Read & Chat Access</span>
-              </div>
-            </div>
-            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
-              Browse all hidden gems, photo stories, and DM live explorers right now with zero barriers!
-            </p>
-            <button class="btn-gem" style="width: 100%; padding: 9px; font-size: 0.84rem; margin-bottom: 6px;" onclick="loginAsDemo()">
-              ⚡ 1-Click Instant Demo Login (Maya Lin)
-            </button>
-            <button class="btn-direction" style="width: 100%; padding: 8px; font-size: 0.8rem;" onclick="openAuthModal('signin')">
-              🔑 Sign In with Your Account
-            </button>
-          </div>
 
             <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0 6px;">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User" class="widget-user-avatar current-user-avatar" style="width: 44px; height: 44px;">

@@ -311,6 +311,13 @@ function mountMessengerUI() {
 // 3. MESSENGER CONTROLS & RENDERING
 // ==========================================================================
 window.toggleMessenger = function() {
+  if (!currentUser) {
+    if (typeof openAuthModal === 'function') openAuthModal('signin');
+    if (typeof showToast === 'function') {
+      showToast('🔒 Please sign in or use 1-Click Demo Login to chat and DM with explorers!');
+    }
+    return;
+  }
   const win = document.getElementById('hopstopMessenger');
   if (!win) return;
   win.classList.toggle('open');
@@ -827,7 +834,7 @@ function initEventListeners() {
 
   document.getElementById('signupForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('signupName').value.trim() || 'New Wanderer';
+    const name = document.getElementById('signupName')?.value?.trim() || 'New Wanderer';
     const handle = `@${name.toLowerCase().replace(/\s+/g, '')}`;
     currentUser = {
       ...DEFAULT_USER,
@@ -838,6 +845,12 @@ function initEventListeners() {
     closeAuthModal();
     syncAuthState();
     showToast(`Welcome to HopStop, ${name}! 🎉`);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('redirect') === 'feed' || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
+      window.location.href = 'feed.html';
+    } else {
+      window.location.reload();
+    }
   });
 
   // Supabase Cloud Backend Form Submit
