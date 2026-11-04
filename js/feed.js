@@ -3,13 +3,32 @@
 // Ultra-High-End Editorial Discovery with Interactive Cartographic HUD
 // ==========================================================================
 
-function initStories() {
-  if (!storiesTray) return;
+// Safeguard distance calculation function
+if (typeof calculateDistance !== 'function') {
+  window.calculateDistance = function (lat1, lon1, lat2, lon2) {
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(R * c);
+  };
+}
 
-  storiesTray.innerHTML = `
+function initStories() {
+  const tray = document.getElementById('storiesTray');
+  if (!tray) return;
+
+  const currentAvatar = (typeof currentUser !== 'undefined' && currentUser && currentUser.avatar)
+    ? currentUser.avatar
+    : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
+
+  tray.innerHTML = `
     <div class="story-bubble" onclick="openPostModal()">
       <div class="story-ring-wrap unseen" style="border: 2px dashed #06b6d4; background: transparent;">
-        <img src="${currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}" class="story-avatar" alt="My Story">
+        <img src="${currentAvatar}" class="story-avatar" alt="My Story">
       </div>
       <span class="story-user-name">+ Your Story</span>
     </div>
@@ -22,25 +41,31 @@ function initStories() {
     </div>
   `).join('');
 }
+window.renderStories = initStories;
 
 function renderAppFeed() {
-  if (!socialFeedContainer) return;
+  const container = document.getElementById('socialFeedContainer');
+  if (!container) return;
 
-  let filteredPosts = postsData.filter(post => {
-    if (currentRadiusFilter === 'all') return true;
-    const dist = calculateDistance(userCoordinates[0], userCoordinates[1], post.coords[0], post.coords[1]);
+  const currentPosts = (typeof postsData !== 'undefined' && Array.isArray(postsData)) ? postsData : [];
+
+  let filteredPosts = currentPosts.filter(post => {
+    if (typeof currentRadiusFilter === 'undefined' || currentRadiusFilter === 'all') return true;
+    const userCoords = (typeof userCoordinates !== 'undefined' && userCoordinates) ? userCoordinates : [40.4168, -3.7038];
+    const dist = calculateDistance(userCoords[0], userCoords[1], post.coords[0], post.coords[1]);
     return dist <= Number(currentRadiusFilter);
   });
 
   // Apply Feed Algorithm & Ranking
-  if (currentFeedSortMode === 'foryou') {
+  const sortMode = typeof currentFeedSortMode !== 'undefined' ? currentFeedSortMode : 'foryou';
+  if (sortMode === 'foryou') {
     filteredPosts.sort((a, b) => (parseFloat(b.gemScore) * b.likes) - (parseFloat(a.gemScore) * a.likes));
-  } else if (currentFeedSortMode === 'topgem') {
+  } else if (sortMode === 'topgem') {
     filteredPosts.sort((a, b) => parseFloat(b.gemScore) - parseFloat(a.gemScore));
-  } else if (currentFeedSortMode === 'wishlist') {
+  } else if (sortMode === 'wishlist') {
     filteredPosts.sort((a, b) => {
-      const aWish = savedBookmarks.includes(a.id) || itineraryStops.includes(a.id) ? 1 : 0;
-      const bWish = savedBookmarks.includes(b.id) || itineraryStops.includes(b.id) ? 1 : 0;
+      const aWish = (typeof savedBookmarks !== 'undefined' && savedBookmarks.includes(a.id)) || (typeof itineraryStops !== 'undefined' && itineraryStops.includes(a.id)) ? 1 : 0;
+      const bWish = (typeof savedBookmarks !== 'undefined' && savedBookmarks.includes(b.id)) || (typeof itineraryStops !== 'undefined' && itineraryStops.includes(b.id)) ? 1 : 0;
       return bWish - aWish;
     });
   } else {
@@ -48,12 +73,12 @@ function renderAppFeed() {
   }
 
   if (filteredPosts.length === 0) {
-    socialFeedContainer.innerHTML = `
+    container.innerHTML = `
       <div style="text-align: center; padding: 48px 20px; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px dashed var(--border-color);">
         <span style="font-size: 2.8rem;">📍</span>
-        <h3 style="margin-top: 10px; font-size: 1.2rem;">No Micro-Adventures within ${currentRadiusFilter} km</h3>
+        <h3 style="margin-top: 10px; font-size: 1.2rem;">No Micro-Adventures within ${typeof currentRadiusFilter !== 'undefined' ? currentRadiusFilter : 'your'} km</h3>
         <p style="color: var(--text-muted); max-width: 440px; margin: 6px auto 16px; font-size: 0.9rem;">
-          Try expanding your search radius to 50 km or Worldwide to discover unmapped trails and hidden villages.
+          Try expanding your search radius to Worldwide to discover unmapped trails and hidden villages.
         </p>
         <button class="btn-gem" onclick="setRadiusFilter('all')" style="padding: 8px 18px; font-size: 0.85rem;">
           🌍 Explore Worldwide Gems
@@ -63,17 +88,20 @@ function renderAppFeed() {
     return;
   }
 
-  socialFeedContainer.innerHTML = filteredPosts.map(post => {
-    const isSaved = savedBookmarks.includes(post.id);
-    const isInItinerary = itineraryStops.includes(post.id);
-    const authorHandle = `@${post.author.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+  const userCoords = (typeof userCoordinates !== 'undefined' && userCoordinates) ? userCoordinates : [40.4168, -3.7038];
+  const userLocName = typeof userLocationName !== 'undefined' ? userLocationName : 'Your Location';
+
+  container.innerHTML = filteredPosts.map(post => {
+    const isSaved = typeof savedBookmarks !== 'undefined' && savedBookmarks.includes(post.id);
+    const isInItinerary = typeof itineraryStops !== 'undefined' && itineraryStops.includes(post.id);
+    const authorHandle = `@${(post.author?.name || 'explorer').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
     const commentCount = (post.comments || []).length;
     const weather = post.weather || { icon: "☀️", temp: "22°C" };
     const checkIns = post.checkInsCount || (12 + (post.id * 3));
     const isChecked = !!post.isCheckedIn;
 
     // Distance from user's current GPS / City location
-    const distKm = calculateDistance(userCoordinates[0], userCoordinates[1], post.coords[0], post.coords[1]);
+    const distKm = calculateDistance(userCoords[0], userCoords[1], post.coords[0], post.coords[1]);
     const distPill = distKm < 15
       ? `🚶 ${distKm} km • Walk/Bike`
       : (distKm < 100
@@ -86,7 +114,7 @@ function renderAppFeed() {
     const lngStr = post.coords ? `${post.coords[1].toFixed(4)}° E` : '11.8542° E';
 
     return `
-      <article class="social-card post-card-animated" data-id="${post.id}">
+      <article class="social-card" data-id="${post.id}">
         <!-- Top Card Header -->
         <div class="social-card-header">
           <div class="social-author-wrap">
@@ -106,7 +134,7 @@ function renderAppFeed() {
           </div>
 
           <div class="social-header-actions">
-            <span class="card-distance-pill" title="Distance from ${userLocationName}">${distPill}</span>
+            <span class="card-distance-pill" title="Distance from ${userLocName}">${distPill}</span>
             <button class="btn-been-here ${isChecked ? 'checked' : ''}" onclick="checkInToGem(${post.id})" title="Confirm you've visited this place">
               ${isChecked ? "✅ Visited" : `📍 Been Here (${checkIns})`}
             </button>
@@ -214,7 +242,7 @@ function renderAppFeed() {
 
         <!-- Inline Comment Form -->
         <form class="social-inline-comment-form" onsubmit="handleInlineCommentSubmit(event, ${post.id})">
-          <img src="${currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80'}" class="comment-author-avatar" alt="You">
+          <img src="${(typeof currentUser !== 'undefined' && currentUser && currentUser.avatar) ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80'}" class="comment-author-avatar" alt="You">
           <input type="text" class="social-comment-input" placeholder="Add field notes, transit advice, or secret coordinates..." required>
           <button type="submit" class="btn-post-comment">Dispatch</button>
         </form>
@@ -222,6 +250,7 @@ function renderAppFeed() {
     `;
   }).join('');
 }
+window.renderAppFeed = renderAppFeed;
 
 window.toggleFieldRadarHud = function (postId) {
   const hud = document.getElementById(`fieldRadarHud_${postId}`);
@@ -236,9 +265,12 @@ window.toggleFieldRadarHud = function (postId) {
 };
 
 function renderSuggestedUsers() {
-  if (!suggestedUsersList) return;
+  const list = document.getElementById('suggestedUsersList');
+  if (!list) return;
 
-  suggestedUsersList.innerHTML = suggestedExplorers.map((user, idx) => `
+  const explorers = (typeof suggestedExplorers !== 'undefined' && Array.isArray(suggestedExplorers)) ? suggestedExplorers : [];
+
+  list.innerHTML = explorers.map((user, idx) => `
     <li class="widget-user-item">
       <div class="widget-user-info">
         <img src="${user.avatar}" class="widget-user-avatar" alt="${user.name}">
@@ -253,10 +285,11 @@ function renderSuggestedUsers() {
     </li>
   `).join('');
 }
+window.renderSuggestedUsers = renderSuggestedUsers;
 
 window.toggleFollowExplorer = function (index) {
+  if (typeof suggestedExplorers === 'undefined' || !suggestedExplorers[index]) return;
   const exp = suggestedExplorers[index];
-  if (!exp) return;
   exp.isFollowing = !exp.isFollowing;
   renderSuggestedUsers();
   showToast(exp.isFollowing ? `Following ${exp.name}!` : `Unfollowed ${exp.name}`);
@@ -270,22 +303,24 @@ window.handleMediaDoubleTap = function (e, postId) {
     heart.classList.add('animate');
   }
 
+  if (typeof postsData === 'undefined') return;
   const post = postsData.find(p => p.id === postId);
   if (post && !post.isLiked) {
     post.isLiked = true;
     post.likes += 1;
-    savePostsData();
+    if (typeof savePostsData === 'function') savePostsData();
     renderAppFeed();
-    renderPosts();
+    if (typeof renderPosts === 'function') renderPosts();
     showToast('Liked this stop! ❤️');
 
-    if (supabaseClient) {
+    if (typeof supabaseClient !== 'undefined' && supabaseClient) {
       supabaseClient.from('posts').update({ likes_count: post.likes }).eq('id', postId).then();
     }
   }
 };
 
 window.sharePostLink = function (postId) {
+  if (typeof postsData === 'undefined') return;
   const post = postsData.find(p => p.id === postId);
   if (!post) return;
   navigator.clipboard?.writeText(window.location.href);
@@ -299,11 +334,12 @@ window.handleInlineCommentSubmit = function (e, postId) {
   const text = input.value.trim();
   if (!text) return;
 
+  if (typeof postsData === 'undefined') return;
   const post = postsData.find(p => p.id === postId);
   if (!post) return;
 
-  const authorName = currentUser ? currentUser.name : 'Fellow Traveler';
-  const authorAvatar = currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80';
+  const authorName = (typeof currentUser !== 'undefined' && currentUser && currentUser.name) ? currentUser.name : 'Fellow Traveler';
+  const authorAvatar = (typeof currentUser !== 'undefined' && currentUser && currentUser.avatar) ? currentUser.avatar : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80';
 
   const newComment = {
     id: Date.now(),
@@ -315,14 +351,14 @@ window.handleInlineCommentSubmit = function (e, postId) {
 
   if (!post.comments) post.comments = [];
   post.comments.unshift(newComment);
-  savePostsData();
+  if (typeof savePostsData === 'function') savePostsData();
   input.value = '';
 
   renderAppFeed();
-  renderPosts();
+  if (typeof renderPosts === 'function') renderPosts();
   showToast('Comment posted! 💬');
 
-  if (supabaseClient) {
+  if (typeof supabaseClient !== 'undefined' && supabaseClient) {
     supabaseClient.from('comments').insert([{
       post_id: postId,
       author_name: authorName,
@@ -343,3 +379,16 @@ window.toggleFeedVideoAudio = function (e, postId) {
   e.target.textContent = video.muted ? '🔇' : '🔊';
   showToast(video.muted ? 'Muted video audio 🔇' : 'Playing ambient audio 🔊');
 };
+
+// Immediate Execution on Load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initStories();
+    renderAppFeed();
+    renderSuggestedUsers();
+  });
+} else {
+  initStories();
+  renderAppFeed();
+  renderSuggestedUsers();
+}
