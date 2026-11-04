@@ -60,13 +60,18 @@ function syncAuthState() {
   const guestFeedComposerBanner = document.getElementById('guestFeedComposerBanner');
   const feedCreateBox = document.querySelector('.feed-create-box');
   const messengerGuestBanners = document.querySelectorAll('.messenger-guest-banner');
-  const userMenuTierBadge = document.querySelector('.user-dropdown-tier');
-  const userMenuXpWrap = document.querySelector('.user-dropdown-xp-progress');
+  const userMenuTierBadges = document.querySelectorAll('.user-dropdown-tier-badge, .user-dropdown-tier');
+  const userMenuXpWraps = document.querySelectorAll('.user-dropdown-xp-card, .user-dropdown-xp-progress');
 
   if (currentUser) {
     if (authHeaderActions) authHeaderActions.style.display = 'flex';
     if (guestHeaderActions) guestHeaderActions.style.display = 'none';
     messengerGuestBanners.forEach(b => b.style.display = 'none');
+
+    const rawName = currentUser.name || '';
+    const cleanName = (rawName.trim().length > 0 && /[\w]/.test(rawName)) ? rawName.trim() : (currentUser.isGuest ? 'Guest Explorer' : 'Maya Lin');
+    const rawHandle = currentUser.handle || '';
+    const cleanHandle = (rawHandle.length > 1 && /[\w]/.test(rawHandle)) ? rawHandle : (currentUser.isGuest ? '@guest_explorer' : '@mayawanders');
 
     if (currentUser.isGuest) {
       // Guest User state: can view & DM, but no fake level/XP or composer
@@ -75,12 +80,12 @@ function syncAuthState() {
       if (sidebarGuestCard) sidebarGuestCard.style.display = 'block';
       if (feedCreateBox) feedCreateBox.style.display = 'none';
       if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'block';
-      if (userMenuTierBadge) userMenuTierBadge.textContent = 'Guest Explorer';
-      if (userMenuXpWrap) userMenuXpWrap.style.display = 'none';
+      userMenuTierBadges.forEach(b => b.innerHTML = '🔞 18+ Verified &bull; Guest Explorer');
+      userMenuXpWraps.forEach(w => w.style.display = 'none');
 
-      currentUserNameEls.forEach(el => el.textContent = currentUser.name || 'Guest Explorer');
+      currentUserNameEls.forEach(el => el.textContent = cleanName);
       currentUserAvatarEls.forEach(el => el.src = currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80');
-      currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@guest');
+      currentUserHandleEls.forEach(el => el.textContent = cleanHandle);
     } else {
       // Full Signed-in Member state
       if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'block';
@@ -88,12 +93,19 @@ function syncAuthState() {
       if (sidebarGuestCard) sidebarGuestCard.style.display = 'none';
       if (feedCreateBox) feedCreateBox.style.display = 'block';
       if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'none';
-      if (userMenuTierBadge) userMenuTierBadge.textContent = 'Level 2: Trailblazer';
-      if (userMenuXpWrap) userMenuXpWrap.style.display = 'block';
+      userMenuTierBadges.forEach(b => b.textContent = '⚡ Level 2: Trailblazer');
+      userMenuXpWraps.forEach(w => w.style.display = 'block');
 
-      currentUserNameEls.forEach(el => el.textContent = currentUser.name);
-      currentUserAvatarEls.forEach(el => el.src = currentUser.avatar);
-      currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@mayawanders');
+      currentUserNameEls.forEach(el => el.textContent = cleanName);
+      currentUserAvatarEls.forEach(el => el.src = currentUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80');
+      currentUserHandleEls.forEach(el => el.textContent = cleanHandle);
+
+      if (typeof userXp !== 'undefined') {
+        const xpValEl = document.querySelector('.user-dropdown-xp-val');
+        const xpFillEl = document.querySelector('.user-dropdown-xp-fill');
+        if (xpValEl) xpValEl.innerHTML = '<strong>' + userXp + '</strong> / 600 XP';
+        if (xpFillEl) xpFillEl.style.width = Math.min(100, Math.round((userXp / 600) * 100)) + '%';
+      }
     }
   } else {
     // Unauthenticated state
@@ -105,6 +117,10 @@ function syncAuthState() {
     if (feedCreateBox) feedCreateBox.style.display = 'none';
     if (guestFeedComposerBanner) guestFeedComposerBanner.style.display = 'block';
     messengerGuestBanners.forEach(b => b.style.display = 'flex');
+  }
+
+  if (typeof window.initUserMenuTrigger === 'function') {
+    window.initUserMenuTrigger();
   }
 }
 
@@ -289,42 +305,59 @@ window.handleSignOut = function () {
 
 window.logout = window.handleUserLogout = window.handleSignOut;
 
+window.openUserMenu = function () {
+  const dropdown = document.getElementById('userMenuDropdown');
+  const wrap = document.querySelector('.user-menu-wrap');
+  const trigger = document.getElementById('userMenuTrigger');
+  if (!dropdown) return;
+
+  // Close notifications dropdown if open
+  const notifDropdown = document.getElementById('notificationsDropdown');
+  if (notifDropdown) notifDropdown.classList.remove('open');
+
+  // Sync user values
+  syncAuthState();
+
+  dropdown.classList.add('open');
+  if (wrap) wrap.classList.add('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'true');
+};
+
+window.closeUserMenu = function () {
+  const dropdown = document.getElementById('userMenuDropdown');
+  const wrap = document.querySelector('.user-menu-wrap');
+  const trigger = document.getElementById('userMenuTrigger');
+  if (dropdown) dropdown.classList.remove('open');
+  if (wrap) wrap.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+};
+
 window.toggleUserMenu = function (e) {
   if (e) {
     if (typeof e.stopPropagation === 'function') e.stopPropagation();
     if (typeof e.preventDefault === 'function') e.preventDefault();
   }
   const dropdown = document.getElementById('userMenuDropdown');
-  const wrap = document.querySelector('.user-menu-wrap');
   if (!dropdown) return;
 
   const willOpen = !dropdown.classList.contains('open');
-
-  // Close notifications dropdown if open
-  const notifDropdown = document.getElementById('notificationsDropdown');
-  if (notifDropdown) notifDropdown.classList.remove('open');
-
   if (willOpen) {
-    // Sync latest XP & tier in user menu
-    if (typeof userXp !== 'undefined') {
-      const xpValEl = document.querySelector('.user-dropdown-xp-val');
-      const xpFillEl = document.querySelector('.user-dropdown-xp-fill');
-      if (xpValEl) xpValEl.innerHTML = '<strong>' + userXp + '</strong> / 600 XP';
-      if (xpFillEl) xpFillEl.style.width = Math.min(100, Math.round((userXp / 600) * 100)) + '%';
-    }
-    dropdown.classList.add('open');
-    if (wrap) wrap.classList.add('open');
+    window.openUserMenu();
   } else {
-    dropdown.classList.remove('open');
-    if (wrap) wrap.classList.remove('open');
+    window.closeUserMenu();
   }
 };
 
-window.closeUserMenu = function () {
-  const dropdown = document.getElementById('userMenuDropdown');
-  const wrap = document.querySelector('.user-menu-wrap');
-  if (dropdown) dropdown.classList.remove('open');
-  if (wrap) wrap.classList.remove('open');
+window.initUserMenuTrigger = function () {
+  const triggers = document.querySelectorAll('#userMenuTrigger, .user-avatar-btn');
+  triggers.forEach(btn => {
+    if (!btn._menuTriggerBound) {
+      btn._menuTriggerBound = true;
+      btn.addEventListener('click', (e) => {
+        window.toggleUserMenu(e);
+      });
+    }
+  });
 };
 
 // Global click listener to close user dropdown when clicking outside
@@ -333,6 +366,12 @@ document.addEventListener('click', (e) => {
     window.closeUserMenu();
   }
 });
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.initUserMenuTrigger);
+} else {
+  window.initUserMenuTrigger();
+}
 
 window.handleFeedNavClick = function (e) {
   if (!currentUser) {

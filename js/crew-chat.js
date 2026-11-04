@@ -804,7 +804,14 @@ function initEventListeners() {
   // User Dropdown is handled via window.toggleUserMenu(event)
 
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.user-menu-wrap')) userMenuDropdown?.classList.remove('open');
+    if (!e.target.closest('.user-menu-wrap')) {
+      if (typeof window.closeUserMenu === 'function') {
+        window.closeUserMenu();
+      } else {
+        document.getElementById('userMenuDropdown')?.classList.remove('open');
+        document.querySelector('.user-menu-wrap')?.classList.remove('open');
+      }
+    }
     if (notificationsDropdown && !e.target.closest('#notificationsDropdown') && !e.target.closest('.notif-btn-wrap')) {
       notificationsDropdown.classList.remove('open');
     }

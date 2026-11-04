@@ -395,14 +395,20 @@
 
     window.handleGuestEntrySubmit = function (e) {
       if (e && e.preventDefault) e.preventDefault();
-      const username = document.getElementById('guestUsernameInput')?.value?.trim();
+      const rawUsername = document.getElementById('guestUsernameInput')?.value?.trim() || '';
+      const cleanUsername = rawUsername.replace(/[^\w\s\-]/gi, '').trim();
       const age = parseInt(document.getElementById('guestAgeInput')?.value, 10);
       const gender = document.getElementById('guestGenderSelect')?.value;
       const termsChecked = document.getElementById('guestTermsCheck')?.checked;
       const errorEl = document.getElementById('guestAgeError');
 
-      if (!username) {
-        alert('Please choose an explorer username or nickname.');
+      if (!cleanUsername || cleanUsername.length < 2) {
+        if (errorEl) {
+          errorEl.textContent = '⚠️ Please enter a valid explorer username or nickname (at least 2 letters/numbers).';
+          errorEl.style.display = 'block';
+        } else {
+          alert('Please enter a valid explorer username or nickname (at least 2 letters/numbers).');
+        }
         return;
       }
 
@@ -426,10 +432,12 @@
         avatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80';
       }
 
+      const formattedHandle = '@' + cleanUsername.toLowerCase().replace(/[\s\-]+/g, '_');
+
       const guestUser = {
         id: 'guest_' + Date.now(),
-        name: username,
-        handle: '@' + username.toLowerCase().replace(/[^a-z0-9_]/g, ''),
+        name: cleanUsername,
+        handle: formattedHandle,
         age: age,
         gender: gender,
         avatar: avatar,
@@ -440,7 +448,7 @@
 
       localStorage.setItem('hopstop_auth_user', JSON.stringify(guestUser));
       window.closeGuestEntryModal();
-      window.showToast(`👋 Welcome, ${username}! Exploring in 18+ Guest Mode.`);
+      window.showToast(`👋 Welcome, ${cleanUsername}! Exploring in 18+ Guest Mode.`);
 
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get('redirect') || 'feed.html';

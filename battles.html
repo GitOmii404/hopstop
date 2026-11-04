@@ -72,11 +72,11 @@
           <button class="btn-gem" onclick="openPostModal()">+ Share a Stop</button>
           
                     <div class="user-menu-wrap">
-            <div class="user-avatar-btn" id="userMenuTrigger" onclick="toggleUserMenu(event)">
+            <button type="button" class="user-avatar-btn" id="userMenuTrigger" onclick="toggleUserMenu(event)" aria-haspopup="true" aria-expanded="false" title="Account Menu">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="user-avatar-img current-user-avatar">
               <span class="user-avatar-name current-user-name">Maya Lin</span>
               <span class="user-avatar-arrow">▼</span>
-            </div>
+            </button>
 
             <!-- User Dropdown Menu -->
             <div class="user-dropdown" id="userMenuDropdown">
@@ -208,7 +208,6 @@
                 </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
 

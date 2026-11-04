@@ -21,7 +21,22 @@ if (storedHopstopVersion !== CURRENT_APP_DATA_VERSION) {
 }
 
 // --- State Variables ---
-let currentUser = JSON.parse(localStorage.getItem('hopstop_auth_user')) || null;
+let currentUser = (() => {
+  try {
+    const user = JSON.parse(localStorage.getItem('hopstop_auth_user'));
+    if (user && typeof user === 'object') {
+      const raw = (user.name || '').trim();
+      if (!raw || raw.length < 2 || !/[\w]/.test(raw)) {
+        user.name = user.isGuest ? 'Guest Explorer' : 'Maya Lin';
+      }
+      if (!user.handle || user.handle.length < 2 || !/[\w]/.test(user.handle)) {
+        user.handle = user.isGuest ? '@guest_explorer' : '@mayawanders';
+      }
+      return user;
+    }
+  } catch (e) {}
+  return null;
+})();
 let currentView = currentUser ? 'app' : 'landing';
 let postsData = (() => {
   let saved = null;
