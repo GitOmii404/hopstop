@@ -7,34 +7,152 @@
 // ==========================================================================
 
 function initScrollRevealAnimations() {
-  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  if (window._hopstopScrollObserver) {
+    try { window._hopstopScrollObserver.disconnect(); } catch (e) {}
+  }
 
-  // Make immediately visible elements in viewport visible right away
-  revealElements.forEach(el => {
+  const TARGET_SELECTOR = [
+    '.reveal',
+    '.reveal-left',
+    '.reveal-right',
+    '.reveal-scale',
+    '.reveal-up',
+    '.section-header',
+    '.page-header',
+    '.post-card',
+    '.post-card-animated',
+    '.bounty-card',
+    '.how-bounty-step-card',
+    '.board-card',
+    '.dreamboard-card',
+    '.spotlight-board-card',
+    '.battle-card',
+    '.feed-post-card',
+    '.feed-sidebar-card',
+    '.guide-card',
+    '.publication-card',
+    '.toolkit-card',
+    '.newsletter-card',
+    '.footer-newsletter-bar',
+    '.footer-brand',
+    '.footer-column',
+    '.cartography-hud-bar',
+    '.map-controls-panel',
+    '.map-container-frame',
+    '.hopstop-stage-wrap',
+    '.bounty-hero-banner',
+    '.how-bounties-work-grid',
+    '.bounty-tabs-bar',
+    '.planner-card',
+    '.planner-summary-card',
+    '.battles-hero-banner',
+    '.boards-hero-banner'
+  ].join(', ');
+
+  const elements = Array.from(document.querySelectorAll(TARGET_SELECTOR));
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        el.classList.add('visible');
+        el.classList.add('revealed');
+        obs.unobserve(el);
+      }
+    });
+  }, {
+    threshold: 0.05,
+    rootMargin: '0px 0px -20px 0px'
+  });
+
+  window._hopstopScrollObserver = observer;
+
+  const vh = window.innerHeight || 800;
+
+  elements.forEach((el) => {
+    if (!el.classList.contains('reveal') &&
+        !el.classList.contains('reveal-left') &&
+        !el.classList.contains('reveal-right') &&
+        !el.classList.contains('reveal-scale') &&
+        !el.classList.contains('reveal-up') &&
+        !el.classList.contains('post-card-animated')) {
+      el.classList.add('scroll-reveal-item');
+    }
+
+    // Auto-calculate progressive wave stagger for grid siblings
+    if (!el.classList.contains('stagger-1') &&
+        !el.classList.contains('stagger-2') &&
+        !el.classList.contains('stagger-3') &&
+        !el.classList.contains('stagger-4') &&
+        el.parentElement &&
+        (el.classList.contains('post-card') ||
+         el.classList.contains('bounty-card') ||
+         el.classList.contains('board-card') ||
+         el.classList.contains('battle-card') ||
+         el.classList.contains('feed-post-card') ||
+         el.classList.contains('guide-card') ||
+         el.classList.contains('how-bounty-step-card') ||
+         el.classList.contains('footer-column'))) {
+      const siblings = Array.from(el.parentElement.children).filter(c => c.matches && c.matches(TARGET_SELECTOR));
+      const idx = siblings.indexOf(el);
+      if (idx >= 0) {
+        const colIndex = idx % 4;
+        if (colIndex > 0) {
+          el.style.transitionDelay = `${(colIndex * 0.08).toFixed(2)}s`;
+        }
+      }
+    }
+
+    // Elements already above or within the initial viewport on page load
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight) {
-      el.classList.add('visible');
+    if (rect.top < vh - 40 && rect.bottom > 0) {
+      setTimeout(() => {
+        el.classList.add('visible');
+        el.classList.add('revealed');
+      }, 40);
+    } else {
+      observer.observe(el);
     }
   });
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
+  // Watch for dynamically added cards across any page (search, filter, pagination)
+  if (!window._hopstopMutationObserver && typeof MutationObserver !== 'undefined') {
+    let debounceTimer = null;
+    window._hopstopMutationObserver = new MutationObserver((mutations) => {
+      let shouldRefresh = false;
+      for (const m of mutations) {
+        if (m.addedNodes.length > 0) {
+          for (const node of m.addedNodes) {
+            if (node.nodeType === 1) {
+              if (node.matches && node.matches(TARGET_SELECTOR)) {
+                shouldRefresh = true;
+                break;
+              }
+              if (node.querySelector && node.querySelector(TARGET_SELECTOR)) {
+                shouldRefresh = true;
+                break;
+              }
+            }
+          }
         }
-      });
-    }, {
-      threshold: 0.05,
-      rootMargin: '0px 0px 50px 0px'
+        if (shouldRefresh) break;
+      }
+      if (shouldRefresh) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          initScrollRevealAnimations();
+        }, 60);
+      }
     });
 
-    revealElements.forEach(el => observer.observe(el));
-  } else {
-    revealElements.forEach(el => el.classList.add('visible'));
+    window._hopstopMutationObserver.observe(document.body, { childList: true, subtree: true });
   }
 }
+
+window.initScrollRevealAnimations = initScrollRevealAnimations;
+window.refreshScrollReveal = function () {
+  setTimeout(initScrollRevealAnimations, 50);
+};
 
 function initTiltEffect() {
   const tiltCards = document.querySelectorAll('.tilt-card');

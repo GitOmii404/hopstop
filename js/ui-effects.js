@@ -7,17 +7,9 @@
 // ==========================================================================
 
 function initScrollRevealAnimations() {
-  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  revealElements.forEach(el => observer.observe(el));
+  if (typeof window.initScrollRevealAnimations === 'function' && window.initScrollRevealAnimations !== initScrollRevealAnimations) {
+    window.initScrollRevealAnimations();
+  }
 }
 
 function initTiltEffect() {

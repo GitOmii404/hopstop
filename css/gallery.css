@@ -1744,32 +1744,89 @@ textarea.form-control {
   to { opacity: 1; transform: translateX(0); }
 }
 
-.reveal {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+/* ==========================================================================
+   HopStop — Universal Silky Scroll-Reveal Animation Engine
+   ========================================================================== */
+
+.reveal,
+.reveal-up,
+.scroll-reveal-item {
+  opacity: 0;
+  transform: translateY(32px);
+  will-change: transform, opacity;
+  transition: 
+    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal-left {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateX(-36px);
+  will-change: transform, opacity;
+  transition: 
+    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal-right {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateX(36px);
+  will-change: transform, opacity;
+  transition: 
+    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.reveal.visible, .reveal-left.visible, .reveal-right.visible {
-  opacity: 1;
-  transform: none;
+.reveal-scale {
+  opacity: 0;
+  transform: translateY(28px) scale(0.95);
+  will-change: transform, opacity;
+  transition: 
+    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.stagger-1 { transition-delay: 0.08s; }
-.stagger-2 { transition-delay: 0.16s; }
-.stagger-3 { transition-delay: 0.24s; }
+/* Revealed / Visible states */
+.reveal.visible,
+.reveal-up.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible,
+.scroll-reveal-item.visible,
+.post-card-animated.visible,
+.reveal.revealed,
+.reveal-up.revealed,
+.reveal-left.revealed,
+.reveal-right.revealed,
+.reveal-scale.revealed,
+.scroll-reveal-item.revealed,
+.post-card-animated.revealed {
+  opacity: 1 !important;
+  transform: translateY(0) translateX(0) scale(1) !important;
+}
+
+/* Progressive Stagger Wave Delays */
+.stagger-1 { transition-delay: 0.08s !important; }
+.stagger-2 { transition-delay: 0.16s !important; }
+.stagger-3 { transition-delay: 0.24s !important; }
+.stagger-4 { transition-delay: 0.32s !important; }
+.stagger-5 { transition-delay: 0.40s !important; }
+.stagger-6 { transition-delay: 0.48s !important; }
+
+/* Accessible Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-up,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale,
+  .scroll-reveal-item,
+  .post-card-animated {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 
 .tilt-card {
   transition: transform 0.15s ease-out, box-shadow 0.25s ease-out;
@@ -1790,13 +1847,20 @@ textarea.form-control {
   to { transform: scale(4); opacity: 0; }
 }
 
-@keyframes cardPopIn {
-  from { opacity: 0; transform: translateY(24px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+.post-card-animated {
+  opacity: 0;
+  transform: translateY(32px) scale(0.97);
+  will-change: transform, opacity;
+  transition: 
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
 }
 
-.post-card-animated {
-  animation: cardPopIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.post-card-animated.visible,
+.post-card-animated.revealed {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
 }
 
 /* ==========================================================================
