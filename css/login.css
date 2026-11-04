@@ -487,3 +487,164 @@ html, body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+/* ==========================================================================
+   Guest 18+ Verification Modal & Disclaimer Styles
+   ========================================================================== */
+
+.guest-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeInModal 0.2s ease;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.guest-modal-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.35);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.guest-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--bg-card-hover, #f1f5f9);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.guest-modal-close:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.guest-modal-badge-18 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.badge-18-pill {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.4px;
+}
+
+.badge-no-pass {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.guest-modal-title {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 3px;
+}
+
+.guest-modal-sub {
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.guest-input-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr;
+  gap: 10px;
+}
+
+.guest-legal-disclaimer-box {
+  background: var(--bg-card-hover, #f8fafc);
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  padding: 9px 12px;
+  margin: 10px 0;
+  font-size: 0.7rem;
+  line-height: 1.38;
+  color: var(--text-secondary);
+}
+
+.disclaimer-header {
+  font-weight: 800;
+  color: #b91c1c;
+  margin-bottom: 3px;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.guest-terms-check-wrap {
+  margin-bottom: 12px;
+}
+
+.guest-terms-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1.35;
+}
+
+.btn-guest-enter {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-guest-enter:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}

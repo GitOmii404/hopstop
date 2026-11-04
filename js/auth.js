@@ -63,9 +63,9 @@ function syncAuthState() {
       if (userMenuTierBadge) userMenuTierBadge.textContent = 'Guest Explorer';
       if (userMenuXpWrap) userMenuXpWrap.style.display = 'none';
 
-      currentUserNameEls.forEach(el => el.textContent = 'Guest Explorer');
+      currentUserNameEls.forEach(el => el.textContent = currentUser.name || 'Guest Explorer');
       currentUserAvatarEls.forEach(el => el.src = currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80');
-      currentUserHandleEls.forEach(el => el.textContent = '@guest');
+      currentUserHandleEls.forEach(el => el.textContent = currentUser.handle || '@guest');
     } else {
       // Full Signed-in Member state
       if (sidebarUserLevelCard) sidebarUserLevelCard.style.display = 'block';
@@ -250,26 +250,12 @@ window.loginAsDemo = function () {
 };
 
 window.loginAsGuest = function () {
-  currentUser = {
-    id: 'guest_' + Date.now(),
-    name: 'Guest Explorer',
-    handle: '@guest_wanderer',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-    isGuest: true
-  };
-  localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
-  closeAuthModal();
-  syncAuthState();
-  if (typeof showToast === 'function') showToast('👋 Welcome! Browsing in Guest Mode (Viewing & DMs enabled).');
-  
-  const params = new URLSearchParams(window.location.search);
-  const redirect = params.get('redirect');
-  if (redirect && redirect.endsWith('.html')) {
-    window.location.href = redirect;
-  } else if (window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '') {
-    window.location.href = 'feed.html';
+  if (typeof openGuestEntryModal === 'function') {
+    openGuestEntryModal();
   } else {
-    window.location.reload();
+    // Universal 18+ enforcement: redirect to login.html with guest modal open
+    const currentPath = window.location.pathname.split('/').pop() || 'feed.html';
+    window.location.href = 'login.html?guest=open&redirect=' + encodeURIComponent(currentPath);
   }
 };
 

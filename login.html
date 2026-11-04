@@ -164,14 +164,14 @@
             </div>
           </div>
 
-          <!-- Card 2: Continue as Guest (Browse & DM Only) -->
-          <div class="access-tier-card tier-guest-login" onclick="loginAsGuest()">
+          <!-- Card 2: Continue as Guest (Browse & DM Only, 18+ Required) -->
+          <div class="access-tier-card tier-guest-login" onclick="openGuestEntryModal()">
             <div class="tier-header-row">
               <span class="tier-card-title">👤 Guest Mode</span>
-              <span class="tier-pill-badge guest">🟢 Live DMs & View</span>
+              <span class="tier-pill-badge guest">🔞 18+ No Password</span>
             </div>
             <div class="tier-card-desc">
-              Instant entry: browse hidden waypoints & photos, chat & DM online wanderers.
+              Instant entry: nickname, age & gender only. Browse secret spots & DM online wanderers.
             </div>
           </div>
 
@@ -184,7 +184,7 @@
             <span class="matrix-features-text">Post Gems &bull; XP & Streaks &bull; Co-Save Boards &bull; Full DMs</span>
           </div>
           <div class="matrix-row-item">
-            <span class="matrix-tag-guest">👤 Guest:</span>
+            <span class="matrix-tag-guest">👤 Guest (18+):</span>
             <span class="matrix-features-text">Browse Hidden Gems &bull; Live Online Wanderers DMs & GIFs</span>
           </div>
         </div>
@@ -193,6 +193,76 @@
     </div>
 
   </main>
+
+  <!-- ==================== Guest Mode 18+ Verification Modal ==================== -->
+  <div class="guest-modal-backdrop" id="guestEntryModal" style="display: none;">
+    <div class="guest-modal-card">
+      <button class="guest-modal-close" onclick="closeGuestEntryModal()" type="button" aria-label="Close modal">✕</button>
+
+      <div class="guest-modal-badge-18">
+        <span class="badge-18-pill">🔞 18+ Strictly Required</span>
+        <span class="badge-no-pass">No Email or Password</span>
+      </div>
+
+      <h3 class="guest-modal-title">Enter as Guest Explorer</h3>
+      <p class="guest-modal-sub">Choose your explorer handle, age & gender to browse and live message travelers.</p>
+
+      <form id="guestEntryForm" onsubmit="handleGuestEntrySubmit(event)">
+        
+        <div class="guest-input-grid">
+          <!-- Username -->
+          <div class="login-form-group">
+            <label class="login-label">Explorer Username / Nickname *</label>
+            <input type="text" id="guestUsernameInput" class="login-input" placeholder="e.g. WandererSam" required maxlength="25">
+          </div>
+
+          <!-- Age -->
+          <div class="login-form-group">
+            <label class="login-label">Age (Must be 18+) *</label>
+            <input type="number" id="guestAgeInput" class="login-input" placeholder="18" min="1" max="120" required>
+          </div>
+        </div>
+
+        <!-- Gender Identity -->
+        <div class="login-form-group">
+          <label class="login-label">Gender Identity *</label>
+          <select id="guestGenderSelect" class="login-input" required style="cursor: pointer;">
+            <option value="" disabled selected>Select Gender</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="non-binary">Non-Binary / Diverse</option>
+            <option value="prefer_not">Prefer not to specify</option>
+          </select>
+        </div>
+
+        <!-- Mandatory 18+ Legal Terms & Liability Disclaimer Box -->
+        <div class="guest-legal-disclaimer-box">
+          <div class="disclaimer-header">
+            <span>🛡️ 18+ Age Requirement & Legal Liability Shield</span>
+          </div>
+          <div class="disclaimer-body">
+            This platform, its social feed, and member direct messaging are strictly intended for adults aged 18 and older. By continuing, you certify under penalty of law that you are 18 years of age or older. HopStop and its operators bear zero responsibility or liability should any minor access this website through false age declarations. You agree that under no circumstances shall any legal action, lawsuit, claim, or demand be brought against HopStop, its creators, or partners regarding unauthorized underage access.
+          </div>
+        </div>
+
+        <!-- Required Checkbox -->
+        <div class="guest-terms-check-wrap">
+          <label class="guest-terms-label">
+            <input type="checkbox" id="guestTermsCheck" required>
+            <span>I certify I am 18+ years old and accept the 18+ Terms of Service & Legal Liability Disclaimer.</span>
+          </label>
+        </div>
+
+        <div id="guestAgeError" style="display: none; color: #ef4444; font-size: 0.76rem; font-weight: 700; margin-bottom: 10px; background: rgba(239, 68, 68, 0.1); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);">
+          ⛔ Access Denied: You must be at least 18 years old to access HopStop. Minors are strictly prohibited.
+        </div>
+
+        <button type="submit" class="btn-guest-enter">
+          Enter HopStop in Guest Mode (18+) 🚀
+        </button>
+      </form>
+    </div>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/state.js"></script>
@@ -238,6 +308,87 @@
       };
       localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
       if (typeof showToast === 'function') showToast(`Welcome to HopStop, ${name}! 🎉`);
+      
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || 'feed.html';
+      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+    }
+
+    // Guest Mode 18+ Modal Handlers
+    function openGuestEntryModal() {
+      const modal = document.getElementById('guestEntryModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        const userInp = document.getElementById('guestUsernameInput');
+        if (userInp) userInp.focus();
+      }
+    }
+
+    function closeGuestEntryModal() {
+      const modal = document.getElementById('guestEntryModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleGuestEntrySubmit(e) {
+      e.preventDefault();
+      const username = document.getElementById('guestUsernameInput').value.trim();
+      const age = parseInt(document.getElementById('guestAgeInput').value, 10);
+      const gender = document.getElementById('guestGenderSelect').value;
+      const termsChecked = document.getElementById('guestTermsCheck').checked;
+      const errorEl = document.getElementById('guestAgeError');
+
+      if (!username) {
+        alert('Please choose an explorer username or nickname.');
+        return;
+      }
+
+      if (isNaN(age) || age < 18) {
+        if (errorEl) {
+          errorEl.textContent = '⛔ Access Denied: You must be at least 18 years old to access HopStop. Underage access is strictly prohibited and HopStop holds zero liability.';
+          errorEl.style.display = 'block';
+        }
+        return;
+      }
+
+      if (!termsChecked) {
+        alert('You must accept the 18+ Age Disclaimer & Terms.');
+        return;
+      }
+
+      let avatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80';
+      if (gender === 'female') {
+        avatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
+      } else if (gender === 'male') {
+        avatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80';
+      }
+
+      currentUser = {
+        id: 'guest_' + Date.now(),
+        name: username,
+        handle: '@' + username.toLowerCase().replace(/[^a-z0-9_]/g, ''),
+        age: age,
+        gender: gender,
+        avatar: avatar,
+        isGuest: true,
+        verified18Plus: true,
+        disclaimerAgreedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem('hopstop_auth_user', JSON.stringify(currentUser));
+      closeGuestEntryModal();
+      if (typeof syncAuthState === 'function') syncAuthState();
+      if (typeof showToast === 'function') showToast(`👋 Welcome, ${username}! Exploring in 18+ Guest Mode.`);
+
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || 'feed.html';
+      window.location.href = redirect.endsWith('.html') ? redirect : 'feed.html';
+    }
+
+    // Auto open guest modal if url has ?guest=open
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('guest') === 'open') {
+      openGuestEntryModal();
+    }
       
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get('redirect') || 'feed.html';
