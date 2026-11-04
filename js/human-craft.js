@@ -303,6 +303,7 @@
 
   // 5. Setup Ambient Sound Pill Button
   function setupAudioPill() {
+    if (window.location.pathname.includes('feed.html') || window.location.href.includes('feed.html')) return;
     if (document.getElementById('wanderlustAudioPill')) return;
 
     const pill = document.createElement('button');

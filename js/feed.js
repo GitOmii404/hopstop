@@ -392,3 +392,8 @@ if (document.readyState === 'loading') {
   renderAppFeed();
   renderSuggestedUsers();
 }
+
+
+// Remove audio pill if present on feed
+const existingAudioPill = document.getElementById('wanderlustAudioPill');
+if (existingAudioPill) existingAudioPill.remove();

@@ -1465,3 +1465,15 @@
   line-height: 1.45 !important;
   margin: 0 !important;
 }
+
+
+/* ==========================================================================
+   Remove Floating Wanderlust Audio Pill from Feed View
+   ========================================================================== */
+#wanderlustAudioPill,
+.wanderlust-audio-pill {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
