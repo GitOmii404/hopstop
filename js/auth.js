@@ -315,9 +315,6 @@ window.openUserMenu = function () {
   const notifDropdown = document.getElementById('notificationsDropdown');
   if (notifDropdown) notifDropdown.classList.remove('open');
 
-  // Sync user values
-  syncAuthState();
-
   dropdown.classList.add('open');
   if (wrap) wrap.classList.add('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
@@ -334,23 +331,39 @@ window.closeUserMenu = function () {
 
 window.toggleUserMenu = function (e) {
   if (e) {
+    if (e._hopstopMenuHandled) return;
+    e._hopstopMenuHandled = true;
     if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
     if (typeof e.preventDefault === 'function') e.preventDefault();
   }
+
+  // Guard against rapid duplicate trigger within 250ms
+  const now = Date.now();
+  if (window._lastUserMenuToggle && (now - window._lastUserMenuToggle) < 250) {
+    return;
+  }
+  window._lastUserMenuToggle = now;
+
   const dropdown = document.getElementById('userMenuDropdown');
   if (!dropdown) return;
 
-  const willOpen = !dropdown.classList.contains('open');
-  if (willOpen) {
-    window.openUserMenu();
-  } else {
+  const isCurrentlyOpen = dropdown.classList.contains('open');
+  if (isCurrentlyOpen) {
     window.closeUserMenu();
+  } else {
+    window.openUserMenu();
   }
 };
 
 window.initUserMenuTrigger = function () {
   const triggers = document.querySelectorAll('#userMenuTrigger, .user-avatar-btn');
   triggers.forEach(btn => {
+    // If the button already has an inline onclick handler for toggleUserMenu, DO NOT bind another listener
+    const onclickAttr = btn.getAttribute('onclick') || '';
+    if (onclickAttr.includes('toggleUserMenu')) {
+      return;
+    }
     if (!btn._menuTriggerBound) {
       btn._menuTriggerBound = true;
       btn.addEventListener('click', (e) => {
