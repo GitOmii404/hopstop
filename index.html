@@ -419,7 +419,6 @@
           <div class="map-controls-panel reveal stagger-1">
             <div class="map-filter-group">
               <button class="map-pill-btn active" data-map-filter="all" onclick="filterMapPins('all')">💎 All Pins</button>
-              <button class="map-pill-btn" id="btnFilterNearest10" data-map-filter="nearest" onclick="showNearestGemsView()" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%); border-color: #06b6d4; color: #0284c7; font-weight: 800;">📍 10 Nearest To Me</button>
               <button class="map-pill-btn" data-map-filter="village" onclick="filterMapPins('village')">🏘️ Villages</button>
               <button class="map-pill-btn" data-map-filter="nature" onclick="filterMapPins('nature')">🌿 Nature</button>
               <button class="map-pill-btn" data-map-filter="culture" onclick="filterMapPins('culture')">⛩️ Sacred / Culture</button>
@@ -455,44 +454,9 @@
               <button class="map-floating-btn" onclick="focusUserOnMap()" title="Auto-Detect My GPS & Center">
                 <span>📍 My Location</span>
               </button>
-              <button class="map-floating-btn" onclick="fitMapToNearestGems()" title="Zoom to 10 Nearest Places">
-                <span>⚡ 10 Nearest</span>
-              </button>
               <button class="map-floating-btn" onclick="flyMapTo('global')" title="Reset Map View">
-                <span>🎯 Fit Global</span>
+                <span>🎯 Fit Global View</span>
               </button>
-            </div>
-          </div>
-
-          <!-- 10 Underrated Places Near You HUD Card -->
-          <div class="nearest-gems-hud-card reveal stagger-3" id="nearestGemsHud">
-            <div class="nearest-hud-header">
-              <div class="nearest-hud-title-wrap">
-                <div class="nearest-radar-pulse">
-                  <div class="radar-ring"></div>
-                  <span>📍</span>
-                </div>
-                <div>
-                  <h3 class="nearest-hud-title">10 Underrated Places Near You</h3>
-                  <p class="nearest-hud-subtitle">
-                    Auto-detected base: <strong id="nearestUserLocationName" class="nearest-location-pill">Detecting your location...</strong>
-                    <span class="nearest-gps-indicator" id="nearestGpsIndicator">📡 Auto GPS</span>
-                  </p>
-                </div>
-              </div>
-              <div class="nearest-hud-actions">
-                <button type="button" class="btn-detect-gps" onclick="autoDetectUserLocation(true)" title="Refresh GPS Accuracy">
-                  <span>🎯 Detect My GPS</span>
-                </button>
-                <button type="button" class="btn-change-city" onclick="openCityPickerModal()" title="Choose a different world city">
-                  <span>🌍 Change City</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 10 Nearest Destinations Slider -->
-            <div class="nearest-places-slider" id="nearestPlacesSlider">
-              <!-- Dynamically populated via js/map.js -->
             </div>
           </div>
         </div>
