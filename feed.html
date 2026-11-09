@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="styles.css?v=20261104_navbar_perfection_v31">
   <link rel="stylesheet" href="css/human-craft.css?v=20261104_no_scrollbar_v23">
   <link rel="stylesheet" href="css/feed.css?v=20261104_badge_fixed_v27">
+  <link rel="stylesheet" href="css/digest.css?v=20261109_v9_luxury">
 </head>
 <body>
 
@@ -1066,14 +1067,34 @@
 
   <!-- ==================== Weekly Curated Digest Modal ==================== -->
   <div class="modal-backdrop" id="weeklyDigestModal">
-    <div class="modal-box" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
-      <button class="modal-close-btn" onclick="closeWeeklyDigestModal()" aria-label="Close digest">✕</button>
-      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.15); color: #0284c7; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 700; margin-bottom: 8px;">
-        <span>📬</span> Weekly Personalized Explorer Digest
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeWeeklyDigestModal()" aria-label="Close digest">&times;</button>
+      <div class="digest-modal-header">
+        <div class="digest-tag-pill">
+          <span class="digest-tag-dot"></span>
+          <span>📬 Weekly Curated Explorer Digest &bull; Issue #42</span>
+        </div>
+        <h2 class="digest-modal-title">5 Hidden Gems Picked For You</h2>
+        <p class="digest-modal-subtitle">Curated for your travel tastes, off-season wishlists, and moderate budget tier.</p>
       </div>
-      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 4px;">5 Hidden Gems Picked For You</h2>
-      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Curated for your travel tastes, off-season wishlists, and moderate budget tier.</p>
+      <div class="digest-filter-bar">
+        <button type="button" class="digest-tab-chip active" data-filter="all" onclick="filterWeeklyDigest('all')">✨ All 5 Picks</button>
+        <button type="button" class="digest-tab-chip" data-filter="village" onclick="filterWeeklyDigest('village')">🏘️ Villages</button>
+        <button type="button" class="digest-tab-chip" data-filter="nature" onclick="filterWeeklyDigest('nature')">🌿 Nature & Alpine</button>
+        <button type="button" class="digest-tab-chip" data-filter="culture" onclick="filterWeeklyDigest('culture')">⛩️ Sacred Culture</button>
+        <button type="button" class="digest-tab-chip" data-filter="coastal" onclick="filterWeeklyDigest('coastal')">🌊 Lakes & Coasts</button>
+      </div>
       <div class="weekly-digest-cards-list" id="weeklyDigestCardsList"></div>
+      <div class="digest-modal-footer-banner">
+        <div class="digest-footer-memo">
+          <span>⚡ Next Weekly Drop in 4 Days &bull; Every Friday 09:00 UTC</span>
+        </div>
+        <div class="digest-footer-actions">
+          <button type="button" class="btn-save-all-digest" onclick="saveAllDigestGems()">
+            <span>📥 Save All 5 to Dream Board</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

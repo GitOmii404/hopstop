@@ -3,7 +3,7 @@
  */
 
 // --- HopStop Schema & Authentic Asset Migration Engine ---
-const CURRENT_APP_DATA_VERSION = '20261109_v8_global_nearest_gems';
+const CURRENT_APP_DATA_VERSION = '20261109_v9_perfect_digest';
 const storedHopstopVersion = (() => {
   try { return localStorage.getItem('hopstop_data_version'); } catch (e) { return null; }
 })();

@@ -100,10 +100,13 @@ window.handleNotificationClick = function (notifId) {
   }
 };
 
+let currentDigestFilter = 'all';
+
 window.openWeeklyDigestModal = function () {
   const dropdown = document.getElementById('notificationsDropdown');
   if (dropdown) dropdown.classList.remove('open');
-  renderWeeklyDigest();
+  currentDigestFilter = 'all';
+  renderWeeklyDigest('all');
   const modal = document.getElementById('weeklyDigestModal');
   if (modal) {
     modal.classList.add('open');
@@ -117,24 +120,93 @@ window.closeWeeklyDigestModal = function () {
   document.body.style.overflow = '';
 };
 
-function renderWeeklyDigest() {
+window.filterWeeklyDigest = function (category) {
+  currentDigestFilter = category;
+  document.querySelectorAll('.digest-tab-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.getAttribute('data-filter') === category);
+  });
+  renderWeeklyDigest(category);
+};
+
+window.saveAllDigestGems = function () {
+  const posts = (typeof postsData !== 'undefined' && Array.isArray(postsData)) ? postsData : [];
+  const topGems = [...posts].sort((a, b) => parseFloat(b.gemScore || 0) - parseFloat(a.gemScore || 0)).slice(0, 5);
+  
+  if (typeof savedBookmarks !== 'undefined') {
+    topGems.forEach(g => {
+      if (!savedBookmarks.includes(g.id)) {
+        savedBookmarks.push(g.id);
+      }
+    });
+    localStorage.setItem('hopstop_saved', JSON.stringify(savedBookmarks));
+    if (typeof renderBucketList === 'function') renderBucketList();
+  }
+  showToast('🎉 All 5 Editor Choice gems saved to your Dream Board!');
+};
+
+function renderWeeklyDigest(filter = currentDigestFilter) {
   const grid = document.getElementById('weeklyDigestCardsList') || document.getElementById('weeklyDigestGrid');
   if (!grid) return;
   const posts = (typeof postsData !== 'undefined' && Array.isArray(postsData)) ? postsData : [];
-  const topGems = [...posts].sort((a, b) => parseFloat(b.gemScore || 0) - parseFloat(a.gemScore || 0)).slice(0, 5);
 
-  grid.innerHTML = topGems.map((gem, idx) => `
-    <div class="weekly-digest-card" style="display: flex; gap: 14px; padding: 14px; background: var(--bg-hover); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 12px; cursor: pointer;" onclick="if(typeof openArticleModal==='function') openArticleModal(${gem.id})">
-      <img src="${gem.image}" style="width: 100px; height: 100px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0;" alt="${gem.title}">
-      <div class="weekly-digest-card-body" style="flex: 1; min-width: 0;">
-        <div style="font-size: 0.72rem; font-weight: 700; color: #ea580c; text-transform: uppercase;">#${idx + 1} Editor's Choice • 💎 ${gem.gemScore}/10</div>
-        <h4 style="font-weight: 700; font-size: 1rem; margin: 2px 0 4px; color: var(--text-primary);">${gem.placeName}, ${gem.country}</h4>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 0 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${gem.excerpt || gem.fullStory || ''}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem;">
-          <span style="color: var(--text-secondary);">✍️ ${gem.author?.name || 'Explorer'}</span>
-          <span style="color: #0284c7; font-weight: 700;">Explore Stop →</span>
+  let candidates = [...posts];
+  if (filter !== 'all') {
+    candidates = candidates.filter(p => p.category === filter);
+  }
+
+  // Pick top 5 by gemScore
+  const topGems = candidates.sort((a, b) => parseFloat(b.gemScore || 0) - parseFloat(a.gemScore || 0)).slice(0, 5);
+
+  if (topGems.length === 0) {
+    grid.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--text-muted);">No destinations found for this category.</div>';
+    return;
+  }
+
+  grid.innerHTML = topGems.map((gem, idx) => {
+    const isSaved = typeof savedBookmarks !== 'undefined' && savedBookmarks.includes(gem.id);
+    const authorAvatar = gem.author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
+    const authorName = gem.author?.name || 'Explorer';
+    const rankLabel = `#${idx + 1} Top Pick`;
+    const seasonBudget = `${gem.bestTime ? '🌤️ ' + gem.bestTime : ''}${gem.budget ? ' • ' + gem.budget : ''}`;
+
+    return `
+      <div class="weekly-digest-card" onclick="if(typeof openArticleModal==='function') openArticleModal(${gem.id})">
+        <div class="digest-card-thumb-wrap">
+          <img src="${gem.image}" alt="${gem.placeName}" class="digest-card-thumb" loading="lazy">
+          <div class="digest-rank-badge">${rankLabel}</div>
+          <div class="digest-score-overlay">💎 ${gem.gemScore}/10</div>
+        </div>
+        <div class="digest-card-body">
+          <div class="digest-meta-row">
+            <span class="digest-category-badge">${gem.categoryLabel || gem.category} &bull; ${gem.country}</span>
+            <span class="digest-season-pill">${seasonBudget}</span>
+          </div>
+          <h3 class="digest-card-title">${gem.placeName}</h3>
+          <p class="digest-card-desc">${gem.excerpt || gem.title}</p>
+          ${gem.secretTip ? `
+            <div class="digest-secret-memo">
+              <strong>🤫 Traveler Intel:</strong> ${gem.secretTip}
+            </div>
+          ` : ''}
+          <div class="digest-card-footer">
+            <div class="digest-author-capsule">
+              <img src="${authorAvatar}" alt="${authorName}" class="digest-author-avatar">
+              <span class="digest-author-name">By ${authorName}</span>
+            </div>
+            <div class="digest-actions-group" onclick="event.stopPropagation()">
+              <button type="button" class="btn-digest-direction" onclick="openDirections(event, '${encodeURIComponent(gem.locationQuery || gem.placeName)}')">
+                <span>🧭 Directions</span>
+              </button>
+              <button type="button" class="btn-digest-direction" onclick="toggleBookmark(event, ${gem.id})">
+                <span>${isSaved ? '📌 Saved' : '📌 Co-Save'}</span>
+              </button>
+              <button type="button" class="btn-digest-explore" onclick="openArticleModal(${gem.id})">
+                <span>Explore &rarr;</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }

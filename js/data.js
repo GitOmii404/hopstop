@@ -78,7 +78,7 @@ const STORIES_DATA = [
     title: "Svaneti Watchtowers",
     location: "Ushguli, Georgia",
     coords: [42.9175, 43.0167],
-    image: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
     desc: "Medieval stone towers guarded by the glaciers of Mount Shkhara."
   }
 ];
@@ -274,7 +274,7 @@ const INITIAL_POSTS = [
       handle: "@giorgi_svaneti",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80"
     },
-    image: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
     excerpt: "Europe’s highest continuously inhabited village guarded by hundreds of 1,000-year-old defensive stone watchtowers under glaciers.",
     secretTip: "Stay in a traditional family guesthouse in Ushguli for home-cooked Khachapuri cheese bread and homemade Svaneti mountain salt stew.",
     fullContent: `
