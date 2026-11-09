@@ -3,7 +3,7 @@
  */
 
 // --- HopStop Schema & Authentic Asset Migration Engine ---
-const CURRENT_APP_DATA_VERSION = '20261109_v9_perfect_digest';
+const CURRENT_APP_DATA_VERSION = '20261109_v11_autogps_perfect';
 const storedHopstopVersion = (() => {
   try { return localStorage.getItem('hopstop_data_version'); } catch (e) { return null; }
 })();
@@ -16,6 +16,8 @@ if (storedHopstopVersion !== CURRENT_APP_DATA_VERSION) {
     localStorage.removeItem('hopstop_bounties');
     localStorage.removeItem('hopstop_community_posts');
     localStorage.removeItem('hopstop_battles');
+    localStorage.removeItem('hopstop_user_coords');
+    localStorage.removeItem('hopstop_user_location_name');
     localStorage.setItem('hopstop_data_version', CURRENT_APP_DATA_VERSION);
   } catch (e) {}
 }

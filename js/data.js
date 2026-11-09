@@ -827,6 +827,87 @@ const INITIAL_POSTS = [
     likes: 620,
     isLiked: true,
     comments: []
+  },
+  {
+    id: 26,
+    title: "Kaas Plateau: The UNESCO Plateau of 850 Wildflower Species",
+    placeName: "Kaas Plateau Valley of Flowers",
+    country: "India",
+    locationQuery: "Kaas Plateau, Satara, Maharashtra, India",
+    coords: [17.7208, 73.8211],
+    gemScore: "9.8",
+    category: "nature",
+    categoryLabel: "Wildflower Plateau",
+    readTime: "5 min read",
+    date: "1 day ago",
+    bestTime: "August - October (Monsoon Bloom)",
+    budget: "$15 - $35 / day",
+    author: {
+      name: "Rohan Deshmukh",
+      handle: "@rohan_wild",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+    },
+    image: "https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "A high volcanic laterite plateau that transforms after monsoon rains into an ocean of pink, purple, and blue endemic wildflowers.",
+    secretTip: "Visit during early weekday mornings in September to witness Utricularia and Pogostemon blooms misted in dawn mountain clouds without tourist crowds.",
+    fullContent: "<h4>The Living Carpet of Satara</h4><p>Perched at 1,200m altitude in the Western Ghats UNESCO corridor, Kaas Plateau contains over 850 known species of wildflowers, 39 of which are found nowhere else on planet Earth.</p>",
+    likes: 480,
+    isLiked: true,
+    comments: []
+  },
+  {
+    id: 27,
+    title: "Lonar Crater: Hypersaline Soda Lake in a 50,000-Year Meteor Crater",
+    placeName: "Lonar Meteor Crater Lake",
+    country: "India",
+    locationQuery: "Lonar Lake, Buldhana, Maharashtra, India",
+    coords: [19.9756, 76.5074],
+    gemScore: "9.9",
+    category: "nature",
+    categoryLabel: "Impact Crater",
+    readTime: "6 min read",
+    date: "3 days ago",
+    bestTime: "November - March",
+    budget: "$20 - $40 / day",
+    author: {
+      name: "Priya Kulkarni",
+      handle: "@priya_explorer",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+    },
+    image: "https://images.unsplash.com/photo-1518457607834-6e8d80c183c5?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "The world's only known hyper-velocity impact crater formed in basalt rock, harboring an ancient saline lake surrounded by 1,000-year-old temples.",
+    secretTip: "Trek the jungle perimeter trail down to the Gomukh temple where a perennial fresh mountain spring flows directly over ancient stone lingams.",
+    fullContent: "<h4>Cosmic Impact in Basalt</h4><p>Formed when an extraterrestrial meteorite struck Earth over 50,000 years ago, Lonar Lake is a geological enigma. The lake water is both hyper-saline and alkaline, fostering rare micro-organisms found nowhere else.</p>",
+    likes: 530,
+    isLiked: false,
+    comments: []
+  },
+  {
+    id: 28,
+    title: "Gandikota: The Red Granite Grand Canyon of India & Fort",
+    placeName: "Gandikota Gorge & Fort",
+    country: "India",
+    locationQuery: "Gandikota, Kadapa, Andhra Pradesh, India",
+    coords: [14.8149, 78.2861],
+    gemScore: "9.9",
+    category: "culture",
+    categoryLabel: "Red Rock Gorge",
+    readTime: "7 min read",
+    date: "5 days ago",
+    bestTime: "October - March",
+    budget: "$25 - $45 / day",
+    author: {
+      name: "Aditya Rao",
+      handle: "@adityarao",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
+    },
+    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "A staggering 300-foot gorge carved by the Penna River slicing through sheer red Erramala sandstone ridges, crowned by a medieval fortress.",
+    secretTip: "Camp along the boulder rims at sunset or climb the Madhavaraya temple roof for an unobstructed view of the river winding through the red abyss.",
+    fullContent: "<h4>The Majestic Penna Chasm</h4><p>Often referred to as the Grand Canyon of India, Gandikota features dramatic layered red granite battlements dating back to 1123 AD, providing an unforgettable wild frontier panorama.</p>",
+    likes: 590,
+    isLiked: true,
+    comments: []
   }
 ];
 

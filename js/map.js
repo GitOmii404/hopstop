@@ -378,115 +378,200 @@ window.updateUserLocationMarkerOnMap = function () {
   `);
 };
 
-// Auto-Detect User Location using HTML5 Geolocation with seamless IP fallback
-window.autoDetectUserLocation = function (isUserInitiated = false) {
+// ==========================================================================
+// AUTO-DETECT USER LOCATION & 10 NEAREST UNDERRATED PLACES ENGINE
+// ==========================================================================
+
+// Reliable Multi-Provider IP Geolocation (Zero-permission silent auto-detect)
+async function detectLocationByIp() {
+  // Provider 1: geojs.io (Fastest & high reliability)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2800);
+    const r = await fetch('https://get.geojs.io/v1/ip/geo.json', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (r.ok) {
+      const data = await r.json();
+      if (data && data.latitude && data.longitude) {
+        const lat = parseFloat(data.latitude);
+        const lon = parseFloat(data.longitude);
+        if (!isNaN(lat) && !isNaN(lon)) {
+          const parts = [data.city, data.region, data.country].filter(Boolean);
+          return {
+            coords: [lat, lon],
+            name: parts.length > 0 ? parts.join(', ') : 'Nearby Explorer Base',
+            source: 'ip'
+          };
+        }
+      }
+    }
+  } catch (e) {}
+
+  // Provider 2: ipwho.is (Robust global fallback)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2800);
+    const r = await fetch('https://ipwho.is/', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (r.ok) {
+      const data = await r.json();
+      if (data && data.success !== false && data.latitude && data.longitude) {
+        const lat = parseFloat(data.latitude);
+        const lon = parseFloat(data.longitude);
+        if (!isNaN(lat) && !isNaN(lon)) {
+          const parts = [data.city, data.region, data.country].filter(Boolean);
+          return {
+            coords: [lat, lon],
+            name: parts.length > 0 ? parts.join(', ') : 'Nearby Explorer Base',
+            source: 'ip'
+          };
+        }
+      }
+    }
+  } catch (e) {}
+
+  return null;
+}
+
+// Synchronize location state across HUD, indicators, markers, and feed components
+function applyLocationUpdate(centerMap = false) {
   const label = document.getElementById('nearestUserLocationName');
   const indicator = document.getElementById('nearestGpsIndicator');
+  if (label) label.textContent = userLocationName;
+  if (indicator) {
+    const isGps = userLocationName && userLocationName.includes('GPS');
+    indicator.textContent = isGps ? '🟢 Precise GPS' : '🌐 Auto Detected';
+    indicator.style.color = isGps ? '#10b981' : '#0284c7';
+  }
+
+  // Update micro-adventures label on feed page if present
+  const feedLocLabel = document.getElementById('userLocationLabel');
+  if (feedLocLabel) feedLocLabel.textContent = `📍 ${userLocationName}`;
+
+  updateUserLocationMarkerOnMap();
+  renderNearestGemsSlider();
+
+  if (centerMap && leafletMap && userCoordinates) {
+    leafletMap.flyTo(userCoordinates, 8, {
+      animate: true,
+      duration: 1.2
+    });
+    setTimeout(() => {
+      if (userLocationMarker) userLocationMarker.openPopup();
+    }, 1250);
+  }
+}
+
+// Auto-Detect User Location using HTML5 Geolocation with seamless multi-IP fallback
+window.autoDetectUserLocation = async function (isUserInitiated = false) {
+  const label = document.getElementById('nearestUserLocationName');
   if (label && isUserInitiated) label.textContent = 'Detecting exact GPS... 📡';
 
   if (isUserInitiated) {
-    showToast('📡 Requesting GPS coordinates to find nearest underrated places...');
+    // If coordinates already exist, fly immediately for instantaneous feedback!
+    if (userCoordinates && leafletMap) {
+      leafletMap.flyTo(userCoordinates, 8, { animate: true, duration: 1.0 });
+      setTimeout(() => {
+        if (userLocationMarker) userLocationMarker.openPopup();
+      }, 1050);
+    }
+    showToast('📡 Pinpointing your GPS coordinates & nearby hidden gems...');
   }
 
+  // Browser Geolocation with fast network/Wi-Fi positioning
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        userCoordinates = [position.coords.latitude, position.coords.longitude];
-        userLocationName = `GPS Location (${position.coords.latitude.toFixed(2)}°, ${position.coords.longitude.toFixed(2)}°)`;
-        
-        // Save to cache
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        userCoordinates = [lat, lon];
+        userLocationName = `GPS Location (${lat.toFixed(2)}°, ${lon.toFixed(2)}°)`;
+
         try {
           localStorage.setItem('hopstop_user_coords', JSON.stringify(userCoordinates));
           localStorage.setItem('hopstop_user_location_name', userLocationName);
         } catch (e) {}
 
-        if (label) label.textContent = userLocationName;
-        if (indicator) {
-          indicator.textContent = '🟢 Precise GPS';
-          indicator.style.color = '#10b981';
-        }
-
-        updateUserLocationMarkerOnMap();
-        renderNearestGemsSlider();
-        fitMapToNearestGems();
+        applyLocationUpdate(true);
         showToast('🎯 GPS Updated! Showing your 10 nearest underrated places.');
       },
-      (error) => {
-        console.warn('[HopStop Geo] GPS denied or timed out, trying IP fallback:', error);
-        fallbackToIpLocation(isUserInitiated);
+      async (error) => {
+        console.warn('[HopStop Geo] Browser GPS unavailable or timed out, using fast IP detection:', error);
+        await runIpDetectionFlow(isUserInitiated);
       },
-      { timeout: 7000, enableHighAccuracy: true }
+      { enableHighAccuracy: false, timeout: 3500, maximumAge: 300000 }
     );
   } else {
-    fallbackToIpLocation(isUserInitiated);
+    await runIpDetectionFlow(isUserInitiated);
   }
 };
 
-// Fast IP-based geolocation fallback (No prompt needed)
-function fallbackToIpLocation(isUserInitiated) {
-  const label = document.getElementById('nearestUserLocationName');
-  const indicator = document.getElementById('nearestGpsIndicator');
+async function runIpDetectionFlow(isUserInitiated) {
+  const ipResult = await detectLocationByIp();
+  if (ipResult) {
+    userCoordinates = ipResult.coords;
+    userLocationName = ipResult.name;
 
-  // Try fast free IP geolocation endpoint
-  fetch('https://get.geojs.io/v1/ip/geo.json')
-    .then(r => r.json())
-    .then(data => {
-      if (data && data.latitude && data.longitude) {
-        userCoordinates = [parseFloat(data.latitude), parseFloat(data.longitude)];
-        userLocationName = `${data.city || 'Nearby'}, ${data.country || 'Region'}`;
-        if (label) label.textContent = userLocationName;
-        if (indicator) {
-          indicator.textContent = '🌐 IP Auto-Detect';
-          indicator.style.color = '#0284c7';
-        }
-        updateUserLocationMarkerOnMap();
-        renderNearestGemsSlider();
-        if (isUserInitiated) {
-          fitMapToNearestGems();
-          showToast(`📍 Location detected: ${userLocationName}`);
-        }
-      } else {
-        useDefaultHub(isUserInitiated);
-      }
-    })
-    .catch(() => {
-      useDefaultHub(isUserInitiated);
+    try {
+      localStorage.setItem('hopstop_user_coords', JSON.stringify(userCoordinates));
+      localStorage.setItem('hopstop_user_location_name', userLocationName);
+    } catch (e) {}
+
+    applyLocationUpdate(isUserInitiated);
+    if (isUserInitiated) {
+      showToast(`📍 Location auto-detected: ${userLocationName}`);
+    }
+  } else {
+    // Graceful offline fallback
+    if (!userCoordinates) {
+      userCoordinates = [18.5204, 73.8567]; // Pune, India base
+      userLocationName = 'Pune, India (Default Base)';
+    }
+    applyLocationUpdate(isUserInitiated);
+    if (isUserInitiated) {
+      showToast(`Using ${userLocationName}. Select "Change City" to pick any city worldwide! 🌍`);
+    }
+  }
+}
+
+// 1-Click "My Location" focus action on interactive map
+window.focusUserOnMap = function () {
+  if (leafletMap && userCoordinates) {
+    leafletMap.flyTo(userCoordinates, 8, {
+      animate: true,
+      duration: 1.2
     });
-}
-
-// Fallback to high-density default hub if both GPS & IP fail
-function useDefaultHub(isUserInitiated) {
-  const label = document.getElementById('nearestUserLocationName');
-  const indicator = document.getElementById('nearestGpsIndicator');
-
-  // Seville / Mediterranean baseline (close to Setenil, Rifugio, Civita, Blagaj)
-  userCoordinates = [37.3891, -5.9845];
-  userLocationName = 'Seville, Spain (Default Base)';
-  if (label) label.textContent = userLocationName;
-  if (indicator) {
-    indicator.textContent = '📍 Adventure Hub';
-    indicator.style.color = '#f97316';
+    setTimeout(() => {
+      if (userLocationMarker) userLocationMarker.openPopup();
+    }, 1250);
+    showToast(`📍 Centered on: ${userLocationName || 'Active Base'}`);
+    // Background refresh
+    autoDetectUserLocation(false);
+  } else {
+    autoDetectUserLocation(true);
   }
-  updateUserLocationMarkerOnMap();
-  renderNearestGemsSlider();
-  if (isUserInitiated) {
-    showToast('Using Seville base hub. Select "Change City" to pick any world city! 🌍');
-  }
-}
+};
 
-// Fit map view to encompass user location + top 10 nearest places
+// Fit map view to encompass user location + top nearest places
 window.fitMapToNearestGems = function () {
   if (!leafletMap || typeof L === 'undefined' || !userCoordinates) return;
 
   const nearest10 = getNearest10Gems(userCoordinates);
   if (!nearest10 || nearest10.length === 0) return;
 
-  const points = [userCoordinates, ...nearest10.map(g => g.coords)];
-  const bounds = L.latLngBounds(points);
+  // Fit bounds around user and nearest gems
+  const keyPoints = [userCoordinates, ...nearest10.slice(0, 5).map(g => g.coords)];
+  const bounds = L.latLngBounds(keyPoints);
   leafletMap.fitBounds(bounds, {
     padding: [60, 60],
     maxZoom: 9
   });
+
+  const hud = document.getElementById('nearestGemsHud');
+  if (hud) {
+    hud.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  showToast('Showing your 10 nearest underrated spots! 📍');
 };
 
 // Filter button on map control panel
@@ -495,10 +580,6 @@ window.showNearestGemsView = function () {
   document.getElementById('btnFilterNearest10')?.classList.add('active');
 
   fitMapToNearestGems();
-  const hud = document.getElementById('nearestGemsHud');
-  if (hud) {
-    hud.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
   showToast('Showing your 10 nearest underrated spots! 📍');
 };
 
@@ -507,13 +588,15 @@ window.showNearestGemsView = function () {
 // ==========================================================================
 
 const GLOBAL_ADVENTURE_HUBS = [
+  { name: 'Pune, India', coords: [18.5204, 73.8567], flag: '🇮🇳' },
+  { name: 'Mumbai, India', coords: [19.0760, 72.8777], flag: '🇮🇳' },
+  { name: 'New Delhi, India', coords: [28.6139, 77.2090], flag: '🇮🇳' },
+  { name: 'Bengaluru, India', coords: [12.9716, 77.5946], flag: '🇮🇳' },
   { name: 'Madrid, Spain', coords: [40.4168, -3.7038], flag: '🇪🇸' },
   { name: 'Rome, Italy', coords: [41.9028, 12.4964], flag: '🇮🇹' },
   { name: 'London, UK', coords: [51.5074, -0.1278], flag: '🇬🇧' },
   { name: 'Berlin, Germany', coords: [52.5200, 13.4050], flag: '🇩🇪' },
   { name: 'Athens, Greece', coords: [37.9838, 23.7275], flag: '🇬🇷' },
-  { name: 'New Delhi, India', coords: [28.6139, 77.2090], flag: '🇮🇳' },
-  { name: 'Mumbai, India', coords: [19.0760, 72.8777], flag: '🇮🇳' },
   { name: 'Tokyo, Japan', coords: [35.6762, 139.6503], flag: '🇯🇵' },
   { name: 'Bangkok, Thailand', coords: [13.7563, 100.5018], flag: '🇹🇭' },
   { name: 'New York, USA', coords: [40.7128, -74.0060], flag: '🇺🇸' },
@@ -635,21 +718,41 @@ window.handleCitySearchKey = function (e) {
 };
 
 // Initialize user location and nearest gems on map load
-function initUserLocationAndNearestGems() {
-  // Check if previously stored
+async function initUserLocationAndNearestGems() {
+  let hasStoredCoords = false;
+  // 1. Check if previously stored in localStorage for instant rendering
   try {
     const saved = localStorage.getItem('hopstop_user_coords');
     const savedName = localStorage.getItem('hopstop_user_location_name');
     if (saved) {
       userCoordinates = JSON.parse(saved);
       if (savedName) userLocationName = savedName;
+      hasStoredCoords = true;
     }
   } catch (e) {}
 
   updateUserLocationMarkerOnMap();
   renderNearestGemsSlider();
 
-  // Try auto-detecting without intrusive prompt
-  autoDetectUserLocation(false);
+  // 2. Perform silent, fast auto-detection in background without intrusive prompts
+  const ipResult = await detectLocationByIp();
+  if (ipResult) {
+    userCoordinates = ipResult.coords;
+    userLocationName = ipResult.name;
+    try {
+      localStorage.setItem('hopstop_user_coords', JSON.stringify(userCoordinates));
+      localStorage.setItem('hopstop_user_location_name', userLocationName);
+    } catch (e) {}
+
+    applyLocationUpdate(false);
+
+    // Auto-fly map to user's region on initial load so they immediately see their country & local pins!
+    if (leafletMap && !hasStoredCoords) {
+      leafletMap.flyTo(userCoordinates, 5, {
+        animate: true,
+        duration: 1.5
+      });
+    }
+  }
 }
 window.initUserLocationAndNearestGems = initUserLocationAndNearestGems;
