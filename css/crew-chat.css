@@ -80,7 +80,13 @@
    FLOATING DIRECT MESSENGER & ONLINE EXPLORERS
    ========================================================================== */
 
-/* Floating Messenger Launcher Pill */
+/* Floating Messenger Launcher Pill — Strictly Exclusive to Feed Page */
+body:not(.feed-page) .floating-messenger-pill {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 .floating-messenger-pill {
   position: fixed;
   bottom: 24px;

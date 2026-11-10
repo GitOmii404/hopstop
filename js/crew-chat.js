@@ -150,17 +150,27 @@ function initDmStore() {
 // 2. MOUNT FLOATING MESSENGER UI INTO DOM
 // ==========================================================================
 function mountMessengerUI() {
+  const isFeedPage = window.location.pathname.toLowerCase().includes('feed.html') || !!document.getElementById('socialFeedContainer') || (document.body && document.body.classList.contains('feed-page'));
+
+  // If not on the feed page, ensure any floating pill is removed
+  if (!isFeedPage) {
+    const existingBtn = document.getElementById('floatingMessengerBtn');
+    if (existingBtn) existingBtn.remove();
+  }
+
   if (document.getElementById('hopstopMessenger')) return;
 
   const container = document.createElement('div');
   container.innerHTML = `
-    <!-- Floating Messenger Launcher Pill -->
+    <!-- Floating Messenger Launcher Pill (Rendered ONLY on Feed Page) -->
+    ${isFeedPage ? `
     <button class="floating-messenger-pill" id="floatingMessengerBtn" onclick="window.toggleMessenger()">
       <span class="messenger-dot-live"></span>
       <span class="messenger-icon">💬</span>
       <span class="messenger-label">Messages</span>
       <span class="messenger-badge" id="messengerUnreadBadge">${ONLINE_EXPLORERS.length}</span>
     </button>
+    ` : ''}
 
     <!-- Messenger Drawer / Floating Window -->
     <div class="hopstop-messenger-window" id="hopstopMessenger">
@@ -328,6 +338,11 @@ window.toggleMessenger = function() {
 };
 
 window.openMessenger = function() {
+  const isFeedPage = window.location.pathname.toLowerCase().includes('feed.html') || !!document.getElementById('socialFeedContainer') || (document.body && document.body.classList.contains('feed-page'));
+  if (!isFeedPage) {
+    window.location.href = 'feed.html?open=messenger';
+    return;
+  }
   const win = document.getElementById('hopstopMessenger');
   if (win) {
     win.classList.add('open');
@@ -685,6 +700,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initDmStore();
   mountMessengerUI();
   initEventListeners();
+
+  // Auto-open messenger if navigating with ?open=messenger on feed page
+  if (window.location.search.includes('open=messenger')) {
+    setTimeout(() => {
+      window.openMessenger();
+    }, 350);
+  }
 });
 
 // Also run immediately if DOM is already loaded
