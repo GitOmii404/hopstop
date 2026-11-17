@@ -24,8 +24,40 @@
     </div>
 
     <div style="display: flex; align-items: center; gap: 10px;">
-      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Light/Dark Theme" style="background: none; border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center;">
-        🌙
+      <button id="themeToggle" class="theme-landscape-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" onclick="toggleTheme()">
+        <span class="tlt-track">
+          <!-- Day Scene (Apricot Sky & Dunes) -->
+          <span class="tlt-scene-day">
+            <span class="tlt-sun-dot"></span>
+            <svg class="tlt-dunes-svg" viewBox="0 0 100 48" preserveAspectRatio="none">
+              <polygon points="12,48 35,23 60,48" fill="#f5b536"></polygon>
+              <polygon points="35,23 48,48 60,48" fill="#e29b1b"></polygon>
+              <polygon points="0,48 16,35 36,48" fill="#f09c18"></polygon>
+              <path d="M 0,48 Q 28,30 58,40 Q 78,46 100,36 L 100,48 Z" fill="#e08a10"></path>
+            </svg>
+          </span>
+          <!-- Night Scene (Midnight Sky, Moon & Mountains) -->
+          <span class="tlt-scene-night">
+            <span class="tlt-stars">
+              <span class="tlt-star tlt-star-1"></span>
+              <span class="tlt-star tlt-star-2"></span>
+              <span class="tlt-star tlt-star-3"></span>
+              <span class="tlt-star tlt-star-4"></span>
+            </span>
+            <svg class="tlt-crescent-svg" viewBox="0 0 20 20">
+              <path d="M 11,3 A 7.5,7.5 0 0 0 13,15 A 8.5,8.5 0 1 1 11,3 Z" fill="#ffffff"></path>
+            </svg>
+            <svg class="tlt-mountains-svg" viewBox="0 0 100 48" preserveAspectRatio="none">
+              <polygon points="26,48 48,22 72,48" fill="#53758e"></polygon>
+              <polygon points="62,48 82,28 100,42 100,48" fill="#43647c"></polygon>
+              <polygon points="18,48 34,34 50,48" fill="#224360"></polygon>
+              <polygon points="44,48 64,30 84,48" fill="#1c3852"></polygon>
+              <path d="M 0,48 L 10,41 L 30,48 L 52,43 L 74,48 L 100,42 L 100,48 Z" fill="#0e2236"></path>
+            </svg>
+          </span>
+          <!-- Sliding White Orb (Sun in Day / Moon in Night) -->
+          <span class="tlt-thumb"></span>
+        </span>
       </button>
     </div>
   </header>
@@ -284,7 +316,14 @@
 
     window.updateThemeIcon = function (theme) {
       const btn = document.getElementById('themeToggle');
-      if (btn) btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      if (btn) {
+        btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+        btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+        btn.setAttribute('data-theme-state', theme);
+        if (!btn.classList.contains('theme-landscape-toggle')) {
+          btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+      }
     };
 
     // Toast Notification Utility

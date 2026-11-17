@@ -39,8 +39,13 @@ window.toggleTheme = function () {
 
 window.updateThemeIcon = function (theme) {
   document.querySelectorAll('#themeToggle, .theme-toggle-btn').forEach(btn => {
-    btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
     btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    btn.setAttribute('data-theme-state', theme);
+    // Only update innerHTML for legacy emoji buttons, never wipe rich landscape toggle switches
+    if (!btn.classList.contains('theme-landscape-toggle')) {
+      btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    }
   });
 };
 
