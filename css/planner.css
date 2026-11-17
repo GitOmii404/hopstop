@@ -13,23 +13,9 @@
   display: block;
 }
 
-.itinerary-view::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 550px;
-  background: radial-gradient(circle 500px at 20% 15%, rgba(6, 182, 212, 0.08), transparent 70%),
-              radial-gradient(circle 600px at 80% 25%, rgba(59, 130, 246, 0.07), transparent 70%),
-              radial-gradient(circle 400px at 50% 50%, rgba(139, 92, 246, 0.05), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+.itinerary-view::before { display: none !important; }
 
-[data-theme="dark"] .itinerary-view::before {
-  display: none !important;
-}
+[data-theme="dark"] .itinerary-view::before { display: none !important; }
 
 /* 2. Hero Bar */
 .itinerary-hero-bar {
@@ -49,16 +35,7 @@
   backdrop-filter: blur(12px);
 }
 
-.itinerary-hero-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #06b6d4, #3b82f6, #8b5cf6);
-  opacity: 0.9;
-}
+.itinerary-hero-bar::after { display: none !important; }
 
 .itinerary-title-wrap h2 {
   font-family: var(--font-heading);
@@ -70,7 +47,7 @@
 }
 
 .itinerary-title-wrap h2 span {
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  background: #f97316;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -168,7 +145,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  background: #f97316;
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -385,7 +362,7 @@
   top: -12px;
   bottom: -12px;
   width: 2px;
-  background: linear-gradient(180deg, #06b6d4, #0284c7);
+  background: #f97316;
   opacity: 0.8;
 }
 
@@ -455,7 +432,7 @@
 .itinerary-map-marker-pin {
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+  background: #f97316;
   color: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -502,7 +479,7 @@
 }
 
 .itinerary-map-controls .btn-popup-read.active {
-  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  background: #f97316;
   color: #ffffff;
   border-color: #0284c7;
   box-shadow: 0 4px 12px rgba(6, 182, 212, 0.35);
