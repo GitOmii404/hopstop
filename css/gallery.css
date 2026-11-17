@@ -89,9 +89,9 @@
 }
 
 [data-theme="dark"] .hero-badge {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.25);
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.12);
+  border-color: rgba(249, 115, 22, 0.25);
 }
 
 .hero-title {
@@ -434,7 +434,7 @@
 }
 
 [data-theme="dark"] .section-tag {
-  color: #38bdf8;
+  color: #fb923c;
 }
 
 .section-title {
@@ -601,7 +601,7 @@
 }
 
 [data-theme="dark"] .post-location-name {
-  color: #38bdf8;
+  color: #fb923c;
 }
 
 .post-title {
@@ -1167,7 +1167,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .modal-secret-box h4 {
-  color: #38bdf8;
+  color: #fb923c;
 }
 
 .modal-secret-box p {
@@ -2322,9 +2322,9 @@ button:active, .btn-gem:active, .btn-primary:active, .btn-direction:active, .bat
 }
 
 [data-theme="dark"] .bucket-item-index {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(2, 132, 199, 0.35));
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(249, 115, 22, 0.15);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.3);
 }
 
 /* Item Media Thumbnail */

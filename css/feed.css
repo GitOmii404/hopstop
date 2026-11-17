@@ -234,9 +234,9 @@
 }
 
 [data-theme="dark"] .sidebar-nav-btn.active {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  box-shadow: inset 3px 0 0 #38bdf8;
+  background: rgba(249, 115, 22, 0.12);
+  color: #fb923c;
+  box-shadow: inset 3px 0 0 #f97316;
 }
 
 .sidebar-nav-btn .nav-icon {
@@ -759,9 +759,9 @@
 }
 
 [data-theme="dark"] .card-distance-pill {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.15);
-  border-color: rgba(56, 189, 248, 0.3);
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.12);
+  border-color: rgba(249, 115, 22, 0.25);
 }
 
 .btn-been-here {
@@ -1274,7 +1274,7 @@
 }
 
 [data-theme="dark"] .xp-counter-text .xp-current {
-  color: #38bdf8 !important;
+  color: #fb923c !important;
 }
 
 .xp-counter-text .xp-divider {

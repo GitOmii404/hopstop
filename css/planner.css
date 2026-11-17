@@ -28,9 +28,7 @@
 }
 
 [data-theme="dark"] .itinerary-view::before {
-  background: radial-gradient(circle 500px at 20% 15%, rgba(6, 182, 212, 0.14), transparent 70%),
-              radial-gradient(circle 600px at 80% 25%, rgba(59, 130, 246, 0.12), transparent 70%),
-              radial-gradient(circle 400px at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%);
+  background: radial-gradient(ellipse 900px 400px at 50% 0%, rgba(249, 115, 22, 0.05), transparent 70%);
 }
 
 /* 2. Hero Bar */
@@ -200,7 +198,9 @@
 }
 
 [data-theme="dark"] .itinerary-leg-card {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: var(--bg-surface-elevated) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
 .itinerary-leg-card:hover {
@@ -210,7 +210,8 @@
 }
 
 [data-theme="dark"] .itinerary-leg-card:hover {
-  box-shadow: 0 16px 36px rgba(6, 182, 212, 0.18);
+  border-color: rgba(249, 115, 22, 0.35) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Header Row */

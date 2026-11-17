@@ -48,9 +48,9 @@
 }
 
 [data-theme="dark"] .digest-tag-pill {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.28);
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.12);
+  border-color: rgba(249, 115, 22, 0.28);
 }
 
 .digest-tag-dot {
@@ -232,8 +232,8 @@
 }
 
 [data-theme="dark"] .digest-category-badge {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.14);
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.14);
 }
 
 .digest-season-pill {
@@ -256,7 +256,7 @@
 }
 
 [data-theme="dark"] .weekly-digest-card:hover .digest-card-title {
-  color: #38bdf8;
+  color: #fb923c;
 }
 
 .digest-card-desc {
