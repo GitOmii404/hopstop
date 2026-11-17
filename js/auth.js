@@ -25,6 +25,7 @@ window.initTheme = function () {
   const savedTheme = localStorage.getItem('hopstop_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeIcon(savedTheme);
+  if (typeof updateMapTiles === 'function') updateMapTiles(savedTheme === 'dark' ? 'dark' : 'google');
 };
 
 window.toggleTheme = function () {
@@ -33,7 +34,7 @@ window.toggleTheme = function () {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('hopstop_theme', newTheme);
   updateThemeIcon(newTheme);
-  if (typeof updateMapTiles === 'function') updateMapTiles();
+  if (typeof updateMapTiles === 'function') updateMapTiles(newTheme === 'dark' ? 'dark' : 'google');
   if (typeof showToast === 'function') showToast(`Switched to ${newTheme === 'dark' ? '🌙 Dark' : '☀️ Light'} mode!`);
 };
 

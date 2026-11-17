@@ -48,9 +48,13 @@ function initLeafletMap() {
   }, 250);
 }
 
-function updateMapTiles(theme = activeMapTheme) {
+function updateMapTiles(theme) {
   if (!leafletMap || typeof L === 'undefined') return;
 
+  const siteTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  if (!theme) {
+    theme = siteTheme === 'dark' ? 'dark' : (activeMapTheme || 'google');
+  }
   activeMapTheme = theme;
 
   if (mapTileLayer) {
