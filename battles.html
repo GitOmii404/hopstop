@@ -7,7 +7,8 @@
   <meta name="description" content="Vote and submit hidden gem photography in HopStop's weekly prompt battles. Compete for the Gem Finder badge and XP rewards.">
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261104_navbar_perfection_v31">
+  <link rel="stylesheet" href="styles.css?v=20261117_landscape_pill_v10">
+  <link rel="stylesheet" href="css/theme-toggle.css?v=20261117_landscape_pill_v10">
   <link rel="stylesheet" href="css/human-craft.css?v=20261104_no_scrollbar_v23">
 </head>
 <body>
@@ -64,10 +65,15 @@
             <span class="tlt-scene-day">
               <span class="tlt-sun-dot"></span>
               <svg class="tlt-dunes-svg" viewBox="0 0 100 48" preserveAspectRatio="none">
-                <polygon points="12,48 35,23 60,48" fill="#f5b536"></polygon>
-                <polygon points="35,23 48,48 60,48" fill="#e29b1b"></polygon>
-                <polygon points="0,48 16,35 36,48" fill="#f09c18"></polygon>
-                <path d="M 0,48 Q 28,30 58,40 Q 78,46 100,36 L 100,48 Z" fill="#e08a10"></path>
+                <!-- Back dune -->
+                <polygon points="0,48 0,36 30,24 55,48" fill="#f5be42"></polygon>
+                <!-- Main pyramid dune left sunlit face -->
+                <polygon points="16,48 40,16 64,48" fill="#e9a62c"></polygon>
+                <!-- Main pyramid dune right shaded face -->
+                <polygon points="40,16 64,48 85,38 85,48" fill="#d28616"></polygon>
+                <!-- Foreground dune sweep -->
+                <polygon points="0,48 18,34 40,48" fill="#df8b18"></polygon>
+                <path d="M 0,48 L 12,40 Q 38,32 62,42 L 100,34 L 100,48 Z" fill="#cc740e"></path>
               </svg>
             </span>
             <!-- Night Scene (Midnight Sky, Moon & Mountains) -->
@@ -79,20 +85,40 @@
                 <span class="tlt-star tlt-star-4"></span>
               </span>
               <svg class="tlt-crescent-svg" viewBox="0 0 20 20">
-                <path d="M 11,3 A 7.5,7.5 0 0 0 13,15 A 8.5,8.5 0 1 1 11,3 Z" fill="#ffffff"></path>
+                <path d="M 12,2 A 7.5,7.5 0 0 0 14,16 A 8.5,8.5 0 1 1 12,2 Z" fill="#ffffff"></path>
               </svg>
               <svg class="tlt-mountains-svg" viewBox="0 0 100 48" preserveAspectRatio="none">
-                <polygon points="26,48 48,22 72,48" fill="#53758e"></polygon>
-                <polygon points="62,48 82,28 100,42 100,48" fill="#43647c"></polygon>
-                <polygon points="18,48 34,34 50,48" fill="#224360"></polygon>
-                <polygon points="44,48 64,30 84,48" fill="#1c3852"></polygon>
-                <path d="M 0,48 L 10,41 L 30,48 L 52,43 L 74,48 L 100,42 L 100,48 Z" fill="#0e2236"></path>
+                <polygon points="26,48 48,22 72,48" fill="#587a94"></polygon>
+                <polygon points="62,48 82,28 100,42 100,48" fill="#44667f"></polygon>
+                <polygon points="18,48 34,34 50,48" fill="#244664"></polygon>
+                <polygon points="44,48 64,30 84,48" fill="#1b3854"></polygon>
+                <path d="M 0,48 L 10,41 L 30,48 L 52,43 L 74,48 L 100,42 L 100,48 Z" fill="#0d2134"></path>
               </svg>
             </span>
             <!-- Sliding White Orb (Sun in Day / Moon in Night) -->
             <span class="tlt-thumb"></span>
           </span>
         </button>
+        <script>
+          (function() {
+            var btn = document.getElementById('themeToggle');
+            if (btn) {
+              var preserve = btn.innerHTML;
+              try {
+                Object.defineProperty(btn, 'innerHTML', {
+                  get: function() { return preserve; },
+                  set: function(val) {
+                    if (typeof val === 'string' && (val.includes('🌙') || val.includes('☀️') || val.trim().length < 30)) {
+                      return;
+                    }
+                    preserve = val;
+                  },
+                  configurable: true
+                });
+              } catch(e) {}
+            }
+          })();
+        </script>
 
         <!-- Guest Actions -->
         <div id="guestHeaderActions" style="display: flex; align-items: center; gap: 10px;">
@@ -810,7 +836,7 @@
   <script src="js/state.js?v=20261103_perfect_v6"></script>
   <script src="js/cloud.js"></script>
   <script src="js/map.js?v=20261103_perfect_v6"></script>
-  <script src="js/auth.js?v=20261109_v10_usermenu_fixed"></script>
+  <script src="js/auth.js?v=20261117_landscape_pill_v10"></script>
   <script src="js/gamification.js"></script>
   <script src="js/bounties.js?v=20261103_perfect_v6"></script>
   <script src="js/feed.js"></script>
