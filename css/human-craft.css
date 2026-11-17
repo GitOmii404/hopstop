@@ -9,12 +9,7 @@
    -------------------------------------------------------------------------- */
 body {
   background-color: var(--bg-primary) !important;
-  background-image: 
-    radial-gradient(circle 900px at 15% -5%, rgba(249, 115, 22, 0.04), transparent 60%),
-    radial-gradient(circle 800px at 85% 10%, rgba(14, 165, 233, 0.04), transparent 60%),
-    radial-gradient(circle 600px at 50% 60%, rgba(139, 92, 246, 0.02), transparent 70%),
-    linear-gradient(180deg, var(--bg-primary) 0%, #f1f5f9 100%) !important;
-  background-attachment: fixed !important;
+  background-image: none !important;
   color: var(--text-primary) !important;
 }
 
@@ -36,16 +31,13 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   2. HERO SECTION — Golden Hour Explorer Atmosphere (Clean, High-Contrast)
+   2. HERO SECTION — Clean, High-Contrast
    -------------------------------------------------------------------------- */
 .hero {
   position: relative;
   padding-top: 26px !important;
   padding-bottom: 46px !important;
-  background: 
-    radial-gradient(circle at 10% 25%, rgba(251, 146, 60, 0.09) 0%, transparent 45%),
-    radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-    linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-primary) 100%) !important;
+  background: var(--bg-surface) !important;
   border-bottom: 1px solid var(--border-color);
   overflow: visible !important;
 }
@@ -155,17 +147,14 @@ body {
    -------------------------------------------------------------------------- */
 .map-section {
   position: relative;
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 20% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
-    linear-gradient(180deg, #f0fdf4 0%, #f0f9ff 50%, #f8fafc 100%) !important;
-  border-top: 1px solid rgba(226, 232, 240, 0.9);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bg-primary) !important;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   padding: 56px 0 !important;
 }
 
 [data-theme="dark"] .map-section {
-  background: var(--bg-surface) !important;
+  background: var(--bg-primary) !important;
   border-top: 1px solid var(--border-color) !important;
   border-bottom: 1px solid var(--border-color) !important;
 }
@@ -252,16 +241,13 @@ body {
    4. UNDERRATED PLACES (DISCOVER GRID) — Clean Backdrop (No Blurry Edge Blobs)
    -------------------------------------------------------------------------- */
 #explore {
-  background: 
-    radial-gradient(circle at 12% 20%, rgba(254, 215, 170, 0.22) 0%, transparent 42%),
-    radial-gradient(circle at 88% 80%, rgba(186, 230, 253, 0.26) 0%, transparent 45%),
-    linear-gradient(180deg, #f8fafc 0%, #f5f3ef 50%, #f8fafc 100%) !important;
+  background: var(--bg-surface) !important;
   padding: 60px 0 !important;
   position: relative;
 }
 
 [data-theme="dark"] #explore {
-  background: var(--bg-primary) !important;
+  background: var(--bg-surface) !important;
 }
 
 /* Post Cards with Human Handcrafted Polish */
@@ -385,20 +371,12 @@ body {
    5. COMMUNITY PHOTO WALL — Dark Translucent Authentic Wood Bark Exhibition Wall
    -------------------------------------------------------------------------- */
 #gallery {
-  background-color: #21160e !important;
-  background-image: 
-    /* 1. Ambient Gallery Warm Downlighting */
-    radial-gradient(circle at 50% 8%, rgba(255, 235, 205, 0.22) 0%, transparent 65%),
-    radial-gradient(circle at 18% 48%, rgba(217, 119, 6, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 82% 52%, rgba(180, 83, 9, 0.10) 0%, transparent 50%),
-    /* 2. Authentic Handcrafted Dark Translucent Wood Bark, Organic Furrows & Timber Grain */
-    url('wood-bark.svg?v=20261103_dark_transparent_bark') !important;
-  background-size: auto, auto, auto, 520px 520px !important;
-  background-repeat: no-repeat, no-repeat, no-repeat, repeat !important;
-  border-top: 1px solid rgba(195, 130, 75, 0.28) !important;
-  border-bottom: 1px solid rgba(195, 130, 75, 0.28) !important;
-  box-shadow: inset 0 16px 44px rgba(0, 0, 0, 0.50), inset 0 -16px 44px rgba(0, 0, 0, 0.50) !important;
-  padding: 34px 0 28px !important;
+  background-color: var(--bg-surface) !important;
+  background-image: none !important;
+  border-top: 1px solid var(--border-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  box-shadow: none !important;
+  padding: 48px 0 36px !important;
   position: relative;
   overflow: hidden;
 }
@@ -987,9 +965,7 @@ body {
    6. SECRET ITINERARY — Vintage Field Passport & Explorer Journal
    -------------------------------------------------------------------------- */
 #toolkit {
-  background: 
-    radial-gradient(circle at 75% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 40%),
-    linear-gradient(180deg, #f8f6f0 0%, #fdfbf7 50%, #f4f6fa 100%) !important;
+  background: var(--bg-primary) !important;
   padding: 60px 0 !important;
   position: relative;
 }
@@ -1027,13 +1003,10 @@ body {
    7. NEWSLETTER SECTION — Airmail Vintage Postcard
    -------------------------------------------------------------------------- */
 .newsletter-card {
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(234, 88, 12, 0.3) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.2) 0%, transparent 45%),
-    linear-gradient(135deg, #16171a 0%, #1e2024 100%) !important;
-  border: 2px solid rgba(249, 115, 22, 0.3) !important;
+  background: var(--bg-surface-elevated) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 28px !important;
-  box-shadow: 0 24px 60px -12px rgba(234, 88, 12, 0.22) !important;
+  box-shadow: var(--shadow-xl) !important;
   position: relative;
   overflow: hidden;
 }
