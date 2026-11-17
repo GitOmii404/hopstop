@@ -6,8 +6,8 @@
   <title>Sign In or Join — HopStop Social Travel Network</title>
   <meta name="description" content="Sign in to HopStop to share secret waypoints, earn daily streak XP, rank on leaderboards, and direct message online travelers worldwide.">
   
-  <link rel="stylesheet" href="styles.css?v=20261117_pure_dark_v2">
-  <link rel="stylesheet" href="css/theme-toggle.css?v=20261117_landscape_pill_v10">
+  <link rel="stylesheet" href="styles.css?v=20261117_master_v1">
+  <link rel="stylesheet" href="css/theme-toggle.css?v=20261117_master_v1">
   <link rel="stylesheet" href="css/login.css?v=20261104_no_scroll_v3">
 </head>
 <body class="login-page-wrap">
@@ -66,25 +66,35 @@
         </span>
       </button>
       <script>
-        (function() {
-          var btn = document.getElementById('themeToggle');
-          if (btn) {
-            var preserve = btn.innerHTML;
-            try {
-              Object.defineProperty(btn, 'innerHTML', {
-                get: function() { return preserve; },
-                set: function(val) {
-                  if (typeof val === 'string' && (val.includes('🌙') || val.includes('☀️') || val.trim().length < 30)) {
-                    return;
-                  }
-                  preserve = val;
-                },
-                configurable: true
-              });
-            } catch(e) {}
-          }
-        })();
-      </script>
+          (function() {
+            var btn = document.getElementById('themeToggle');
+            if (btn) {
+              var preserve = btn.innerHTML;
+              try {
+                Object.defineProperty(btn, 'innerHTML', {
+                  get: function() { return preserve; },
+                  set: function(val) {
+                    if (typeof val === 'string' && (val.includes('🌙') || val.includes('☀️') || val.trim().length < 50)) {
+                      return;
+                    }
+                    preserve = val;
+                  },
+                  configurable: true
+                });
+                Object.defineProperty(btn, 'textContent', {
+                  get: function() { return ''; },
+                  set: function(val) { /* reject text overrides like 🌙 */ },
+                  configurable: true
+                });
+                Object.defineProperty(btn, 'innerText', {
+                  get: function() { return ''; },
+                  set: function(val) { /* reject text overrides like 🌙 */ },
+                  configurable: true
+                });
+              } catch(e) {}
+            }
+          })();
+        </script>
     </div>
   </header>
 
