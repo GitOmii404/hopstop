@@ -950,8 +950,8 @@ body:not(.feed-page) .floating-messenger-pill {
 }
 
 [data-theme="dark"] .messenger-guest-banner {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.16) 0%, rgba(59, 130, 246, 0.12) 100%);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .guest-banner-left {

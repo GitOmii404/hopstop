@@ -223,14 +223,20 @@
 }
 
 .pub-hero-banner {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  color: #ffffff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   padding: 36px 30px;
   border-radius: var(--radius-lg);
   margin-bottom: 30px;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .pub-hero-banner {
+  background: var(--bg-surface);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 .pub-hero-banner h2 {

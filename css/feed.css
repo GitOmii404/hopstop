@@ -345,8 +345,9 @@
 }
 
 [data-theme="dark"] .daily-gem-banner {
-  background: linear-gradient(135deg, rgba(234, 88, 12, 0.15) 0%, rgba(6, 182, 212, 0.12) 100%);
-  border-color: rgba(234, 88, 12, 0.35);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .daily-banner-top {
@@ -1120,9 +1121,9 @@
 }
 
 [data-theme="dark"] .social-secret-tip-box {
-  background: linear-gradient(135deg, rgba(234, 88, 12, 0.15) 0%, rgba(245, 158, 11, 0.12) 100%);
-  border-color: rgba(234, 88, 12, 0.4);
-  border-left-color: #f97316;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent);
 }
 
 .secret-tip-header {

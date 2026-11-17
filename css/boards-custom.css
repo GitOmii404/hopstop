@@ -25,7 +25,7 @@
 }
 
 [data-theme="dark"] .boards-page::before {
-  background: radial-gradient(ellipse 900px 400px at 50% 0%, rgba(249, 115, 22, 0.05), transparent 70%);
+  display: none !important;
 }
 
 #dreamBoardsView {

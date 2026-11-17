@@ -28,7 +28,7 @@
 }
 
 [data-theme="dark"] .itinerary-view::before {
-  background: radial-gradient(ellipse 900px 400px at 50% 0%, rgba(249, 115, 22, 0.05), transparent 70%);
+  display: none !important;
 }
 
 /* 2. Hero Bar */
