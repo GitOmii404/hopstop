@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <!-- Dark Translucent Walnut, Aged Teak & Cedar Bark Gradients -->
+    <linearGradient id="darkBarkPlate1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#140c07" stop-opacity="0.88"/>
+      <stop offset="25%" stop-color="#2a1a10" stop-opacity="0.75"/>
+      <stop offset="55%" stop-color="#3d2719" stop-opacity="0.72"/>
+      <stop offset="85%" stop-color="#24160e" stop-opacity="0.78"/>
+      <stop offset="100%" stop-color="#100a06" stop-opacity="0.90"/>
+    </linearGradient>
+
+    <linearGradient id="darkBarkPlate2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f0905" stop-opacity="0.90"/>
+      <stop offset="20%" stop-color="#22150d" stop-opacity="0.74"/>
+      <stop offset="50%" stop-color="#352115" stop-opacity="0.70"/>
+      <stop offset="80%" stop-color="#26180f" stop-opacity="0.76"/>
+      <stop offset="100%" stop-color="#120b07" stop-opacity="0.88"/>
+    </linearGradient>
+
+    <!-- Microscopic natural wood fibers & pores filter -->
+    <filter id="darkWoodFibers" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.0035" numOctaves="4" seed="42" result="noise"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.85  0 0 0 0 0.55  0 0 0 0 0.30  0 0 0 0 0.18 0"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Background Slat & Dark Bark Plates (Seamless at 0 and 600) -->
+  <rect x="0" y="0" width="120" height="600" fill="url(#darkBarkPlate1)"/>
+  <rect x="120" y="0" width="150" height="600" fill="url(#darkBarkPlate2)"/>
+  <rect x="270" y="0" width="130" height="600" fill="url(#darkBarkPlate1)"/>
+  <rect x="400" y="0" width="200" height="600" fill="url(#darkBarkPlate2)"/>
+
+  <!-- 2. Microscopic Natural Wood Fibers & Grain -->
+  <rect x="0" y="0" width="600" height="600" filter="url(#darkWoodFibers)" opacity="0.75"/>
+
+  <!-- 3. Fine Organic Vertical Grain Striations (Dark Timber Fibers, Wavy, Seamless) -->
+  <g fill="none" stroke="#663e26" stroke-width="0.85" opacity="0.32">
+    <!-- Bark Plate A -->
+    <path d="M 18,0 C 22,120 14,240 20,360 C 24,460 18,540 18,600"/>
+    <path d="M 36,0 C 32,100 40,220 34,340 C 30,440 38,530 36,600"/>
+    <path d="M 58,0 C 64,150 52,280 60,420 C 66,510 58,570 58,600"/>
+    <path d="M 82,0 C 78,90 86,210 80,330 C 76,450 84,540 82,600"/>
+    <path d="M 102,0 C 106,140 98,270 104,400 C 108,500 102,560 102,600"/>
+
+    <!-- Bark Plate B (Flowing around knot at 195,300) -->
+    <path d="M 142,0 C 138,100 144,200 140,300 C 136,410 144,520 142,600"/>
+    <path d="M 162,0 C 166,90 156,180 158,260 C 150,300 158,340 164,420 C 168,510 162,560 162,600"/>
+    <path d="M 180,0 C 184,110 174,210 170,270 C 166,290 166,310 172,330 C 178,410 182,510 180,600"/>
+    <path d="M 215,0 C 210,110 220,210 224,270 C 228,290 228,310 222,330 C 214,410 212,510 215,600"/>
+    <path d="M 238,0 C 242,130 234,260 240,390 C 244,490 238,560 238,600"/>
+    <path d="M 256,0 C 252,90 260,200 254,320 C 250,430 258,530 256,600"/>
+
+    <!-- Bark Plate C -->
+    <path d="M 292,0 C 298,120 288,240 294,370 C 298,470 292,550 292,600"/>
+    <path d="M 314,0 C 310,100 320,210 312,330 C 308,440 316,530 314,600"/>
+    <path d="M 338,0 C 344,140 332,270 340,410 C 346,500 338,570 338,600"/>
+    <path d="M 362,0 C 358,90 366,200 360,320 C 356,430 364,520 362,600"/>
+    <path d="M 384,0 C 388,110 380,230 386,360 C 390,460 384,540 384,600"/>
+
+    <!-- Bark Plate D -->
+    <path d="M 425,0 C 420,100 428,210 422,330 C 418,440 426,530 425,600"/>
+    <path d="M 450,0 C 456,130 446,260 452,390 C 458,490 450,560 450,600"/>
+    <path d="M 478,0 C 474,90 482,190 476,300 C 472,400 480,510 478,600"/>
+    <path d="M 510,0 C 516,120 506,240 512,370 C 518,470 510,550 510,600"/>
+    <path d="M 542,0 C 538,100 546,220 540,340 C 536,450 544,530 542,600"/>
+    <path d="M 572,0 C 576,130 568,260 574,400 C 578,500 572,560 572,600"/>
+  </g>
+
+  <!-- Secondary Dark Accent Fibers -->
+  <g fill="none" stroke="#120804" stroke-width="0.75" opacity="0.45">
+    <path d="M 28,0 C 24,110 32,230 26,350 C 22,450 30,540 28,600"/>
+    <path d="M 70,0 C 76,140 66,270 72,410 C 78,500 70,570 70,600"/>
+    <path d="M 172,0 C 176,100 166,200 164,280 C 160,320 168,360 174,440 C 178,520 172,570 172,600"/>
+    <path d="M 226,0 C 222,120 230,220 232,280 C 236,320 228,360 222,440 C 218,520 224,570 226,600"/>
+    <path d="M 326,0 C 322,110 330,220 324,350 C 320,450 328,540 326,600"/>
+    <path d="M 464,0 C 468,120 460,250 464,380 C 470,480 464,550 464,600"/>
+    <path d="M 526,0 C 522,110 530,230 524,350 C 520,460 528,540 526,600"/>
+  </g>
+
+  <!-- 4. Deep Dark Bark Furrows & Fissures (Realistic 3D Bark Crevices) -->
+  <!-- Crevice 1: x ~ 120 -->
+  <g>
+    <!-- Deep fissure shadow trench -->
+    <path d="M 120,0 C 124,70 116,150 122,230 C 127,310 117,390 123,480 C 126,530 120,570 120,600" 
+          fill="none" stroke="#050302" stroke-width="4.5" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 120,0 C 124,70 116,150 122,230 C 127,310 117,390 123,480 C 126,530 120,570 120,600" 
+          fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" opacity="0.90"/>
+    <!-- Subtle warm bark lip highlight -->
+    <path d="M 123,0 C 127,70 119,150 125,230 C 130,310 120,390 126,480 C 129,530 123,570 123,600" 
+          fill="none" stroke="#8a5a3a" stroke-width="1.2" opacity="0.35"/>
+    <!-- Branching clefts -->
+    <path d="M 121,110 C 128,135 136,150 138,170" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.65"/>
+    <path d="M 122,340 C 114,365 106,380 102,405" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.60"/>
+  </g>
+
+  <!-- Crevice 2: x ~ 270 -->
+  <g>
+    <path d="M 270,0 C 265,80 274,170 268,260 C 262,340 273,430 267,520 C 264,560 270,590 270,600" 
+          fill="none" stroke="#050302" stroke-width="4.6" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 270,0 C 265,80 274,170 268,260 C 262,340 273,430 267,520 C 264,560 270,590 270,600" 
+          fill="none" stroke="#000000" stroke-width="2.4" stroke-linecap="round" opacity="0.90"/>
+    <path d="M 273,0 C 268,80 277,170 271,260 C 265,340 276,430 270,520 C 267,560 273,590 273,600" 
+          fill="none" stroke="#8a5a3a" stroke-width="1.2" opacity="0.35"/>
+    <path d="M 269,200 C 278,225 284,245 288,270" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.65"/>
+    <path d="M 268,460 C 259,485 252,505 248,525" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.60"/>
+  </g>
+
+  <!-- Crevice 3: x ~ 400 -->
+  <g>
+    <path d="M 400,0 C 405,90 395,190 402,280 C 408,370 397,460 404,540 C 406,570 400,590 400,600" 
+          fill="none" stroke="#050302" stroke-width="4.4" stroke-linecap="round" opacity="0.75"/>
+    <path d="M 400,0 C 405,90 395,190 402,280 C 408,370 397,460 404,540 C 406,570 400,590 400,600" 
+          fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" opacity="0.90"/>
+    <path d="M 403,0 C 408,90 398,190 405,280 C 411,370 400,460 407,540 C 409,570 403,590 403,600" 
+          fill="none" stroke="#8a5a3a" stroke-width="1.2" opacity="0.35"/>
+    <path d="M 401,150 C 392,175 385,195 380,215" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.60"/>
+    <path d="M 403,380 C 411,405 418,425 422,450" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.65"/>
+  </g>
+
+  <!-- Seamless Border Furrow: x = 0 and x = 600 -->
+  <g>
+    <path d="M 0,0 C 4,90 -3,190 3,290 C 7,380 -2,470 4,550 C 5,580 0,595 0,600" 
+          fill="none" stroke="#000000" stroke-width="3.6" opacity="0.80"/>
+    <path d="M 600,0 C 604,90 597,190 603,290 C 607,380 598,470 604,550 C 605,580 600,595 600,600" 
+          fill="none" stroke="#000000" stroke-width="3.6" opacity="0.80"/>
+  </g>
+
+  <!-- 5. Natural Dark Wood Knots & Swirling Annual Rings -->
+  <!-- Knot A (Plank 2 at x=195, y=300) -->
+  <g transform="translate(195, 300)">
+    <ellipse cx="0" cy="0" rx="26" ry="46" fill="none" stroke="#0d0704" stroke-width="1.4" opacity="0.60"/>
+    <ellipse cx="0" cy="0" rx="19" ry="34" fill="none" stroke="#170c07" stroke-width="1.8" opacity="0.75"/>
+    <ellipse cx="0" cy="0" rx="12" ry="22" fill="none" stroke="#080402" stroke-width="2.2" opacity="0.85"/>
+    <!-- Dense dark resinous knot center -->
+    <ellipse cx="0" cy="0" rx="7" ry="13" fill="#000000" opacity="0.95"/>
+    <ellipse cx="-1" cy="-2" rx="3" ry="7" fill="#050302" opacity="0.95"/>
+    <ellipse cx="2" cy="1" rx="4" ry="8" fill="none" stroke="#9e6945" stroke-width="0.8" opacity="0.45"/>
+  </g>
+
+  <!-- Knot B (Plank 4 at x=520, y=140) -->
+  <g transform="translate(520, 140)">
+    <ellipse cx="0" cy="0" rx="16" ry="28" fill="none" stroke="#120905" stroke-width="1.4" opacity="0.65"/>
+    <ellipse cx="0" cy="0" rx="9" ry="17" fill="none" stroke="#080402" stroke-width="1.8" opacity="0.80"/>
+    <ellipse cx="0" cy="0" rx="5" ry="9" fill="#000000" opacity="0.95"/>
+  </g>
+
+  <!-- 6. Real Tree Bark Lenticels & Horizontal Clefts (Dark Walnut / Smoked Oak Bark) -->
+  <g fill="#000000" opacity="0.65">
+    <path d="M 45,75 Q 58,73 70,76 Q 58,78 45,75 Z"/>
+    <path d="M 72,185 Q 86,182 96,186 Q 84,188 72,185 Z"/>
+    <path d="M 28,410 Q 42,407 55,411 Q 40,413 28,410 Z"/>
+    <path d="M 68,520 Q 82,518 92,522 Q 80,524 68,520 Z"/>
+
+    <path d="M 148,80 Q 162,77 174,81 Q 160,83 148,80 Z"/>
+    <path d="M 225,160 Q 238,157 248,161 Q 236,163 225,160 Z"/>
+    <path d="M 152,470 Q 168,467 180,472 Q 166,474 152,470 Z"/>
+    <path d="M 228,540 Q 242,537 252,541 Q 240,543 228,540 Z"/>
+
+    <path d="M 305,65 Q 320,62 332,66 Q 318,68 305,65 Z"/>
+    <path d="M 345,190 Q 360,187 372,191 Q 358,193 345,190 Z"/>
+    <path d="M 312,430 Q 328,427 340,432 Q 326,434 312,430 Z"/>
+    <path d="M 355,515 Q 370,512 382,516 Q 368,518 355,515 Z"/>
+
+    <path d="M 440,70 Q 458,67 472,71 Q 456,73 440,70 Z"/>
+    <path d="M 525,230 Q 542,227 558,232 Q 540,234 525,230 Z"/>
+    <path d="M 460,370 Q 478,367 492,372 Q 476,374 460,370 Z"/>
+    <path d="M 530,490 Q 548,487 564,492 Q 546,494 530,490 Z"/>
+  </g>
+
+  <!-- 7. Subtle amber wood bark highlights -->
+  <g fill="#9c633b" opacity="0.25">
+    <path d="M 46,76 Q 58,77 70,77 Q 58,79 46,76 Z"/>
+    <path d="M 149,81 Q 162,82 174,82 Q 160,84 149,81 Z"/>
+    <path d="M 306,66 Q 320,67 332,67 Q 318,69 306,66 Z"/>
+    <path d="M 441,71 Q 458,72 472,72 Q 456,74 441,71 Z"/>
+    <path d="M 153,471 Q 168,473 180,473 Q 166,475 153,471 Z"/>
+    <path d="M 356,516 Q 370,517 382,517 Q 368,519 356,516 Z"/>
+  </g>
+</svg>

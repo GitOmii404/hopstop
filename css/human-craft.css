@@ -371,22 +371,37 @@ body {
    5. COMMUNITY PHOTO WALL — Dark Translucent Authentic Wood Bark Exhibition Wall
    -------------------------------------------------------------------------- */
 #gallery {
-  background-color: var(--bg-surface) !important;
-  background-image: none !important;
-  border-top: 1px solid var(--border-color) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  box-shadow: none !important;
+  background-color: #21160e !important;
+  background-image: 
+    /* 1. Ambient Gallery Warm Downlighting */
+    radial-gradient(circle at 50% 8%, rgba(255, 235, 205, 0.22) 0%, transparent 65%),
+    radial-gradient(circle at 18% 48%, rgba(217, 119, 6, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 82% 52%, rgba(180, 83, 9, 0.10) 0%, transparent 50%),
+    /* 2. Authentic Handcrafted Dark Translucent Wood Bark, Organic Furrows & Timber Grain */
+    url('wood-bark.svg?v=20261119_bark_v1') !important;
+  background-size: auto, auto, auto, 520px 520px !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat !important;
+  border-top: 1px solid rgba(195, 130, 75, 0.28) !important;
+  border-bottom: 1px solid rgba(195, 130, 75, 0.28) !important;
+  box-shadow: inset 0 16px 44px rgba(0, 0, 0, 0.50), inset 0 -16px 44px rgba(0, 0, 0, 0.50) !important;
   padding: 48px 0 36px !important;
   position: relative;
   overflow: hidden;
 }
 
 [data-theme="dark"] #gallery {
-  background-color: var(--bg-surface) !important;
-  background-image: none !important;
-  border-top: 1px solid var(--border-color) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  box-shadow: none !important;
+  /* Traditional Japanese Yakisugi (Shou Sugi Ban) Authentic Charred Wood Bark */
+  background-color: #120e0a !important;
+  background-image: 
+    radial-gradient(circle at 50% 8%, rgba(255, 220, 180, 0.14) 0%, transparent 65%),
+    radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    url('wood-bark.svg?v=20261119_bark_v1') !important;
+  background-size: auto, auto, auto, 520px 520px !important;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat !important;
+  border-top: 1px solid rgba(180, 83, 9, 0.35) !important;
+  border-bottom: 1px solid rgba(180, 83, 9, 0.35) !important;
+  box-shadow: inset 0 20px 48px rgba(0, 0, 0, 0.65), inset 0 -20px 48px rgba(0, 0, 0, 0.65) !important;
 }
 
 #gallery .section-tag {
@@ -415,21 +430,23 @@ body {
   font-family: var(--font-heading) !important;
   font-size: 2.5rem !important;
   font-weight: 800 !important;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7) !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8) !important;
 }
 
 [data-theme="dark"] #gallery .section-title {
-  color: #f8fafc !important;
+  color: #fef3c7 !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9) !important;
 }
 
 #gallery .section-subtitle {
-  color: #e5d8c8 !important;
+  color: #f1dfcf !important;
   font-size: 1.0rem !important;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6) !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8) !important;
 }
 
 [data-theme="dark"] #gallery .section-subtitle {
-  color: #cbd5e1 !important;
+  color: #e2d3c2 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9) !important;
 }
 
 /* Gallery Viewport Dimensions & Spacing — 100% Crystal Clear (No Blur/Fade Overlays) */
