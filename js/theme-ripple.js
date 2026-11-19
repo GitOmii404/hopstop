@@ -1,15 +1,15 @@
 /**
- * HopStop — Organic Water Ripple Theme Transition
- * Creates a fluid, water-droplet shockwave & circular ripple that travels across the viewport,
- * revealing the new theme (Light / Dark) seamlessly along the expanding wavefront.
+ * HopStop — Organic Liquid Water Transformation Theme Transition
+ * Makes the entire page physically ripple, bend, and wave like real water during the theme transition.
+ * Combines SVG fluid displacement mapping, traveling liquid waves, water surface caustics, and View Transitions.
  */
 
 (function () {
   'use strict';
 
-  // Audio synthesis: Organic subtle water droplet sound using Web Audio API
+  // 1. Synthetic organic water surf & droplet splash audio via Web Audio API
   let audioCtx = null;
-  function playWaterDropSound() {
+  function playWaterWaveSound() {
     try {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -18,39 +18,99 @@
         audioCtx.resume();
       }
       const now = audioCtx.currentTime;
+
+      // A. Pink noise water wave wash
+      const bufferSize = audioCtx.sampleRate * 0.8;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.038;
+        b6 = white * 0.115926;
+      }
+
+      const whiteNoise = audioCtx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+
+      // Lowpass filter for deep soothing water wash
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(420, now);
+      filter.frequency.exponentialRampToValueAtTime(1100, now + 0.35);
+      filter.frequency.exponentialRampToValueAtTime(280, now + 0.8);
+
+      const noiseGain = audioCtx.createGain();
+      noiseGain.gain.setValueAtTime(0.001, now);
+      noiseGain.gain.linearRampToValueAtTime(0.07, now + 0.12);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.78);
+
+      whiteNoise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(audioCtx.destination);
+
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 0.8);
+
+      // B. Resonant water drop glissando
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      // Pitch glide: starting high, dropping, then a bubbly resonating rise
+      const dropGain = audioCtx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(680, now);
-      osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
-      osc.frequency.exponentialRampToValueAtTime(540, now + 0.18);
+      osc.frequency.setValueAtTime(620, now);
+      osc.frequency.exponentialRampToValueAtTime(340, now + 0.09);
+      osc.frequency.exponentialRampToValueAtTime(560, now + 0.22);
 
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.09, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+      dropGain.gain.setValueAtTime(0.001, now);
+      dropGain.gain.linearRampToValueAtTime(0.065, now + 0.03);
+      dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
 
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc.connect(dropGain);
+      dropGain.connect(audioCtx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.24);
+      osc.stop(now + 0.26);
     } catch (_) {
-      // Audio not permitted or not supported, ignore silently
+      // Audio autoplay restrictions or unsupported
     }
   }
 
-  // Smooth cubic ease for water wave propagation
-  function easeWater(t) {
-    return 1 - Math.pow(1 - t, 3);
+  // 2. Ensure SVG Fluid Displacement Filter is in the document
+  function ensureWaterFilter() {
+    let svg = document.getElementById('hopstopWaterSvg');
+    if (!svg) {
+      svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.id = 'hopstopWaterSvg';
+      svg.setAttribute('style', 'position:fixed;width:0;height:0;left:-9999px;top:-9999px;pointer-events:none;');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.innerHTML = `
+        <defs>
+          <filter id="hopstopWaterFilter" x="-15%" y="-15%" width="130%" height="130%" filterUnits="objectBoundingBox">
+            <feTurbulence id="hopstopWaterTurb" type="fractalNoise" baseFrequency="0.016 0.024" numOctaves="3" result="liquidNoise" seed="14" />
+            <feDisplacementMap id="hopstopWaterDisp" in="SourceGraphic" in2="liquidNoise" scale="0" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+          </filter>
+        </defs>
+      `;
+      document.body.appendChild(svg);
+    }
+    return {
+      disp: document.getElementById('hopstopWaterDisp'),
+      turb: document.getElementById('hopstopWaterTurb')
+    };
   }
 
+  // 3. Main Water Ripple Theme Transformation Controller
   window.triggerWaterRippleTheme = function (event, newTheme, onThemeApply) {
-    // 1. Determine origin coordinate (x, y)
+    const { disp, turb } = ensureWaterFilter();
+
+    // Determine click coordinate origin (x, y)
     const evt = event || window.event;
     let x, y;
-
     if (evt && typeof evt.clientX === 'number' && evt.clientX > 0) {
       x = evt.clientX;
       y = evt.clientY;
@@ -68,30 +128,26 @@
 
     // Gentle tactile feedback
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      try { navigator.vibrate(12); } catch (_) {}
+      try { navigator.vibrate(14); } catch (_) {}
     }
-    playWaterDropSound();
+    playWaterWaveSound();
 
-    // 2. Animate the toggle button with a liquid ripple pulse
+    // Animate button with liquid pulse
     const toggleBtn = document.getElementById('themeToggle') || document.querySelector('.theme-landscape-toggle');
     if (toggleBtn) {
       toggleBtn.classList.remove('tlt-water-ripple-active');
-      // Trigger reflow
       void toggleBtn.offsetWidth;
       toggleBtn.classList.add('tlt-water-ripple-active');
-      setTimeout(() => toggleBtn.classList.remove('tlt-water-ripple-active'), 800);
+      setTimeout(() => toggleBtn.classList.remove('tlt-water-ripple-active'), 900);
     }
 
-    // 3. Compute maximum radius from origin to farthest corner
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    ) + 30;
-
-    const DURATION = 780; // ms
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const endRadius = Math.hypot(Math.max(x, w - x), Math.max(y, h - y)) + 40;
+    const DURATION = 960; // ms
     const isDark = newTheme === 'dark';
 
-    // 4. Setup full-screen Canvas for the water ripple wave-front
+    // 4. Setup Water Caustic & Surface Wave Canvas Overlay
     let canvas = document.getElementById('themeWaterRippleCanvas');
     if (!canvas) {
       canvas = document.createElement('canvas');
@@ -101,8 +157,6 @@
     }
 
     const dpr = window.devicePixelRatio || 1;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -111,129 +165,135 @@
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
-    // Color definitions for water wave-front & caustics
-    // When going to dark: oceanic twilight cyan/aquamarine water with specular crystal glow
-    // When going to light: sunlit golden amber water with sparkling honey caustics
-    const waveTheme = isDark
-      ? {
-          crest: 'rgba(56, 189, 248, ', // sky cyan
-          crestGlow: 'rgba(14, 165, 233, ', // deep sky
-          innerShadow: 'rgba(3, 7, 18, ', // dark water trough
-          specular: 'rgba(255, 255, 255, ',
-          ambient: 'rgba(56, 189, 248, 0.15)'
-        }
-      : {
-          crest: 'rgba(251, 191, 36, ', // warm amber
-          crestGlow: 'rgba(245, 158, 11, ', // golden amber
-          innerShadow: 'rgba(120, 53, 15, ', // amber trough
-          specular: 'rgba(255, 255, 255, ',
-          ambient: 'rgba(251, 191, 36, 0.18)'
-        };
+    // Turn whole page into liquid water: apply filter class
+    document.documentElement.classList.add('theme-water-submerged');
 
     const startTime = performance.now();
-    let animationFrameId = null;
+    let animId = null;
 
-    function renderWaterWaves(now) {
+    // Caustic color themes
+    const causticTheme = isDark
+      ? {
+          crest: 'rgba(56, 189, 248, ',   // ocean cyan
+          glow: 'rgba(14, 165, 233, ',
+          caustic: 'rgba(125, 211, 252, ',
+          specular: 'rgba(255, 255, 255, '
+        }
+      : {
+          crest: 'rgba(251, 191, 36, ',   // golden amber
+          glow: 'rgba(245, 158, 11, ',
+          caustic: 'rgba(254, 240, 138, ',
+          specular: 'rgba(255, 255, 255, '
+        };
+
+    function renderWaterLiquidFrame(now) {
       const elapsed = now - startTime;
-      const t = Math.min(1, elapsed / DURATION);
-      const progress = easeWater(t);
-      const currentRadius = endRadius * progress;
+      const p = Math.min(1, elapsed / DURATION);
 
+      // A. Physical water displacement scale:
+      // Swells up to ~40px displacement (making all page elements wobble and bend like water),
+      // ripples through harmonic decay, then gently flattens to 0.
+      const waveDisplacement = Math.sin(p * Math.PI) * Math.max(0, 1 - p * 0.45) * 40;
+      if (disp) {
+        disp.setAttribute('scale', waveDisplacement.toFixed(2));
+      }
+
+      // B. Animate traveling liquid frequencies (simulates wave propagation across the page)
+      if (turb) {
+        const freqX = (0.015 + Math.sin(p * Math.PI * 3.5) * 0.006).toFixed(4);
+        const freqY = (0.022 + Math.cos(p * Math.PI * 3.0) * 0.007).toFixed(4);
+        turb.setAttribute('baseFrequency', `${freqX} ${freqY}`);
+      }
+
+      // C. Render water surface caustics & wave boundary on canvas
       ctx.clearRect(0, 0, w, h);
 
-      // 1. Initial droplet ripples blooming at origin (0ms -> 380ms)
-      if (t < 0.5) {
-        const dropT = t / 0.5;
-        const dropAlpha = (1 - dropT) * 0.7;
-        const dropRadius = 8 + dropT * 75;
+      // Expanding wavefront radius using smooth water easing
+      const waveEase = 1 - Math.pow(1 - p, 3);
+      const currentRadius = endRadius * waveEase;
+      const waveAlpha = Math.max(0, Math.sin(p * Math.PI) * (1 - p * 0.3));
 
+      if (currentRadius > 6 && waveAlpha > 0.01) {
         ctx.save();
+
+        // 1. Full-screen subtle water caustic network (pool water reflection)
+        const causticAlpha = waveAlpha * 0.18;
+        ctx.fillStyle = causticTheme.caustic + causticAlpha + ')';
+        // Organic swimming pool light ribbon caustic grid
+        const step = 80;
+        const timeShift = elapsed * 0.003;
+        for (let cx = 0; cx < w; cx += step) {
+          for (let cy = 0; cy < h; cy += step) {
+            const waveDist = Math.hypot(cx - x, cy - y);
+            // Caustics are strongest right near the traveling wave boundary
+            const distFromWave = Math.abs(waveDist - currentRadius);
+            if (distFromWave < 280) {
+              const localAlpha = (1 - distFromWave / 280) * causticAlpha;
+              const ox = Math.sin(cy * 0.04 + timeShift * 3) * 12;
+              const oy = Math.cos(cx * 0.04 + timeShift * 3) * 12;
+              ctx.beginPath();
+              ctx.ellipse(cx + ox, cy + oy, 24, 14, (cx + cy) * 0.01, 0, Math.PI * 2);
+              ctx.fillStyle = causticTheme.caustic + localAlpha + ')';
+              ctx.fill();
+            }
+          }
+        }
+
+        // 2. High-gloss traveling water wave boundary
+        // Soft outer glow of the water wave
         ctx.beginPath();
-        ctx.arc(x, y, dropRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = waveTheme.crest + dropAlpha + ')';
-        ctx.lineWidth = 3.5 * (1 - dropT * 0.5);
-        ctx.shadowColor = waveTheme.crest + (dropAlpha * 0.8) + ')';
+        ctx.arc(x, y, currentRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = causticTheme.glow + (waveAlpha * 0.45) + ')';
+        ctx.lineWidth = 22;
+        ctx.shadowColor = causticTheme.glow + (waveAlpha * 0.8) + ')';
+        ctx.shadowBlur = 24;
+        ctx.stroke();
+
+        // Sharp shimmering specular water crest
+        ctx.beginPath();
+        ctx.arc(x, y, currentRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = causticTheme.specular + (waveAlpha * 0.95) + ')';
+        ctx.lineWidth = 3.6;
         ctx.shadowBlur = 10;
         ctx.stroke();
 
-        if (dropRadius > 20) {
+        // Secondary and tertiary liquid wave ripples trailing behind
+        const echo1 = currentRadius - 32 * (1 - waveEase * 0.25);
+        if (echo1 > 10) {
           ctx.beginPath();
-          ctx.arc(x, y, dropRadius * 0.58, 0, Math.PI * 2);
-          ctx.strokeStyle = waveTheme.specular + (dropAlpha * 0.6) + ')';
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      // 2. Main Traveling Water Wave Crest (The boundary that shifts the world)
-      if (currentRadius > 4) {
-        const waveAlpha = Math.max(0, 1 - Math.pow(t, 2.2)); // Fades out gently as it reaches outer edges
-
-        ctx.save();
-
-        // A. Subtle water refraction band ahead of the crest
-        ctx.beginPath();
-        ctx.arc(x, y, Math.max(0, currentRadius + 6), 0, Math.PI * 2);
-        ctx.strokeStyle = waveTheme.crestGlow + (waveAlpha * 0.35) + ')';
-        ctx.lineWidth = 14;
-        ctx.shadowColor = waveTheme.crestGlow + (waveAlpha * 0.6) + ')';
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-
-        // B. Sharp high-gloss liquid wave crest (Specular highlight)
-        ctx.beginPath();
-        ctx.arc(x, y, currentRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = waveTheme.specular + (waveAlpha * 0.88) + ')';
-        ctx.lineWidth = 3.8;
-        ctx.stroke();
-
-        // C. Core water crest body with luminous color
-        ctx.beginPath();
-        ctx.arc(x, y, currentRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = waveTheme.crest + (waveAlpha * 0.95) + ')';
-        ctx.lineWidth = 7.5;
-        ctx.stroke();
-
-        // D. Secondary trailing echo wave (28px behind)
-        const echo1R = currentRadius - 28 * (1 - progress * 0.25);
-        if (echo1R > 8) {
-          const echo1Alpha = waveAlpha * 0.55;
-          ctx.beginPath();
-          ctx.arc(x, y, echo1R, 0, Math.PI * 2);
-          ctx.strokeStyle = waveTheme.crest + echo1Alpha + ')';
-          ctx.lineWidth = 3.2;
-          ctx.shadowBlur = 8;
+          ctx.arc(x, y, echo1, 0, Math.PI * 2);
+          ctx.strokeStyle = causticTheme.crest + (waveAlpha * 0.6) + ')';
+          ctx.lineWidth = 4;
           ctx.stroke();
         }
 
-        // E. Tertiary trailing echo wave (58px behind)
-        const echo2R = currentRadius - 58 * (1 - progress * 0.35);
-        if (echo2R > 12) {
-          const echo2Alpha = waveAlpha * 0.32;
+        const echo2 = currentRadius - 68 * (1 - waveEase * 0.35);
+        if (echo2 > 15) {
           ctx.beginPath();
-          ctx.arc(x, y, echo2R, 0, Math.PI * 2);
-          ctx.strokeStyle = waveTheme.crestGlow + echo2Alpha + ')';
-          ctx.lineWidth = 2.0;
+          ctx.arc(x, y, echo2, 0, Math.PI * 2);
+          ctx.strokeStyle = causticTheme.crest + (waveAlpha * 0.35) + ')';
+          ctx.lineWidth = 2.4;
           ctx.stroke();
         }
 
         ctx.restore();
       }
 
-      if (t < 1) {
-        animationFrameId = requestAnimationFrame(renderWaterWaves);
+      if (p < 1) {
+        animId = requestAnimationFrame(renderWaterLiquidFrame);
       } else {
+        // Complete transition: calm the water completely
         ctx.clearRect(0, 0, w, h);
+        if (disp) disp.setAttribute('scale', '0');
+        document.documentElement.classList.remove('theme-water-submerged');
       }
     }
 
-    // Start wave physics on canvas
-    animationFrameId = requestAnimationFrame(renderWaterWaves);
+    // Start water physics loop
+    animId = requestAnimationFrame(renderWaterLiquidFrame);
 
     // 5. Apply the Theme via View Transitions API or Fallback
     if (document.startViewTransition) {
-      // Modern standards path: View Transitions API captures the DOM snapshot
       const transition = document.startViewTransition(() => {
         onThemeApply(newTheme);
       });
@@ -254,8 +314,7 @@
         );
       });
     } else {
-      // Fallback path for browsers without View Transitions API
-      // Create a full-screen water overlay that reveals the new theme color
+      // Fallback for non-supporting browsers
       const fallbackOverlay = document.createElement('div');
       fallbackOverlay.id = 'themeFallbackRipple';
       fallbackOverlay.style.cssText = `
@@ -265,21 +324,18 @@
         pointer-events: none;
         background-color: ${isDark ? '#0b0f19' : '#f8fafc'};
         clip-path: circle(0px at ${x}px ${y}px);
-        transition: clip-path ${DURATION}ms cubic-bezier(0.25, 1, 0.35, 1), opacity 200ms ease ${DURATION - 150}ms;
+        transition: clip-path ${DURATION}ms cubic-bezier(0.25, 1, 0.35, 1), opacity 220ms ease ${DURATION - 160}ms;
       `;
       document.body.appendChild(fallbackOverlay);
 
-      // Trigger clip-path expansion
       requestAnimationFrame(() => {
         fallbackOverlay.style.clipPath = `circle(${endRadius}px at ${x}px ${y}px)`;
       });
 
-      // Switch theme halfway through expansion
       setTimeout(() => {
         onThemeApply(newTheme);
       }, DURATION * 0.45);
 
-      // Clean up fallback overlay
       setTimeout(() => {
         fallbackOverlay.style.opacity = '0';
         setTimeout(() => fallbackOverlay.remove(), 250);
