@@ -8,7 +8,7 @@
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <link rel="stylesheet" href="styles.css?v=20261117_craft_v3">
-  <link rel="stylesheet" href="css/theme-toggle.css?v=20261117_craft_v3">
+  <link rel="stylesheet" href="css/theme-toggle.css?v=20261119_ripple_v1">
 </head>
 <body>
 
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Theme Toggle: Animated Day/Night Landscape Switch -->
-        <button id="themeToggle" class="theme-landscape-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" onclick="toggleTheme()">
+        <button id="themeToggle" class="theme-landscape-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" onclick="toggleTheme(event)">
           <span class="tlt-track">
             <!-- Day Scene (Apricot Sky & Dunes) -->
             <span class="tlt-scene-day">
@@ -263,7 +263,7 @@
               </div>
 
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item" onclick="closeUserMenu(); toggleTheme();">
+              <div class="dropdown-item" onclick="closeUserMenu(); toggleTheme(event);">
                 <span class="dropdown-item-icon">🌓</span>
                 <div class="dropdown-item-text">
                   <span class="dropdown-item-title">Toggle Light / Dark Theme</span>
@@ -526,7 +526,7 @@
               <li><button class="footer-link-btn" onclick="openPostModal()">💎 Share a Hidden Stop</button></li>
               <li><button class="footer-link-btn" onclick="openPostBountyModal()">🏹 Post a Travel Bounty</button></li>
               <li><a href="javascript:void(0)" onclick="showToast('Preservation Code: Take only pictures, leave only footprints 🌿')">🌿 Leave-No-Trace Code</a></li>
-              <li><button class="footer-link-btn" onclick="toggleTheme()">🌓 Toggle Light / Dark Theme</button></li>
+              <li><button class="footer-link-btn" onclick="toggleTheme(event)">🌓 Toggle Light / Dark Theme</button></li>
               <li>
                 <button class="footer-back-to-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
                   <span>⬆</span> Back to Top
@@ -846,6 +846,7 @@
   <script src="js/state.js?v=20261117_craft_v3"></script>
   <script src="js/cloud.js"></script>
   <script src="js/map.js?v=20261117_craft_v3"></script>
+  <script src="js/theme-ripple.js?v=20261119_ripple_v1"></script>
   <script src="js/auth.js?v=20261117_craft_v3"></script>
   <script src="js/gamification.js"></script>
   <script src="js/bounties.js?v=20261117_craft_v3"></script>

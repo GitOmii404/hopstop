@@ -27,14 +27,26 @@ window.initTheme = function () {
   updateThemeIcon(savedTheme);
 };
 
-window.toggleTheme = function () {
+window.toggleTheme = function (event) {
   const current = document.documentElement.getAttribute('data-theme') || 'light';
   const newTheme = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('hopstop_theme', newTheme);
-  updateThemeIcon(newTheme);
-  if (typeof updateMapTiles === 'function') updateMapTiles();
-  if (typeof showToast === 'function') showToast(`Switched to ${newTheme === 'dark' ? '🌙 Dark' : '☀️ Light'} mode!`);
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('hopstop_theme', theme);
+    updateThemeIcon(theme);
+    if (typeof updateMapTiles === 'function') updateMapTiles();
+  }
+
+  if (typeof window.triggerWaterRippleTheme === 'function') {
+    window.triggerWaterRippleTheme(event, newTheme, applyTheme);
+  } else {
+    applyTheme(newTheme);
+  }
+
+  if (typeof showToast === 'function') {
+    showToast(`Switched to ${newTheme === 'dark' ? '🌙 Dark' : '☀️ Light'} mode!`);
+  }
 };
 
 window.updateThemeIcon = function (theme) {
