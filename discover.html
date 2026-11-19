@@ -8,7 +8,7 @@
   
   <!-- Leaflet.js Interactive Map CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261119_wood_v1">
+  <link rel="stylesheet" href="styles.css?v=20261119_dispatch_v5">
   <link rel="stylesheet" href="css/theme-toggle.css?v=20261119_seamless_v4">
 </head>
 <body>
@@ -766,17 +766,63 @@
       <section class="section" id="contact" style="padding-top: 20px;">
         <div class="container">
           <div class="newsletter-card reveal">
-            <div class="newsletter-text">
-              <h3>Get Secret Spots Before They Get Crowded 📬</h3>
-              <p>Join 34,000+ conscious travelers getting our private weekly digest of hidden villages, unmapped lagoons, and flight deals.</p>
-            </div>
-            <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); awardUserXp(50, 'Newsletter Subscription'); showToast('🎉 Welcome to the HopStop Explorer Digest!'); this.reset();">
-              <div class="newsletter-input-group">
-                <input type="email" id="newsletterEmail" placeholder="Enter your email address..." required>
-                <button type="submit" class="btn-primary" style="padding: 8px 22px;">Subscribe</button>
+            <!-- Decorative Airmail Stamp Watermark -->
+            <div class="newsletter-stamp-watermark" aria-hidden="true">
+              <div class="stamp-postmark">
+                <div class="stamp-circle">
+                  <span>HOPSTOP</span>
+                  <span>FIELD DISPATCH</span>
+                  <span class="stamp-code">NO. 404</span>
+                </div>
+                <div class="stamp-wavy-lines"><i></i><i></i><i></i><i></i></div>
               </div>
-              <span style="font-size: 0.75rem; color: #94a3b8; text-align: left;">100% free. No ads. Unsubscribe anytime.</span>
-            </form>
+            </div>
+
+            <!-- Left: Curated Dispatch Information & Social Proof -->
+            <div class="newsletter-text">
+              <div class="newsletter-badge-pill">
+                <span class="badge-dot"></span>
+                <span>Weekly Field Dispatch</span>
+                <span class="badge-sub">Free Every Friday</span>
+              </div>
+              <h3 class="newsletter-title">Get Secret Spots Before They Get Crowded 📬</h3>
+              <p class="newsletter-desc">Every Friday morning, our scouting team delivers 5 unmapped cliff villages, hidden waterfalls, and verified offline GPS trails straight to your inbox.</p>
+              
+              <div class="newsletter-community-row">
+                <div class="community-avatar-stack">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Explorer Elena" class="community-avatar" loading="lazy">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Explorer Marco" class="community-avatar" loading="lazy">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Explorer Chloe" class="community-avatar" loading="lazy">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Explorer Liam" class="community-avatar" loading="lazy">
+                  <span class="community-avatar-plus">+34k</span>
+                </div>
+                <div class="community-label">
+                  <strong>34,200+ mindful wanderers</strong>
+                  <span>Reading across 84 countries • No sponsored ads</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Interactive Pill Subscription Form -->
+            <div class="newsletter-action-box">
+              <form class="newsletter-form" id="newsletterForm" onsubmit="event.preventDefault(); if (typeof triggerConfetti === 'function') triggerConfetti(); if (typeof awardUserXp === 'function') awardUserXp(50, 'Newsletter Subscription'); showToast('🎉 Welcome to the HopStop Explorer Digest!'); this.reset();">
+                <div class="newsletter-input-group">
+                  <span class="input-icon">✉️</span>
+                  <input type="email" id="newsletterEmail" placeholder="Enter your explorer email..." required autocomplete="email">
+                  <button type="submit" class="newsletter-submit-btn">
+                    <span>Subscribe</span>
+                    <span class="btn-arrow">→</span>
+                  </button>
+                </div>
+                <div class="newsletter-guarantees">
+                  <span class="guarantee-item"><span>🔒</span> 100% Free & No Ads</span>
+                  <span class="guarantee-dot">•</span>
+                  <span class="guarantee-item"><span>⏱️</span> 3-Min Read</span>
+                  <span class="guarantee-dot">•</span>
+                  <span class="guarantee-item"><span>✕</span> Unsubscribe Anytime</span>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </section>
