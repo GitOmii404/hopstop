@@ -203,19 +203,13 @@
    Water Ripple Theme Transition (View Transitions API & Liquid Pulse)
    ========================================================================== */
 
-/* Liquid Water Submerged State: Ripples the entire viewport like real water */
-html.theme-water-submerged {
-  filter: url('#hopstopWaterFilter');
-  will-change: filter;
-}
-
-/* Disable default cross-fade of View Transitions and apply fluid water filter */
+/* Disable default cross-fade and apply GPU fluid water displacement filter */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
   filter: url('#hopstopWaterFilter');
-  will-change: filter, clip-path;
+  will-change: clip-path;
 }
 
 ::view-transition-old(root) {
@@ -224,6 +218,12 @@ html.theme-water-submerged {
 
 ::view-transition-new(root) {
   z-index: 99999;
+}
+
+/* Fallback for browsers without View Transitions */
+html.theme-water-submerged-fallback {
+  filter: url('#hopstopWaterFilter');
+  will-change: filter;
 }
 
 /* Water Multi-Ripple Active State on the Landscape Toggle Switch */
