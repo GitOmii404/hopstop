@@ -41,7 +41,7 @@ function renderPosts() {
         <div class="post-image-wrap">
           <img src="${post.image}" alt="${post.placeName}" loading="lazy">
           <div class="card-stamp-badge"><span>★</span> OFF-GRID FIND</div>
-          <div class="post-gem-badge">💎 Gem Score: ${post.gemScore}/10</div>
+          <div class="post-gem-badge">⭐ Gem Score: ${post.gemScore}/10</div>
 
           <div class="post-action-overlay">
             <button class="post-action-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(event, ${post.id})" title="Like">
@@ -449,7 +449,7 @@ function renderBucketList() {
           <span class="bucket-item-country">${item.country}</span>
         </div>
         <div class="bucket-item-meta-pills">
-          <span class="meta-pill gem">💎 ${item.gemScore}/10 Underrated</span>
+          <span class="meta-pill gem">⭐ ${item.gemScore}/10 Underrated</span>
           <span class="meta-pill season">☀️ ${item.bestTime || 'Year-round'}</span>
           <span class="meta-pill budget">💰 ${item.budget || '$40 - $70 / day'}</span>
         </div>
@@ -665,7 +665,7 @@ window.openArticleModal = function (id) {
 
   document.getElementById('modalHeroImg').src = post.image;
   document.getElementById('modalTag').textContent = post.categoryLabel;
-  document.getElementById('modalGemScore').textContent = `💎 Gem Score: ${post.gemScore}/10`;
+  document.getElementById('modalGemScore').textContent = `⭐ Gem Score: ${post.gemScore}/10`;
   document.getElementById('modalTitle').textContent = post.title;
   document.getElementById('modalLocationText').textContent = `📍 ${post.placeName}, ${post.country}`;
   document.getElementById('modalAuthorInfo').innerHTML = `Shared by <strong>${post.author.name}</strong> • ${post.date} • ⏱️ ${post.readTime}`;

@@ -918,7 +918,7 @@ if (typeof window !== 'undefined') {
 // --- Curated Gallery Wall Pool ---
 const GALLERY_POOL = [
   { id: 1, title: "Lago di Braies Reflection", location: "Dolomites, Italy", category: "nature", badge: "🏔️ Alpine Mist", span: "tall", image: "https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=900&q=80" },
-  { id: 2, title: "Blagaj Dervish Spring", location: "Blagaj, Bosnia", category: "culture", badge: "💎 Karst Cave", span: "standard", image: "https://images.unsplash.com/photo-1652287350277-db5ba07dfd46?auto=format&fit=crop&w=800&q=80" },
+  { id: 2, title: "Blagaj Dervish Spring", location: "Blagaj, Bosnia", category: "culture", badge: "⭐ Karst Cave", span: "standard", image: "https://images.unsplash.com/photo-1652287350277-db5ba07dfd46?auto=format&fit=crop&w=800&q=80" },
   { id: 3, title: "Setenil Cliffside Houses", location: "Cadiz, Spain", category: "village", badge: "🏘️ Boulder Roofs", span: "standard", image: "https://images.unsplash.com/photo-1684862363333-4f5ab43e7edf?auto=format&fit=crop&w=800&q=80" },
   { id: 4, title: "Huacachina Desert Oasis", location: "Ica, Peru", category: "nature", badge: "🌅 Golden Dunes", span: "wide", image: "https://images.unsplash.com/photo-1769358758778-5b12f301051b?auto=format&fit=crop&w=1200&q=80" },
   { id: 5, title: "Giethoorn Thatched Canals", location: "Overijssel, Netherlands", category: "coastal", badge: "🛶 Whisper Boats", span: "tall", image: "https://images.unsplash.com/photo-1590435525959-40d4af82c270?auto=format&fit=crop&w=900&q=80" },

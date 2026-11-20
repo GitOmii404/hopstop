@@ -54,33 +54,36 @@
 }
 
 .brand-logo .brand-icon {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  color: white;
-  border-radius: 11px;
+  width: 34px;
+  height: 34px;
+  background: transparent !important;
+  border-radius: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 10px rgba(234, 88, 12, 0.35);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  box-shadow: none !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
-  padding: 5px;
-  overflow: hidden;
+  padding: 0 !important;
+  overflow: visible;
 }
 
 .brand-logo .brand-mark-img {
-  width: 100%;
-  height: 100%;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
   transition: transform 0.25s ease;
+  filter: brightness(0); /* Clean obsidian black in light mode */
+}
+
+[data-theme="dark"] .brand-logo .brand-mark-img {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(255, 255, 255, 0.25)); /* Crisp pure white in dark mode */
 }
 
 .brand-logo:hover .brand-icon {
   transform: rotate(-6deg) scale(1.08);
-  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.45);
+  box-shadow: none !important;
 }
 
 .brand-logo:hover .brand-mark-img {
@@ -88,7 +91,7 @@
 }
 
 .brand-logo span span {
-  color: #06b6d4;
+  color: inherit !important;
 }
 
 .nav-links {

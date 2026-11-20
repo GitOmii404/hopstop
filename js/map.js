@@ -147,13 +147,13 @@ function plotMapPins() {
   filtered.forEach(post => {
     if (!post.coords || post.coords.length !== 2) return;
 
-    // Custom Glowing Diamond DivIcon
+    // Custom Waypoint Pin with official HopStop Logomark
     const customIcon = L.divIcon({
       className: 'hopstop-map-pin',
       html: `
         <div class="pin-badge-wrapper" title="${post.placeName}">
           <div class="pin-pulse-ring"></div>
-          <span>💎</span>
+          <img src="assets/logo/hopstop-mark-white.png" alt="HopStop" class="map-pin-logo-img">
         </div>
       `,
       iconSize: [38, 38],
@@ -166,7 +166,7 @@ function plotMapPins() {
       <div class="map-popup-card">
         <img src="${post.image}" alt="${post.placeName}" class="map-popup-thumb">
         <div class="map-popup-body">
-          <span class="map-popup-badge">${post.categoryLabel} • 💎 ${post.gemScore}/10</span>
+          <span class="map-popup-badge">${post.categoryLabel} • ⭐ ${post.gemScore}/10</span>
           <h4 class="map-popup-title">${post.placeName}</h4>
           <p class="map-popup-location">📍 ${post.country}</p>
           <div class="map-popup-secret"><strong>🤫 Tip:</strong> ${post.secretTip}</div>
@@ -306,7 +306,7 @@ window.renderNearestGemsSlider = function () {
         <div class="nearest-card-content">
           <div class="nearest-card-meta-row">
             <span class="nearest-category-tag">${gem.categoryLabel || gem.category}</span>
-            <span class="nearest-score-pill">💎 ${gem.gemScore}/10</span>
+            <span class="nearest-score-pill">⭐ ${gem.gemScore}/10</span>
           </div>
           <h4 class="nearest-card-title">${gem.placeName}</h4>
           <p class="nearest-card-location">📍 ${gem.country}</p>

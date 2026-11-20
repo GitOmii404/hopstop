@@ -208,7 +208,7 @@ window.setFeedSortMode = function (mode) {
   const labelMap = {
     'foryou': '🔥 Curated "For You" Feed',
     'fresh': '⏱️ Fresh Discoveries',
-    'topgem': '💎 Top Gem Score (9.8+)',
+    'topgem': '⭐ Top Gem Score (9.8+)',
     'wishlist': '🏷️ Saved Wishlist & Route Matches'
   };
   showToast(`Switched feed to: ${labelMap[mode] || mode}`);

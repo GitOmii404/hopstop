@@ -404,7 +404,7 @@ window.filterWaypointOptions = function (query = '') {
         <img src="${p.image}" alt="${p.placeName}" style="width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: cover;">
         <div>
           <div style="font-weight: 700; font-size: 0.88rem;">${p.placeName}</div>
-          <span style="font-size: 0.76rem; color: var(--text-muted);">📍 ${p.country} • 💎 ${p.gemScore}/10</span>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">📍 ${p.country} • ⭐ ${p.gemScore}/10</span>
         </div>
       </div>
       <button class="btn-gem" style="padding: 5px 12px; font-size: 0.78rem;" onclick="addToItinerary(${p.id}); closeAddWaypointModal();">

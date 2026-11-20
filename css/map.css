@@ -178,27 +178,47 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: white;
   border-radius: 50%;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.6);
-  border: 2px solid white;
-  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  border: 2.5px solid #ffffff;
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+  padding: 6px;
+}
+
+[data-theme="dark"] .pin-badge-wrapper {
+  background: linear-gradient(135deg, #090d16 0%, #182236 100%);
+  border-color: #f8fafc;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
 }
 
 .pin-badge-wrapper:hover {
   transform: scale(1.25) translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.pin-badge-wrapper .map-pin-logo-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
 }
 
 .pin-pulse-ring {
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 2px solid #06b6d4;
+  border: 2px solid rgba(255, 255, 255, 0.65);
   animation: mapPulse 2s infinite ease-out;
   pointer-events: none;
+}
+
+[data-theme="dark"] .pin-pulse-ring {
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 @keyframes mapPulse {

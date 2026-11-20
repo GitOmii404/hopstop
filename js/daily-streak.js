@@ -93,7 +93,7 @@ window.openDailyGemModal = function () {
   if (heroImg) heroImg.src = dailyGemPost.image;
   if (title) title.textContent = dailyGemPost.title;
   if (location) location.textContent = `📍 ${dailyGemPost.placeName}, ${dailyGemPost.country}`;
-  if (score) score.textContent = `💎 ${dailyGemPost.gemScore}/10 Underrated`;
+  if (score) score.textContent = `⭐ ${dailyGemPost.gemScore}/10 Underrated`;
   if (summary) summary.textContent = dailyGemPost.excerpt;
   if (secretTip) secretTip.textContent = dailyGemPost.secretTip;
 

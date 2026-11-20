@@ -28,7 +28,7 @@ function calculateLevel(xp) {
   } else if (xp < 1500) {
     return {
       tier: 'Level 3: Master Wayfarer',
-      badge: '💎 Master',
+      badge: '⭐ Master',
       min: 600,
       max: 1500,
       progress: Math.min(100, Math.round(((xp - 600) / 900) * 100)),

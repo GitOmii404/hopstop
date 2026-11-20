@@ -448,7 +448,7 @@ let notificationsData = JSON.parse(localStorage.getItem('hopstop_notifications')
 const MONTHLY_LEADERBOARD_DATA = [
   { rank: 1, name: "Mateo Fernandez", handle: "@mateotravels", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80", tier: "👑 Grand Trailblazer", gems: 14, monthlyXp: 3420, badge: "🥇 #1 Discover Legend" },
   { rank: 2, name: "Elena Vance", handle: "@elenavance", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80", tier: "⚡ Master Explorer", gems: 11, monthlyXp: 2850, badge: "🥈 #2 Discover Podium" },
-  { rank: 3, name: "Leila Halilovic", handle: "@leila_h", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80", tier: "💎 Gem Seeker", gems: 9, monthlyXp: 2100, badge: "🥉 #3 Discover Podium" },
+  { rank: 3, name: "Leila Halilovic", handle: "@leila_h", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80", tier: "⭐ Star Seeker", gems: 9, monthlyXp: 2100, badge: "🥉 #3 Discover Podium" },
   { rank: 4, name: "Carlos Mendoza", handle: "@carlos_andes", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80", tier: "🏔️ Alpine Scout", gems: 7, monthlyXp: 1650, badge: "Top 5 Contributor" },
   { rank: 5, name: "Maya Lin (You)", handle: "@mayawanders", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80", tier: "⚡ Trailblazer", gems: 6, monthlyXp: 1450, badge: "Top 5 Contributor" }
 ];

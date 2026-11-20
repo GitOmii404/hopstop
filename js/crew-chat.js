@@ -33,7 +33,7 @@ const ONLINE_EXPLORERS = [
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
     location: 'Blagaj Emerald Spring',
     status: 'At Blagaj Tekke, Bosnia',
-    tier: '💎 Gem Seeker',
+    tier: '⭐ Star Seeker',
     replyPrompt: "The emerald water at the spring is freezing but so pure! Definitely stamp this in your Travel Passport! 💧🏔️"
   },
   {

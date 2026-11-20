@@ -152,7 +152,7 @@ function renderAppFeed() {
           `}
           
           <!-- Tactile Floating Badges -->
-          <div class="gem-score-pill">💎 ${post.gemScore}/10 Underrated</div>
+          <div class="gem-score-pill">⭐ ${post.gemScore}/10 Underrated</div>
           <div class="crowd-meter-pill">🟢 88% Uncrowded</div>
           <div class="dispatch-stamp-badge">🛰️ DISPATCH #${String(post.id).padStart(3, '0')}</div>
           <div class="flying-heart" id="flyingHeart_${post.id}">❤️</div>

@@ -58,7 +58,7 @@ function renderTripHud() {
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
             <span>📍 ${post.country}</span> • <span style="color: #0284c7; font-weight: 700;">${post.distKm} km away</span>
           </div>
-          <div style="font-size: 0.72rem; color: #10b981; margin-top: 2px;">💎 Gem Score: ${post.gemScore}/10</div>
+          <div style="font-size: 0.72rem; color: #10b981; margin-top: 2px;">⭐ Gem Score: ${post.gemScore}/10</div>
         </div>
       </div>
       <button class="btn-direction" style="font-size: 0.75rem; padding: 6px 12px; flex-shrink: 0;" onclick="event.stopPropagation(); if(typeof openDirections === 'function') openDirections(event, '${encodeURIComponent(post.locationQuery)}')">

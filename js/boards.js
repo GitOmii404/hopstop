@@ -284,7 +284,7 @@ window.openBoardDetail = function (boardId) {
             <div class="pin-card-body">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
                 <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0;" onclick="openArticleModal(${post.id})">${post.placeName}</h4>
-                <span style="font-size: 0.76rem; font-weight: 700; color: #06b6d4;">💎 ${post.gemScore}</span>
+                <span style="font-size: 0.76rem; font-weight: 700; color: #06b6d4;">⭐ ${post.gemScore}</span>
               </div>
               <div style="font-size: 0.78rem; color: #0284c7; margin-bottom: 8px;">📍 ${post.country}</div>
 
@@ -334,7 +334,7 @@ window.openAddPinModal = function (preselectedPlaceId = null) {
   `).join('');
 
   placeSelect.innerHTML = postsData.map(p => `
-    <option value="${p.id}" ${p.id === preselectedPlaceId ? 'selected' : ''}>💎 ${p.placeName} (${p.country})</option>
+    <option value="${p.id}" ${p.id === preselectedPlaceId ? 'selected' : ''}>⭐ ${p.placeName} (${p.country})</option>
   `).join('');
 
   addPinToBoardModal.classList.add('open');

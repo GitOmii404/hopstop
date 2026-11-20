@@ -174,7 +174,7 @@ function renderWeeklyDigest(filter = currentDigestFilter) {
         <div class="digest-card-thumb-wrap">
           <img src="${gem.image}" alt="${gem.placeName}" class="digest-card-thumb" loading="lazy">
           <div class="digest-rank-badge">${rankLabel}</div>
-          <div class="digest-score-overlay">💎 ${gem.gemScore}/10</div>
+          <div class="digest-score-overlay">⭐ ${gem.gemScore}/10</div>
         </div>
         <div class="digest-card-body">
           <div class="digest-meta-row">
