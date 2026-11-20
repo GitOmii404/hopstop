@@ -10,7 +10,7 @@
   <meta name="description" content="Vote and submit hidden gem photography in HopStop's weekly prompt battles. Compete for the Gem Finder badge and XP rewards.">
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261117_craft_v3">
+  <link rel="stylesheet" href="styles.css?v=20261120_clean_v2">
   <link rel="stylesheet" href="css/theme-toggle.css?v=20261119_seamless_v4">
 </head>
 <body>
@@ -299,13 +299,13 @@
         <!-- Photo Battle Hero Banner -->
         <div class="battle-hero-banner">
           <div class="battle-hero-left">
-            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.2); color: #facc15; padding: 5px 14px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 800; margin-bottom: 12px; border: 1px solid rgba(245, 158, 11, 0.35);">
+            <div class="battle-round-pill">
               <span>🏆</span> Weekly Discovery Arena • Round #42 Active
             </div>
-            <h2 id="battlePromptTitle" style="font-size: 2.1rem; font-weight: 800; margin-bottom: 8px; line-height: 1.25;">
+            <h2 id="battlePromptTitle" class="battle-hero-title">
               Prompt: "Best Hidden Sunrise Spot Under $10"
             </h2>
-            <p id="battlePromptDesc" style="font-size: 0.95rem; line-height: 1.55; max-width: 680px; color: #e2e8f0; margin-bottom: 14px;">
+            <p id="battlePromptDesc" class="battle-hero-desc">
               Submit your most spectacular, uncrowded sunrise vista. Sunday midnight the community votes crown the top 3 explorers on the global Discover wall!
             </p>
             
@@ -323,17 +323,17 @@
               <div class="battle-stat-chip">
                 <span>🗳️</span> <strong id="battleStatsVoteCount">142</strong> Votes Cast
               </div>
-              <div class="battle-stat-chip" style="background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); color: #facc15;">
-                <span>💎</span> <strong>1,000 XP</strong> Prize Pool
+              <div class="battle-stat-chip prize-chip">
+                <span>⭐</span> <strong>1,000 XP</strong> Prize Pool
               </div>
             </div>
           </div>
 
-          <div class="battle-hero-right" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-            <button class="btn-gem" style="padding: 14px 28px; font-size: 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);" onclick="openSubmitBattleModal()">
+          <div class="battle-hero-right">
+            <button class="btn-gem" style="padding: 12px 26px; font-size: 0.96rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);" onclick="openSubmitBattleModal()">
               📸 + Submit Your Battle Photo
             </button>
-            <button class="btn-popup-read" style="color: #ffffff; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08);" onclick="document.getElementById('arenaRulesSection').scrollIntoView({behavior:'smooth'})">
+            <button class="btn-popup-read" style="color: #ffffff; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.12);" onclick="document.getElementById('arenaRulesSection').scrollIntoView({behavior:'smooth'})">
               📜 How Arena Scoring Works
             </button>
           </div>

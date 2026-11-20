@@ -10,7 +10,7 @@
   <meta name="description" content="Solve crowdsourced travel requests for rare, secret spots to earn XP, level up your rank, and unlock exclusive explorer badges on HopStop.">
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="styles.css?v=20261117_craft_v3">
+  <link rel="stylesheet" href="styles.css?v=20261120_clean_v2">
   <link rel="stylesheet" href="css/theme-toggle.css?v=20261119_seamless_v4">
 </head>
 <body>
@@ -301,7 +301,7 @@
 
             <div class="bounty-stats-strip">
               <div class="bounty-stat-pill"><span>🏹</span> <strong><span id="bountyActiveQuestsCount">4</span></strong> Active Quests</div>
-              <div class="bounty-stat-pill"><span>💎</span> <strong><span id="bountyXpPool">6,350</span></strong> XP Prize Pool</div>
+              <div class="bounty-stat-pill"><span>⭐</span> <strong><span id="bountyXpPool">6,350</span></strong> XP Prize Pool</div>
               <div class="bounty-stat-pill"><span>✅</span> <strong><span id="bountySolvedTotalCount">4</span></strong> Solved Bounties</div>
               <div class="bounty-stat-pill stat-pill-gold"><span>🏆</span> Top Hunter: <strong>@mateotravels</strong></div>
             </div>
@@ -331,7 +331,7 @@
             </div>
           </div>
           <div class="how-bounty-step-card">
-            <div class="how-bounty-icon-box">💎</div>
+            <div class="how-bounty-icon-box">⭐</div>
             <div>
               <h4 style="font-family: var(--font-heading); font-size: 0.98rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">3. Claim the XP Bounty</h4>
               <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.45;">The first verified recommendation claims the XP bounty and earns the prestigious Bounty Hunter badge!</p>
@@ -342,7 +342,7 @@
         <!-- Bounty Category & Status Filter Tabs -->
         <div class="bounty-tabs-bar">
           <button class="bounty-tab-btn active" data-bounty-filter="all" onclick="setBountyFilter('all', this)">🔥 All Bounties (<span id="bountyTotalCount">5</span>)</button>
-          <button class="bounty-tab-btn" data-bounty-filter="high-reward" onclick="setBountyFilter('high-reward', this)">💎 High Reward (600+ XP)</button>
+          <button class="bounty-tab-btn" data-bounty-filter="high-reward" onclick="setBountyFilter('high-reward', this)">⭐ High Reward (600+ XP)</button>
           <button class="bounty-tab-btn" data-bounty-filter="nature" onclick="setBountyFilter('nature', this)">🌿 Nature & Alps</button>
           <button class="bounty-tab-btn" data-bounty-filter="culture" onclick="setBountyFilter('culture', this)">⛩️ Sacred & Ancient</button>
           <button class="bounty-tab-btn" data-bounty-filter="coastal" onclick="setBountyFilter('coastal', this)">🌊 Coastal & Grottoes</button>
@@ -501,9 +501,9 @@
           <div class="form-group">
             <label for="bountyRewardInput">Reward Gem Bounty (XP)</label>
             <select id="bountyRewardInput" class="form-control">
-              <option value="500">💎 500 XP Bounty</option>
-              <option value="750" selected>💎 750 XP Bounty (High Urgency)</option>
-              <option value="1000">💎 1,000 XP Bounty (Legendary)</option>
+              <option value="500">⭐ 500 XP Bounty</option>
+              <option value="750" selected>⭐ 750 XP Bounty (High Urgency)</option>
+              <option value="1000">⭐ 1,000 XP Bounty (Legendary)</option>
             </select>
           </div>
         </div>
